@@ -1,12 +1,13 @@
+[TIL on May 15th, 2022](../../TIL/til-05-15-2022.md) <br>
+
+# **Markdown basics**
+
 Reference: [마크다운(Markdown) 6분 순삭 정리 + 깃허브 리드미(ReadMe) 파일 작성 팁 ⭐️](https://youtu.be/kMEb_BzyUqk) <br>
-[TIL file](../../TIL/til-05-15-2022.md) <br>
 
 Learned how to use markdown.<br>
 Local image could also be easily added in Github markdown <br>
 
 Practice codes are shown as below: <br>
-
-___
 
 <br>
 <br>

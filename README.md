@@ -18,14 +18,18 @@ I've written TIL since May 14th, 2022
 - Extendability and Accessibility: from 'Github' platform
 - Utilize Github flavored markdown
 
-### Conventions
-- Naming and styling conventions are given [here](./conventions.md)
+### TIL conventions: [link](./conventions.md)
 
 <br>
 
 ## **Contents**
-- Comupter science
-- Languages
-  * Markdown
-- Library and Framework
-- TIL
+- [Comupter science](/Computer%20science/)
+  * [Algorithm](./Computer%20science/Algorithm/)
+  * [Data Structure](./Computer%20science/Data%20structure/)
+- [Languages](./Languages/)
+  * [JavaScript](./Languages/JavaScript/)
+  * [Markdown](./Languages/Markdown/)
+- [Library and Framework](./Library%20and%20Framework/)
+  * [MongoDB](./Library%20and%20Framework/MongoDB/)
+  * [Nodejs](./Library%20and%20Framework/Nodejs/)
+- [TIL](./TIL/)

@@ -30,3 +30,9 @@
 ### TIL content file: TIL list link and references
 - TIL list link: written as a format of "TIL on MM-DD-YYYY" at the top
 - References: at the bottom, separated by a line above it
+
+### Commit name
+- "TIL on *Month Day, Year*"
+- ex) TIL on May 15th, 2022
+
+### To README file: [link](./README.md)

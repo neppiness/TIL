@@ -23,10 +23,10 @@ I've written TIL since May 14th, 2022
 <br>
 
 ## **Contents**
-- [Comupter science](/Computer%20science/)
-  * [Algorithm](./Computer%20science/Algorithm/)
-  * [Data Structure](./Computer%20science/Data%20structure/)
-  * [Network](./Computer%20science/Network/)
+- [Comupter Science](/Computer%20Science/)
+  * [Algorithm](./Computer%20Science/Algorithm/)
+  * [Data Structure](./Computer%20Science/Data%20Structure/)
+  * [Network](./Computer%20Science/Network/)
 - [ETC](./ETC/)
 - [Languages](./Languages/)
   * [JavaScript](./Languages/JavaScript/)

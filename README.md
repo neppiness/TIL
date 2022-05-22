@@ -7,7 +7,7 @@ I've written TIL since May 14th, 2022
 ## **Introduction**
 
 ### Purposes of TIL
-- Listing subjects to study today
+- List subjects to study today; motivate myself
 - Note what I learned
 - Wrap up a study for a day
 

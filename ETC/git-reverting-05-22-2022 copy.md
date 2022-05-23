@@ -1,4 +1,4 @@
-[TIL on May 22th, 2022](../../TIL/2022/05-22-2022.md)
+[TIL on May 22nd, 2022](../../TIL/2022/05-22-2022.md)
 # **Reverting functions of Git**
 
 **NOTE: Work flow of git must be preceded**

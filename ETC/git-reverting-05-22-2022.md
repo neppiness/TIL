@@ -32,7 +32,7 @@ $ git reset --hard HEAD^
 
 
 ### 3. Revert 'push'
-- If `git push` command is reverted, your local directory files are forced to be overwritten to remote
+- If `git push` command is reverted, your local directory files are forced to be overwritten by remote
   - Then, all the information modified after the time of the loaded 'commit' was originally committed is lost
   - Also, especially for collaboration projects, it is neccessary to communicate with teammates because some synchronization problems can occur from this function 
 

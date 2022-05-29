@@ -15,8 +15,7 @@ I've written TIL since May 14th, 2022
 - Monitoring: by commit function
 - Written in markdown: to practice and get used to it
 - Extendability and Accessibility: obtained from 'Github' platform
-- Utilize Github flavored markdown;
-  especially easy to write codes in different prog. languages
+- Utilize Github flavored markdown; especially easy to write codes in different prog. languages
 
 ### TIL conventions: [link](./conventions.md)
 

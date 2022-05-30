@@ -1,4 +1,4 @@
-[TIL on May 16th, 2022](../../TIL/2022/05-16-2022.md)
+[TIL on May 16th, 2022](../../TIL/2022/05/05-16-2022.md)
 # **MongoDB Document Collection**
 
 > The Collection class is an internal class that embodies a MongoDB collection allowing for insert/update/remove/find and other command operation on that MongoDB collection. <br> 

@@ -1,4 +1,4 @@
-[TIL on May 23rd, 2022](../TIL/2022/05-23-2022.md)
+[TIL on May 23rd, 2022](../TIL/2022/05/05-23-2022.md)
 # **Git Workflow**
 
 There are four fundamental elements for git

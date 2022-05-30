@@ -1,4 +1,4 @@
-[TIL on May 20th, 2022](../../TIL/2022/05-20-2022.md)
+[TIL on May 20th, 2022](../../TIL/2022/05/05-20-2022.md)
 # **Summarize subnetwork**
 
 ### What is subnetting?

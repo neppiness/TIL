@@ -1,4 +1,4 @@
-[TIL on May 28th, 2022](../../TIL/2022/05-28-2022.md)
+[TIL on May 28th, 2022](../../TIL/2022/05/05-28-2022.md)
 # **Brute-force search**
 
 ### Brute-force search in computer science

@@ -1,4 +1,4 @@
-[TIL on May 16th, 2022](../../TIL/2022/05-16-2022.md)
+[TIL on May 16th, 2022](../../TIL/2022/05/05-16-2022.md)
 # **Static in JavaScript**
 
 ### 💡 Static in Class of JavaScript

@@ -1,0 +1,43 @@
+[TIL on May 30th, 2022](../TIL/2022/05/05-30-2022.md)
+# **Clean Code Chapter 1**
+
+### Contents
+- Let there be code
+- Bad code
+- Price of bad code
+- We are authors
+- Boy scouts
+- Conclusion
+
+### Let there be code
+- Codes are the language of specification
+- Precise expression is needed sometime
+
+### Bad codes
+- A company fails by bad codes
+
+### Price of bad code
+- Bad codes decrease the speed of development
+- Attitude: bad codes are totally made by developers
+- Paradox: programmers write bad codes to meet due date, but written bad codes make programmers not to meet due date
+- Art named clean code: 'code sense' is required
+  * A function works one function
+  * Proper error processing is necessary
+  * Coded with caution
+  * Do what is assumed to do
+
+### We are authors
+- We have to communicate with readers
+- We spend much more time reading code than writing code (about 10:1)
+
+### Boy scouts
+- The boy scouts have a rule: “Always leave the campground cleaner than you found it.”
+
+### Conclusion
+- This is a book for skills, tools, methods and thoughts to write a clean code
+- Keep practicing
+
+___
+
+### References
+- [Martin, R. C. (2013). 클린 코드: 애자일 소프트웨어 장인 정신. 인사이트.](https://books.google.co.kr/books?id=MKsYngEACAAJ)

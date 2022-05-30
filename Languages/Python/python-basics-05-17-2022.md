@@ -1,4 +1,4 @@
-[TIL on May 17th, 2022](../../TIL/2022/05-17-2022.md)
+[TIL on May 17th, 2022](../../TIL/2022/05/05-17-2022.md)
 # **Python Basics**
 
 ### Use of a colon

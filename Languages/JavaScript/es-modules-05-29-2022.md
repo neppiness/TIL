@@ -1,4 +1,4 @@
-[TIL on May 29th, 2022](../../TIL/2022/05-29-2022.md)
+[TIL on May 29th, 2022](../../TIL/2022/05/05-29-2022.md)
 # **What is an ES module and how to import it?**
 
 ### List of contents

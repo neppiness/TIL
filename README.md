@@ -24,6 +24,7 @@ I've written TIL since May 14th, 2022
 ## **Contents**
 - [Comupter Science](/Computer%20Science/)
   * [Algorithm](./Computer%20Science/Algorithm/)
+  * [Clean Code](./Computer%20Science/Clean%20Code/)
   * [Data Structure](./Computer%20Science/Data%20Structure/)
   * [Network](./Computer%20Science/Network/)
 - [ETC](./ETC/)
@@ -37,3 +38,4 @@ I've written TIL since May 14th, 2022
 - [TIL](./TIL/)
   * [2022](./TIL/2022/)
     - [05](./TIL/2022/05/)
+    - [06](./TIL/2022/06/)

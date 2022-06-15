@@ -1,4 +1,4 @@
-[TIL on May 16th, 2022](../../TIL/2022/06/06-14-2022.md)
+[TIL on June 14th, 2022](../../TIL/2022/06/06-14-2022.md)
 # **About Window Load**
 - Interface: event
 - Related events: load, DOMContentLoaded, readystatechange, beforeunload, unload

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html {
+            background-color: black;
+        }
+
+        img {
+            display: block;
+            margin: auto;
+        }
+
+        #find-button {
+            position: fixed;
+        }
+
+    </style>
+
+    <title>Finding the Rabbit</title>
+
+</head>
+
+<body>
+    <button id="find-button">Find the Rabbit!</button>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img id="rabbit" src="./img/rabbit.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <img src="./img/carrot.png"></img>
+    <script>
+        const findButton = document.querySelector('#find-button');
+
+        findButton.addEventListener('click', scrollToRabbit)
+
+        function scrollToRabbit() {
+            scrollIntoViewOptions = {
+                block: "center",
+                behavior: "smooth",
+            }
+            const rabbitImg = document.querySelector('#rabbit');
+            rabbitImg.scrollIntoView(scrollIntoViewOptions);
+        }
+    </script>
+</body>
+</html>

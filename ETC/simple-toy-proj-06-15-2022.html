@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html {
+            cursor: url("target-06-15-2022.png") 60 60, auto;
+            background-color: black;
+        }
+
+        .quadrant {
+            background-color: rgb(15, 15, 15);
+            border: solid;
+            border-color: white;
+            border-width: 1px;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #fourth-quadrant {
+            border-top-style: none;
+            border-left-style: none;
+            top: 0px;
+            left: 0px;
+        }
+
+        #first-quadrant {
+            border-top-style: none;
+            border-right-style: none;
+            top: 0px;
+            right: 0px;
+        }
+
+        #third-quadrant {
+            border-bottom-style: none;
+            border-left-style: none;
+            bottom: 0px;
+            left: 0px;
+        }
+        #second-quadrant {
+            border-bottom-style: none;
+            border-right-style: none;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        #coordinate-box {
+            color: white;
+            position: fixed;
+        }
+    </style>
+
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class="quadrant" id="fourth-quadrant"></div>
+    <div class="quadrant" id="first-quadrant"></div>
+    <div class="quadrant" id="third-quadrant"></div>
+    <div class="quadrant" id="second-quadrant"></div>
+
+    <div id="coordinate-box"></div>
+
+    <script>
+        const divs = document.querySelectorAll('div')
+
+        divs.forEach(quadrant => quadrant.addEventListener('mousemove', (event) => {
+            const xyCoord = getCartesianCoordinates(event);
+            adjustQuadrantsSize(xyCoord);
+            adjustCoordBox(xyCoord);
+        }))
+
+        function getCartesianCoordinates(event) {
+            const xCoord = event.clientX;
+            const yCoord = event.clientY;
+            return [xCoord, yCoord];
+        }
+
+        function adjustQuadrantsSize(xyCoord) {
+            adjustFirstQuadrantSize(xyCoord);
+            adjustSecondQuadrantSize(xyCoord);
+            adjustThirdQuadrantSize(xyCoord);
+            adjustFourthQuadrantSize(xyCoord);
+        }
+
+        function adjustFirstQuadrantSize(xyCoord) {
+            const firstQuadrant = document.querySelector('#first-quadrant');
+            firstQuadrant.style.left = `${xyCoord[0]}px`;
+            firstQuadrant.style.bottom = `${xyCoord[1]}px`;
+        }
+
+        function adjustSecondQuadrantSize(xyCoord) {
+            const secondQuadrant = document.querySelector('#second-quadrant');
+            secondQuadrant.style.left = `${xyCoord[0]}px`;
+            secondQuadrant.style.top = `${xyCoord[1]}px`;
+        }
+        
+        function adjustThirdQuadrantSize(xyCoord) {
+            const thirdQuadrant = document.querySelector('#third-quadrant');
+            thirdQuadrant.style.right = `${xyCoord[0]}px`;
+            thirdQuadrant.style.top = `${xyCoord[1]}px`;
+        }
+
+        function adjustFourthQuadrantSize(xyCoord) {
+            const fourthQuadrant = document.querySelector('#fourth-quadrant');
+            fourthQuadrant.style.right = `${xyCoord[0]}px`;
+            fourthQuadrant.style.bottom = `${xyCoord[1]}px`;
+        }
+
+        function adjustCoordBox(xyCoord) {
+            adjustValues(xyCoord);
+            adjustPosition(xyCoord);
+        }
+
+        function adjustValues(xyCoord) {
+            const coordBox = document.querySelector('#coordinate-box');
+            coordBox.innerHTML = `${xyCoord[0]}px, ${xyCoord[1]}px`;
+        }
+        function adjustPosition(xyCoord) {
+            const coordBox = document.querySelector('#coordinate-box');
+            coordBox.style.left = `${xyCoord[0] + 30}px`;
+            coordBox.style.top = `${xyCoord[1] + 15}px`;
+        }
+
+    </script>
+</body>
+</html>

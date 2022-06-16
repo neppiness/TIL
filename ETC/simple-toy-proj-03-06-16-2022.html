@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html {
+            cursor: url("./img/target-06-15-2022.png") 60 60, auto;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .lines {
+            background-color: none;
+            position: fixed;
+
+            border: solid;
+            border-color: white;
+            border-width: 1px;
+            
+            border-top-style: none;
+            border-left-style: none;
+            border-bottom-style: none;
+            border-right-style: none;
+        }
+
+        #vertical {
+            border-left-style: solid;
+            width: 1px;
+            height: 100vh;
+            left: 0px;
+        }
+
+        #horizontal {
+            border-top-style: solid;
+            height: 1px;
+            width: 100vw;
+            top: 0px;
+        }
+
+        #coordinate-box {
+            color: white;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class="lines" id="vertical"></div>
+    <div class="lines" id="horizontal"></div>
+
+    <div id="coordinate-box"></div>
+
+    <script>
+        document.addEventListener('mousemove', (event) => {
+            adjustLinePosition(event);
+            adjustCoordBox(event);
+        })
+        
+        function adjustLinePosition(event) {
+            const [xCoord, yCoord] = getCartesianCoordinates(event);
+            adjustVerticalLine(xCoord);
+            adjustHorizontalLine(yCoord);
+        }
+        
+        function getCartesianCoordinates(event) {
+            const xCoord = event.clientX;
+            const yCoord = event.clientY;
+            return [xCoord, yCoord];
+        }
+
+        function adjustVerticalLine(xCoord) {
+            const verticalLine = document.querySelector('#vertical');
+            verticalLine.style.transform = `translateX(${xCoord}px)`;
+        }
+
+        function adjustHorizontalLine(yCoord) {
+            const horizontalLine = document.querySelector('#horizontal');
+            horizontalLine.style.transform = `translateY(${yCoord}px)`;
+        }
+
+        function adjustCoordBox(event) {
+            const xyCoord = getCartesianCoordinates(event);
+            adjustValues(xyCoord);
+            adjustPosition(xyCoord);
+        }
+        
+        function adjustValues(xyCoord) {
+            const coordBox = document.querySelector('#coordinate-box');
+            coordBox.innerHTML = `${xyCoord[0]}px, ${xyCoord[1]}px`;
+        }
+        
+        function adjustPosition(xyCoord) {
+            const coordBox = document.querySelector('#coordinate-box');
+            coordBox.style.transform = `translateX(${xyCoord[0]+30}px) translateY(${xyCoord[1]+15}px)`;
+        }
+
+    </script>
+</body>
+</html>

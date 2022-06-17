@@ -2,7 +2,7 @@
 # **How Browsers Work 03: Parsing**
 
 ### Introduction
-- Parsing: the step the browser takes to turn the data into the DOM and CSSOM
+- Parsing: the step the browser takes to turn the data into the *DOM* and *CSSOM*
 
 - [The DOM is the internal representation of the markup for the browser](./dom-06-15-2022.md)
 - The DOM can be manipulated through various APIs in JavaScript.

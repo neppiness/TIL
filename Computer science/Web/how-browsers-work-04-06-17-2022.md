@@ -1,8 +1,7 @@
 [TIL on June 17th, 2022](../../TIL/2022/06/06-17-2022.md)
 # **How Browsers Work 04: Render**
 
-### Render
-Rendering steps include:
+### Rendering Steps
 - style
 - layout
 - paint; and
@@ -23,6 +22,44 @@ Rendering steps include:
   * `<head>` and its children; or
   * any nodes with `display: none`
 - Meanwhile, nodes with `visibility: hidden` applied are included in the render tree, as they do take up space
+
+### Layout
+- Is 4th step in the critical rendering path
+- Running layout on the render tree to compute the geometry of each node
+- Layout: the process by which the width, height, and location of all the nodes in the render tree are determined, plus the determination of the size and position of each object on the page
+- Reflow: any subsequent recalculation of node size and position determination
+
+### Paint
+- Is the last step in the critical rendering path
+- In painting phase, the browser converts each box to actual pixels on the screen
+- Painting involves drawing every visual part of an element to the screen
+- Drawing objects are text, colors, borders, shadows, and replaced elements like buttons and images
+- To make repainting fast, compositing is needed to break screen into several layers
+
+Painting can break the elements in the layout tree into layers.
+
+#### Use of GPU
+- Using GPU instead of the main thread on the CPU, improves paint and repaint performance
+  * `<video>` and `<canvas>`;
+  * any element which has the CSS properties of opacity;
+  * a 3D transform;
+  * will-change and etc.
+- These nodes will be painted onto their own layer
+
+#### Use of layers
+- Layers do improve performance
+- But they are expensive when it comes to memory management
+- Do not be overused as part of web performance optimization strategies
+
+### Compositing
+Compositing is necessary
+- when sections of the document are drawn in different layers, overlapping each other:
+- to ensure they are drawn to the screen in the right order and;
+- the content is rendered correctly
+
+#### Reflows can happen:
+- As the page continues to load assets
+- A reflow sparks a repaint and a re-composite
 
 ___
 

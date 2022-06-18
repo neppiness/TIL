@@ -82,4 +82,4 @@ The second step is processing CSS and building the CSSOM tree
 ___
 
 ### References
-- [Populating the page: how browsers work-Response](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work#parsing)
+- [Populating the page: how browsers work-Parsing](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work#parsing)

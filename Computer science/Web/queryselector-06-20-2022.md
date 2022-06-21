@@ -1,4 +1,4 @@
-[TIL on May 20th, 2022](../../TIL/2022/06/06-20-2022.md)
+[TIL on June 20th, 2022](../../TIL/2022/06/06-20-2022.md)
 # **Document.querySelector()**
 
 ### Syntax

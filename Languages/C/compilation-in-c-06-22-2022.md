@@ -1,4 +1,4 @@
-[TIL on June 22nd, 2022](../TIL/2022/06/06-22-2022.md)
+[TIL on June 22nd, 2022](../../TIL/2022/06/06-22-2022.md)
 # **Compilation Steps in C**
 
 After following compilation steps are properly done, a excutable file is obtained as a result

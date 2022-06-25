@@ -234,7 +234,63 @@ subObj.superVal = 'sub';
 console.log('superObj.superVal => ', superObj.superVal);
 ```
 
-### It's going to be continued with this [link](https://www.boostcourse.org/cs124/lecture/1019224/?isDesc=false)
+### Uses of function
+A function could be used:
+- indepently;
+- as a constructor for an object if `new` is in front of `function`; or
+- with call and bind 
+
+### `call` for a function
+- All functions in JavaScript have `call` method
+- An argument of `call` method becomes `this` of the function (shown in the example below)
+
+```js
+var kim = {name:'kim',first:10,second:20}
+var lee = {name:'lee',first:10,second:10}
+
+function sum(){ 
+    return this.first + this.second;
+}
+
+console.log("sum.call(kim)",sum.call(kim)); //sum.call(kim) 30
+console.log("sum.call(lee)",sum.call(lee)); //sum.call(lee) 20 
+```
+
+- `call` method also gets the other arguments used as arguments for a function:
+```js
+var kim = {name:'kim',first:10,second:20}
+var lee = {name:'lee',first:10,second:10}
+lee.__proto__ = kim
+
+function sum(prefix){ 
+    return prefix+ (this.first + this.second);
+}
+
+//sum();
+console.log("sum.call(kim)",sum.call(kim,'=> ')); //sum.call(kim) => 30
+console.log("sum.call(lee)",sum.call(lee,': ')); //sum.call(lee) : 20
+```
+
+### `bind` for a function
+- `bind` method binds a `this` for a function internally
+- And the arguments could also be binded
+```js
+var kim = {name:'kim',first:10,second:20}
+
+function sum(prefix){ 
+    return prefix + (this.first + this.second);
+}
+
+var kimSum = sum.bind(kim, '-> ');
+console.log('kimSum()', kimSum()); // kimSum() -> 30
+```
+
+### Difference between `prototype` and `__proto__`
+- `__proto__` is a property of a sub-object inherited from parent object
+- `prototype` is an inclusive object that every object has
+
+> Every object in JavaScript has a built-in property, which is called its prototype. The prototype is itself an object (from the [link](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes))
+
 ___
 
 ### Reference

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
 
 int daysCalc(int mon, int day) {
     mon -= 1;

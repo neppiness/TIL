@@ -11,7 +11,7 @@
 struct NODE {
     struct NODE *prev, *next;
     int data;
-}
+};
 ```
 #### Explain
 - `struct NODE` has two pointers to point `struct NODE` data type
@@ -24,15 +24,76 @@ struct NODE {
 - We can make an array behaves as a formal one
 
 ```cpp
-const in MX = 1000005;
-int dat[MX], pre[MX], nxt[MX];
-int unused = 1;
+#include <iostream>
+#include <algorithm>
+using namespace std;
 
-fill(pre, pre+MX, -1);
-fill(nxt, nxt+MX, -1);
+const int MX = 1000005;
+int pre[MX], nxt[MX], dat[MX];
+int unused = 6;
+
+void traverse() {
+    int idx = nxt[0];
+
+    while(nxt[idx] != -1) {
+        cout << dat[idx] << ' ';
+        idx = nxt[idx];
+    }
+    cout << "\n\n";
+}
+
+void insert(int addr, int num) {
+    dat[unused] = num;
+    pre[unused] = addr;
+    nxt[unused] = nxt[addr];
+    if(nxt[addr] != -1) pre[nxt[addr]] = unused;
+    nxt[addr] = unused;
+    unused++;
+}
+
+void erase(int addr) {
+    nxt[pre[addr]] = nxt[addr];
+    if (nxt[addr] != -1) pre[nxt[addr]] = pre[addr];
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    fill(pre, pre+MX, -1);
+    fill(nxt, pre+MX, -1);
+
+    int addr, num;
+    cin >> addr >> num;
+
+    insert(addr, num);
+    erase(addr);
+}
 ```
+- MX should be `const int`
 
-### TODO: code Traverse, insert and erase functions
+<br>
+
+### Linked list using "STL list"
+```cpp
+int main(void){
+    list<int> L = {1, 2}; // 1 2
+    list<int>::iterator t = L.begin();
+    L.push_front(10); // 10 1 2
+    cout << *L << '\n'; // 1, the value pointed by `t` is printed
+    L.push_back(5); // 10 1 2 5
+    L.insert(t, 6); // Insert 6 where the t indicates
+    t++;
+    t = L.erase(t); // Erase where the t indicates, and return the index for next element (5)
+
+    cout << *t << '\n'; // 5
+    for(auto i : L) cout << i << ' '; // For C++ not older than 11 version
+    cout << '\n';
+
+    for(list<int>::iterator it = L.begin(); it != L.end(); it++) cout << *it << ' ';
+    // For C++ older than 11 version
+}
+```
 
 <br>
 

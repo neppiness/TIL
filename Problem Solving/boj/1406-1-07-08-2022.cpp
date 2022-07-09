@@ -17,9 +17,7 @@ int main() {
     int noOfCommands = 0;
     cin >> noOfCommands;
 
-    L.push_back(0);
-    
-    for (int i = 1; i <= str.length(); i++) {
+    for (int i = 0; i < str.length(); i++) {
         L.push_back(str[i]);
     }
 
@@ -37,7 +35,10 @@ int main() {
                 ++it;
             }
         } else if (com == 'B') {
-            if(it != L.begin()) it = L.erase(it);
+            if(it != L.begin()) {
+                --it;
+                it = L.erase(it);
+            }
         } else {
             char a;
             cin >> a;

@@ -19,7 +19,7 @@ int main() {
 
     L.push_back(0);
     
-    for (int i = 1; i <= str.length(); i++) {
+    for (int i = 0; i < str.length(); i++) {
         L.push_back(str[i]);
     }
 
@@ -37,7 +37,10 @@ int main() {
                 ++it;
             }
         } else if (com == 'B') {
-            if(it != L.begin()) it = L.erase(it);
+            if(it != L.begin()) {
+                --it;
+                it = L.erase(it);
+            }
         } else {
             char a;
             cin >> a;
@@ -47,7 +50,10 @@ int main() {
         noOfCommands--;
     }
 
-    for(list<int>::iterator it1 = L.begin(); it1 != L.end(); it1++) {
+    list<int>::iterator it1 = L.begin();
+    it1++;
+
+    for(; it1 != L.end(); it1++) {
         cout << (char)*it1;
     }
 }

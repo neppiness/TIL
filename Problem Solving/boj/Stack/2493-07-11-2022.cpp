@@ -6,7 +6,8 @@ using namespace std;
 int main(){
     ios::sync_with_stdio(0); cin.tie(0);
 
-    stack<int> temp;
+    stack<int> hStk;
+    stack<int> iStk;
 
     const int MX = 500001;
     int height[MX] = {0};
@@ -15,28 +16,30 @@ int main(){
 
     cin >> numTowers;
 
+    // initialization
+    height[0] = 100000001;
     for (int i = 1; i <= numTowers; i++) {
         cin >> height[i];
     }
 
-    int j = numTowers;
+    int i = numTowers;
 
-    do {
-        temp.push(j-1);
-        
-        if(height[j] < height[j - 1]) {
-            int val = temp.top();
-            int k = j;
-            while(!temp.empty()) {
-                height[k++] = val;
-                temp.pop();
+    hStk.push(height[i]);
+    iStk.push(i);
+
+    // Logic
+    while(i--) {
+        if(!hStk.empty()) {
+            while(!hStk.empty()) {
+                if(hStk.top() < height[i]) {
+                    height[iStk.top()] = i;
+                    hStk.pop();
+                    iStk.pop();
+                } else break;
             }
-        } else height[j - 1] = height[j];
-    } while(--j);
-
-    while(!temp.empty()) {
-        height[++j] = 0;
-        temp.pop();
+        }
+        hStk.push(height[i]);
+        iStk.push(i);
     }
 
     for (int i = 1; i <= numTowers; i++) {

@@ -7,7 +7,7 @@ using namespace std;
 
 const int MX = 100;
 int board[MX][MX] = {0};
-bool vis[MX][MX] = {false};
+int dist[MX][MX];
 
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, 0, -1};
@@ -25,14 +25,14 @@ int main(){
 
         for(int j = 0; j < M; j++){
             board[i][j] = str[j] - '0';
+            dist[i][j] = -1;
         }
     }
 
     queue<pair<int,int>> Q;
-    Q.push({0,0}); vis[0][0] = true;
+    Q.push({0,0}); dist[0][0] = 1;
 
-    int cnt = 1;
-    int nx = 0, ny = 0;
+    int nx, ny;
 
     while(!Q.empty()){
         pair<int,int> cur = Q.front(); Q.pop();
@@ -42,13 +42,11 @@ int main(){
             ny = cur.second + dy[dir];
 
             if(nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
-            if((nx == (N-1)) && (ny == (M-1))) break;
-            if(vis[nx][ny] == true || board[nx][ny] != 1) continue;
+            if(dist[nx][ny] != -1 || board[nx][ny] != 1) continue;
 
-            vis[nx][ny] = true;
+            dist[nx][ny] = dist[cur.first][cur.second] + 1;
             Q.push({nx,ny});
         }
-        if((nx == (N-1)) && (ny == (M-1))) break;
     }
-    cout << cnt;
+    cout << dist[N-1][M-1];
 }

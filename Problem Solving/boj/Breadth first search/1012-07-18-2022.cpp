@@ -47,6 +47,8 @@ int main(){
                     pair<int,int> cur;
                     cur = Q.front(); Q.pop();
 
+                    // cout << '(' << cur.first << ',' << cur.second << ')' << '\n';
+
                     for(int dir = 0; dir < 4; dir++) {
                         int nx = cur.first + dX[dir];
                         int ny = cur.second + dY[dir];
@@ -55,7 +57,7 @@ int main(){
                         if(vis[nx][ny] == true) continue;
                         if(dat[nx][ny] == false) continue;
 
-                        vis[nx][ny] == true;
+                        vis[nx][ny] = true;
                         Q.push({nx, ny});
                     }
                 }

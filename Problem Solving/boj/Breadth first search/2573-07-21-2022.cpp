@@ -17,44 +17,43 @@ int main(){
 
     int N, M; cin >> N >> M;
 
-    // dat & years initialize
     for(int i = 0; i < N; i++) {
-        fill(years[i], years[i] + M, -1);
+        fill(years[i], years[i] + M, 0);
         for(int j = 0; j < M; j++) cin >> dat[i][j];
     }
 
-    int cnt, result, year = 0;
-    while(cnt < 2) {
-        year++; cnt = 0;
+    int cnt = 0, result, yr = 0;
+    do {
+        yr++; cnt = 0;
 
         for(int i = 0; i < N; i++) {
             for(int j = 0; j < M; j++) {
                 if(dat[i][j] == 0) continue;
+                if(years[i][j] == yr) continue;
 
                 queue<pair<int,int>> Q;
-                Q.push({i,j}); years[i][j] = year; cnt++;
+                Q.push({i,j}); years[i][j] = yr; cnt++;
+                if(cnt == 2) {cout << (yr - 1); return 0;}
 
-                int waterCnt = 0;
                 while(!Q.empty()) {
                     auto cur = Q.front(); Q.pop();
+                    int waterCnt = 0;
 
                     for(int dir = 0; dir < 4; dir++){
                         int nx = cur.X + dx[dir];
                         int ny = cur.Y + dy[dir];
 
                         if(nx >= N || nx < 0 || ny >= M || ny < 0) continue;
-                        if(years[nx][ny] == year) continue;
+                        if(years[nx][ny] == yr) continue;
 
                         if(dat[nx][ny] == 0) waterCnt++;
-                        else {Q.push({nx,ny}); years[nx][ny] = year;}
+                        else {Q.push({nx,ny}); years[nx][ny] = yr;}
                     }
-                    (dat[i][j] - waterCnt >= 0) ? (dat[i][j] - waterCnt) : 0;
+                    dat[cur.X][cur.Y] -= waterCnt;
+                    if(dat[cur.X][cur.Y] < 0) dat[cur.X][cur.Y] = 0;
                 }
             }
         }
-    }
-    
-    cout << cnt;
-    // if (cnt > 2) cout << 0;
-    // else cout << year;
+    } while(cnt == 1);
+    cout << 0;
 }

@@ -70,6 +70,29 @@ After loop: 1 2 3
 
 <br>
 
+### Application of next_permutation (boj.kr/15650)
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int N, M;
+vector<int> a;
+
+int main(void){
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> N >> M;
+    for(int i = 0; i < N; ++i)  a.push_back(i < M ? 0 : 1);
+    do{
+    for(int i = 0; i < N; ++i)
+        cout << a[i] << ' ';
+    cout << '\n';
+    } while(next_permutation(a.begin(), a.end()));
+}
+```
+
+<br>
+
 ### See also
 - [prev_permutation](https://cplusplus.com/reference/algorithm/prev_permutation/): Transform range to previous permutation (function template)
 
@@ -77,3 +100,4 @@ ___
 
 ### References
 1. [std::next_permutation](https://cplusplus.com/reference/algorithm/next_permutation/)
+2. [basic-algo-lecture/0x0C/solutions/15650_1.cpp](https://github.com/encrypted-def/basic-algo-lecture/blob/master/0x0C/solutions/15650_1.cpp)

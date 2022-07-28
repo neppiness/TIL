@@ -13,16 +13,26 @@ int main(){
 
     cin >> N >> M;
 
-    for(int i = 0; i < N; i++) cin >> num[i];
+    for(int i = 0; i < N; i++) num[i] = i + 1;
 
     do {
-        bool isDuplicated = false;
-        for(int i = 0; i < M; i++) if(isUsed[i]) isDuplicated = true;
-        if(isDuplicated) continue;
+        bool isAccending = true;
+        for(int i = 0; i < M-1; i++) {
+            if(num[i] >= num[i+1]) isAccending = false;
+        }
+        if(!isAccending) continue;
+        bool isDuplicated = true;
+        for(int i = 0; i < M; i++) {
+            if(!isUsed[num[i] - 1]) {isDuplicated = false; break;}
+        }
 
-        for(int i = 0; i < M; i++) isUsed[i] = 1;
+        if(isDuplicated) continue;
+        else fill(isUsed, isUsed + 10, false);
+
+        for(int i = 0; i < M; i++) {
+            isUsed[num[i] - 1] = true;
+        }
         for(int i = 0; i < M; i++) cout << num[i] << ' ';
         cout << '\n';
-        
-    } while(next_permutation(num, num + M));
+    } while(next_permutation(num, num + N));
 }

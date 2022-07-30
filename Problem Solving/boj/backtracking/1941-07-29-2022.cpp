@@ -21,7 +21,12 @@ void search(int m, int cx, int cy) {
         for(int i = 0; i < 7; i++) {
             if(chillGJ[i] == 'S') sCnt++;
         }
-        if(sCnt >= 4) cnt++;
+
+        if(sCnt >= 4) {
+            for(int i = 0; i < 7; i++) cout << chillGJ[i];
+            cout << '\n';
+            cnt++;
+        }
         return;
     }
 

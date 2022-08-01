@@ -3,7 +3,7 @@
 
 ### What is called as a simulation problem?
 - These are just cases not classified as some specific algorithm (such as BFS or recursion) or data structures
-- So the simulation problems require detailed representation and not much background knowledge is needed
+- So the simulation problems require detailed implementation and not much background knowledge is needed
 
 ___
 

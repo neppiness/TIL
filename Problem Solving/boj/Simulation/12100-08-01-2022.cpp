@@ -5,12 +5,9 @@
 using namespace std;
 
 int N;
-int BOARD[22][22];
-int board[22][22];
+int BOARD[22][22], board[22][22];
 int moves[5] = {0};
 int maxNum = 0;
-
-bool OOB(int x, int y) {return x >= N || x < 0 || y >= N || y < 0;}
 
 void rotate(){
     int temp[22][22];
@@ -22,24 +19,25 @@ void rotate(){
         for(int j = 0; j < N; j++) board[i][j] = temp[i][j];
 }
 
-void move(int idx) {
-    if(idx == 0) return;
+void move(int rot) {
+    if(rot == 0) return;
         
-    while(--idx) rotate();
+    while(--rot) rotate();
 
     for(int row = 0; row < N; row++) {
 
         int tmp = 0;
-        for(int col = 0; col < N; col++) {
-            if(!board[row][col]) continue;
+        for(int col = 1; col < N; col++) {
+            if(board[row][col] == 0) continue;
+
+            //if(board[now][col] != 0)
             if(board[row][tmp] == 0) {
                 board[row][tmp] = board[row][col];
                 board[row][col] = 0;
             } else {
                 if(board[row][tmp] == board[row][col]) {
-                    board[row][tmp] = (board[row][tmp] << 1);
+                    board[row][tmp++] *= 2;
                     board[row][col] = 0;
-                    tmp++;
                 } else {
                     board[row][++tmp] = board[row][col];
                     board[row][col] = 0;

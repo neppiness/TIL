@@ -30,16 +30,17 @@ void move(int rot) {
         for(int col = 1; col < N; col++) {
             if(board[row][col] == 0) continue;
 
-            //if(board[now][col] != 0)
+            //if(board[row][col] != 0)
             if(board[row][tmp] == 0) {
                 board[row][tmp] = board[row][col];
                 board[row][col] = 0;
             } else {
                 if(board[row][tmp] == board[row][col]) {
-                    board[row][tmp++] *= 2;
+                    board[row][tmp] *= 2; tmp++;
                     board[row][col] = 0;
                 } else {
-                    board[row][++tmp] = board[row][col];
+                    tmp++; if(tmp == col) continue;
+                    board[row][tmp] = board[row][col];
                     board[row][col] = 0;
                 }
             }

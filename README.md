@@ -15,7 +15,7 @@ I've written TIL since May 14th, 2022
 - Monitoring: by commit function
 - Written in markdown: to practice and get used to it
 - Extendability and Accessibility: obtained from 'Github' platform
-- Utilize Github flavored markdown; especially easy to write codes in different prog. languages
+- Utilize Github flavored markdown; especially easy to write codes in different programming languages
 
 ### TIL conventions: [link](./conventions.md)
 
@@ -39,10 +39,9 @@ I've written TIL since May 14th, 2022
   * [Nodejs](./Library%20and%20Framework/Nodejs/)
 - [Problem Solving](./Problem%20Solving/)
   * [boj](./Problem%20Solving/boj/)
-    - [File input and output](./Problem%20Solving/boj/File%20input%20and%20output/)
-    - [Dynamic programming](./Problem%20Solving/boj/Dynamic%20programming/)
 - [TIL](./TIL/)
   * [2022](./TIL/2022/)
     - [05](./TIL/2022/05/)
     - [06](./TIL/2022/06/)
     - [07](./TIL/2022/07/)
+    - [07](./TIL/2022/08/)

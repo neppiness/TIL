@@ -15,25 +15,26 @@ int dx[] = {0, 0, 0, -1, 1};
 int dy[] = {0, 1, -1, 0, 0};
 
 void moveEast() {
-    rotate(xDirDice, xDirDice + 1, xDirDice + 2);
-    swap(xDirDice[2], top);
-    yDirDice[1] = xDirDice[1];
-}
-void moveWest() {
-    rotate(xDirDice, xDirDice + 2, xDirDice + 2);
-    swap(xDirDice[0], top);
-    yDirDice[1] = xDirDice[1];
-}
-void moveNorth() {
-    rotate(yDirDice, yDirDice + 1, yDirDice + 2);
+    rotate(yDirDice, yDirDice + 1, yDirDice + 3);
     swap(yDirDice[2], top);
     xDirDice[1] = yDirDice[1];
 }
-void moveSouth() {
-    rotate(yDirDice, yDirDice + 2, yDirDice + 2);
+void moveWest() {
+    rotate(yDirDice, yDirDice + 2, yDirDice + 3);
     swap(yDirDice[0], top);
     xDirDice[1] = yDirDice[1];
 }
+void moveNorth() {
+    rotate(xDirDice, xDirDice + 2, xDirDice + 3);
+    swap(xDirDice[0], top);
+    yDirDice[1] = xDirDice[1];
+}
+void moveSouth() {
+    rotate(xDirDice, xDirDice + 1, xDirDice + 3);
+    swap(xDirDice[2], top);
+    yDirDice[1] = xDirDice[1];
+}
+
 bool OOB(int nx, int ny) {return nx >= N || nx < 0 || ny >= M || ny < 0;}
 
 int main(void) {
@@ -49,7 +50,7 @@ int main(void) {
         int move; cin >> move;
         if(OOB(nx + dx[move], ny + dy[move])) continue;
 
-        nx = nx + dx[move]; ny = ny + dy[move];
+        nx += dx[move]; ny += dy[move];
 
         if(move == 1) {moveEast();}
         else if(move == 2) {moveWest();}
@@ -58,7 +59,6 @@ int main(void) {
 
         if(board[nx][ny] == 0) {
             board[nx][ny] = xDirDice[1];
-            xDirDice[1] = 0; yDirDice[1] = 0;
         } else {
             xDirDice[1] = board[nx][ny];
             yDirDice[1] = board[nx][ny];
@@ -68,4 +68,3 @@ int main(void) {
         cout << top << '\n';
     }
 }
-

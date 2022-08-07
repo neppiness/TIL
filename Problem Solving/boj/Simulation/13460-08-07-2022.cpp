@@ -5,7 +5,6 @@
 using namespace std;
 
 int N, M;
-int cnt = 0;
 char board[12][12];
 
 int MIN = 987654321;
@@ -57,13 +56,11 @@ bool moveLeft() {
             if(val == '#') {
                 while(!Q.empty()) Q.pop();
                 exitIsOnQ = 0;
-            }
-            else if(val == 'O') {Q.push({row, col}); exitIsOnQ = 1;}
+            } else if(val == 'O') {Q.push({row, col}); exitIsOnQ = 1;}
             else if(val == '.') {
                 if(exitIsOnQ) continue;
                 Q.push({row, col});
-            }
-            else if(val == 'B' || val == 'R') {
+            } else if(val == 'B' || val == 'R') {
                 if(Q.empty()) continue;
                 if(exitIsOnQ) {
                     if(val == 'B') blueOut = 1 ;
@@ -78,18 +75,18 @@ bool moveLeft() {
         }
     }
 
-    if(blueOut) return false;
-    else if(redOut) return true;
+    if(blueOut) return 0;
+    else return 1;
 }
 
-void solve(int times) {
-    if(times == 10) {return;}
+void solve(int cnt) {
+    if(cnt == 10) {return;}
 
-    cnt = times + 1;
+    cnt++;
     for(int rot = 0; rot < 4; rot++) {
         if(moveLeft()) {MIN = min(MIN, cnt); return;}
 
-        solve(times + 1);
+        solve(cnt);
         doubleRotate();
         moveLeft();
         rRotate();

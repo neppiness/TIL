@@ -8,7 +8,6 @@ using namespace std;
 int N, M;
 int board[502][502];
 bool vis[502][502] = {0};
-bool visT[502][502] = {0};
 
 int dx[] = {1, 0, -1, 0};
 int dy[] = {0, 1, 0, -1};
@@ -38,18 +37,21 @@ void BT(int times, int cx, int cy) {
     }
 }
 
-void considerTShape(int cx, int cy) {
+void CheckTShape(int cx, int cy) {
     for(int type = 0; type < 4; type++) {
         queue<pair<int,int>> Q;
         sum = 0;
         bool isOOB = 0;
+
         for(int pt = 0; pt < 4; pt++) {
             int nx = cx + dt[type][pt][0];
             int ny = cy + dt[type][pt][1];
             if(nx >= N || nx < 0 || ny >= M || ny < 0) {isOOB = 1; break;}
             Q.push({nx, ny});
         }
+
         if(isOOB) continue;
+
         while(!Q.empty()) {
             auto cur = Q.front(); Q.pop();
             sum += board[cur.first][cur.second];
@@ -70,12 +72,12 @@ int main(void){
         for(int col = 0; col < M; col++) {
             vis[row][col] = 1;
             sum += board[row][col];
-            BT(1, row, col); 
+            BT(1, row, col);
             sum -= board[row][col];
         }
-
+    
     for(int row = 0; row < N; row++)
-            for(int col = 0; col < M; col++) considerTShape(row, col);
+            for(int col = 0; col < M; col++) CheckTShape(row, col);
 
     cout << MAX;
 }

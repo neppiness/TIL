@@ -10,20 +10,44 @@ char board[12][12];
 
 int MIN = 987654321;
 
+int rotCases[10];
+
 void rotate() {
     char temp[12][12];
+
     for(int row = 0; row < N; row++)
         for(int col = 0; col < M; col++) temp[col][N-row-1] = board[row][col];
 
+    swap(M, N);
+
     for(int row = 0; row < N; row++)
         for(int col = 0; col < M; col++) board[row][col] = temp[row][col];
-
-    swap(M, N);
 }
 
-void moveLeft() {
+void rRotate() {
+    char temp[12][12];
+
+    for(int row = 0; row < N; row++)
+        for(int col = 0; col < M; col++) temp[M-col-1][row] = board[row][col];
+
+    swap(M, N);
+
+    for(int row = 0; row < N; row++)
+        for(int col = 0; col < M; col++) board[row][col] = temp[row][col];
+}
+
+void doubleRotate() {
+    char temp[12][12];
+
+    for(int row = 0; row < N; row++)
+        for(int col = 0; col < M; col++) temp[N-1-row][M-1-col] = board[row][col];
+
+    for(int row = 0; row < N; row++)
+        for(int col = 0; col < M; col++) board[row][col] = temp[row][col];
+}
+
+bool moveLeft() {
     bool blueOut = 0, redOut = 0;
-    cnt++;
 
     for(int row = 0; row < N; row++) {
         queue<pair<int,int>> Q;
@@ -44,8 +68,8 @@ void moveLeft() {
                 if(exitIsOnQ) {
                     if(val == 'B') blueOut = 1 ;
                     else redOut = 1;
-                }
-                else {
+                    board[row][col] = '.'; 
+                } else {
                     auto cur = Q.front(); Q.pop();
                     board[cur.first][cur.second] = val;
                     board[row][col] = '.';
@@ -53,8 +77,23 @@ void moveLeft() {
             }
         }
     }
-    if(blueOut) return;
-    else if(redOut) {MIN = min(MIN, cnt); cnt = 0; return;}
+
+    if(blueOut) return false;
+    else if(redOut) return true;
+}
+
+void solve(int times) {
+    if(times == 10) {return;}
+
+    cnt = times + 1;
+    for(int rot = 0; rot < 4; rot++) {
+        if(moveLeft()) {MIN = min(MIN, cnt); return;}
+
+        solve(times + 1);
+        doubleRotate();
+        moveLeft();
+        rRotate();
+    }
 }
 
 int main(void) {
@@ -64,10 +103,8 @@ int main(void) {
 
     for(int row = 0; row < N; row++) cin >> board[row];
 
-    rotate();
+    solve(0);
 
-    for(int row = 0; row < N; row++) cout << board[row] << '\n';
-
-    if(MIN = 987654321) cout << -1;
+    if(MIN == 987654321) cout << -1;
     else cout << MIN;
 }

@@ -66,15 +66,8 @@ int main(void){
     for(int row = 0; row < 101; row++) fill(board[row], board[row] + 101, false);
     for(int i = 0; i < N; i++) {
         cx = x[i], cy = y[i];
-        dc(cx, cy, d[i], g[i]);
+        dc(cy, cx, d[i], g[i]);
     }
 
     cout << ret() << '\n';
-
-    for(int row = 0; row < 20; row ++){
-        for(int col = 0; col < 20; col++) {
-            cout << board[row][col] << ' ';
-        }
-        cout << '\n';
-    }
 }

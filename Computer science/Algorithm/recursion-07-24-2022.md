@@ -32,6 +32,41 @@ int fibo(int n) {
 ```
 - The time complexity for this function above is O(1.618^n); n = 100 needs 20000 years to calculate
 
+### Steps in recursive function
+1. Codes for a base condition
+2. Processing codes
+3. Call a deeper function
+4. Post-processing codes
+
+#### Examples
+- Factorial calculation
+```cpp
+int factorial(int n) {
+  // 1. Base condition
+  if(n == 1) return 1;
+  // 2 & 3. Processing code and calling a deeper function
+  return n * factorial(n-1);
+  // 4. Post-processing omitted
+}
+```
+
+- Backtracking example
+```cpp
+void backtracking(int m) {
+    // 1. Base condition
+    if (m == MAX) return;
+
+    // 2. Processing code
+    for(int i = 0; i < N; i++){
+        vis[i] = true;
+        // 3. Calling a deeper function
+        backtracking(m + 1);
+        // 4. Post processing
+        vis[i] = false;
+    }
+}
+```
+
 ___
 
 ### Reference

@@ -9,15 +9,13 @@ int main(){
     int N; cin >> N;
     
     long long a[100002];
+    for(int i = 0; i < N; i++) cin >> a[i];
+    sort(a, a+N);
 
     long long num[100002];
     int cnt[100002];
-
-    for(int i = 0; i < N; i++) cin >> a[i];
-
-    sort(a, a+N);
-
     int idx = 0;
+
     num[0] = a[0];
     for(int i = 1; i < N; i++) {
         if(a[i] != num[idx]) num[++idx] = a[i];

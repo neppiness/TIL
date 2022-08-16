@@ -5,33 +5,23 @@
 
 using namespace std;
 
-int p10Calc(int m) {
-    if(m == 1) return 1;
-    return 10 * p10Calc(m-1);
-}
-
 int main(){
     ios::sync_with_stdio(0); cin.tie(0);
 
-    string str;
     int N; cin >> N;
 
-    vector<int> V;
+    vector<long long> V;
 
     while(N--){
-        cin >> str;
+        string str; cin >> str;
 
-        string::iterator it = str.end(); it--;
-        int len = str.length();
+        int m = str.length() - 1;
+        long long p10 = 1;
 
-        while(*it == '0') {it--; len--;}
-
-        int p10 = p10Calc(len);
-        int num = 0;
-        while(it >= str.begin()) {
+        long long num = 0;
+        for(auto it = str.begin(); it < str.end(); it++) {
             num += (*it - '0') * p10;
-            p10 /= 10;
-            it--;
+            p10 *= 10;
         }
         V.push_back(num);
     }

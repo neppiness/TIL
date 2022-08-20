@@ -32,7 +32,7 @@
 - References: at the bottom, separated by a line above it
 
 ### Commit name
-- "TIL on *Month Day, Year*"
-- ex) TIL on May 15th, 2022
+- "nth commit on *Month Day, Year*"
+- ex) 1st commit on August 20th, 2022
 
 ### To README file: [link](./README.md)

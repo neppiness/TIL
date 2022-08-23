@@ -20,7 +20,7 @@ int main(){
     while(N--) {
         cin >> weight >> value;
 
-        auto sz = wV.size();
+        int sz = wV.size();
         for(int i = 0; i < sz; i++) {
             int nW = wV[i] + weight;
             if(nW > K) continue;

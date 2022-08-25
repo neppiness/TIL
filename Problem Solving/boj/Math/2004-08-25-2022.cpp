@@ -20,7 +20,7 @@ int main(){
         while(num % 5 == 0) {no5++; num /= 5;}
     }
 
-    for(int i = 5; i <= M; i += 5) {
+    for(int i = 2; i <= M; i += 5) {
         int num = i;
         while(num % 5 == 0) {no5--; num /= 5;}
     }

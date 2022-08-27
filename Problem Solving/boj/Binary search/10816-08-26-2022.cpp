@@ -5,12 +5,31 @@ using namespace std;
 int N, cnt;
 int num[500002];
 
-int bsidx(int begin, int end, int value) {
+int lowerBoundSearch(int begin, int end, int value) {
     int mid = begin + (end - begin)/2;
-    if(num[mid] == value) return mid;
-    else if(end - begin == 1) return -1;
-    else if(num[mid] > value) return bsidx(begin, mid, value);
-    else return bsidx(mid, end, value);
+    if(end - begin == 1) {
+        if(num[begin] == value) end--;
+        return end;
+    }
+    else if(num[mid] < value) return lowerBoundSearch(mid, end, value);
+    else return lowerBoundSearch(begin, mid, value);
+}
+
+int upperBoundSearch(int begin, int end, int value) {
+    int mid = begin + (end - begin)/2;
+    if(end - begin == 1) return end;
+    else if(num[mid] > value) return upperBoundSearch(begin, mid, value);
+    else return upperBoundSearch(mid, end, value);
+}
+
+int bsrange(int begin, int end, int value) {
+    int mid = begin + (end - begin)/2;
+    if(num[mid] == value) {
+        return upperBoundSearch(mid, end, value) - lowerBoundSearch(begin, mid, value);
+    }
+    else if(end - begin == 1) return 0;
+    else if(num[mid] > value) return bsrange(begin, mid, value);
+    else return bsrange(mid, end, value);
 }
 
 int main(){
@@ -23,15 +42,8 @@ int main(){
     int M; cin >> M;
     while(M--) {
         int a; cin >> a;
-        cnt = 0;
 
-        int idx = bsidx(0, N, a);
-        if(idx != -1) {
-            cnt++;
-            int idxup = idx;
-            while(num[++idxup] == a) cnt++;
-            while(num[--idx] == a) cnt++;
-        }
-        cout << cnt << ' ';
+        int len = bsrange(0, N, a);
+        cout << len << ' ';
     }
 }

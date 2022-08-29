@@ -54,6 +54,16 @@ upper_bound at position 6
 1. Given array should be sorted
 2. `mid` value should be determined to avoid an infinite loop
   * Be careful for a case when `en - st == 1`
+  * If a pointer is assigned without some calculation, (such as +1 or -1) the equation for `mid` value must differ to the pointer `assigned` mid value
+
+- An example for pointers causing an infinite loop
+```cpp
+mid = (st + en + 1) / 2; // if en - st = 1, mid is always equal to en;
+
+if(mid < val) st = mid + 1; // st pointer changes from mid value
+else en = mid; // end pointer doesn't change from mid value
+```
+
 
 ### boj.kr/18870 using lower_bound and unique
 ```cpp
@@ -80,6 +90,11 @@ int main(void){
 }
 ```
 
+### Parametric search
+- Search the minimum or maximum value satisfying the given conditions using binary search
+- Note that the function representing relationship between variables should be monotonic decreasing/increaseing function
+  * If it is not, binary search is not valid
+- [boj.kr/1654](../../Problem%20Solving/boj/Binary%20search/1654-08-28-2022.cpp)
 
 ___
 

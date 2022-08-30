@@ -13,8 +13,8 @@ ll RES = 0x7ffffff;
 int LB(int begin, int end, int val) {
     while(begin < end) {
         int mid = (begin + end)/2;
-        if(A[mid] > val) end = mid;
-        else begin = mid + 1;
+        if(A[mid] < val) begin = mid + 1;
+        else end = mid;
     }
     return begin;
 }
@@ -30,8 +30,7 @@ int main(){
     for(int i = 0; i < N; i++)
         for(int j = i + 1; j < N; j++) {
             ll tar = -(A[i] + A[j]);
-            int idx = LB(j+1, N, tar) - 1;
-            
+            int idx = LB(j+1, N, tar) -1;
             if(idx != i && idx != j) {
                 ll res = A[idx] - tar;
                 if(res < 0) res = -res;
@@ -40,8 +39,7 @@ int main(){
                     a1 = i; a2 = j; a3 = idx;
                 }
             }
-            if(idx + 1 < N) {
-                idx++;
+            if(++idx < N) {
                 if(idx != i && idx != j) {
                     ll res = A[idx] - tar;
                     if(res < 0) res = -res;

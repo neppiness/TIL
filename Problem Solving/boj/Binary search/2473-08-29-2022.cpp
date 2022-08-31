@@ -1,16 +1,15 @@
 #include <iostream>
 #include <algorithm>
 
-#define ll long long
-
+typedef long long ll;
 using namespace std;
 
-int N; 
+int N;
 ll A[5002];
 int a1, a2, a3;
-ll RES = 0x7ffffff;
+ll RES = 0x7f7f7f7f7f7f;
 
-int LB(int begin, int end, int val) {
+int LB(int begin, int end, ll val) {
     while(begin < end) {
         int mid = (begin + end)/2;
         if(A[mid] < val) begin = mid + 1;
@@ -30,23 +29,16 @@ int main(){
     for(int i = 0; i < N; i++)
         for(int j = i + 1; j < N; j++) {
             ll tar = -(A[i] + A[j]);
-            int idx = LB(j+1, N, tar) -1;
-            if(idx != i && idx != j) {
-                ll res = A[idx] - tar;
+            int idx = LB(j+1, N, tar);
+            for(int k = -1; k <= 0; k++) {
+                int IDX = idx + k;
+                if(IDX < 0 || IDX >= N) continue;
+                if(IDX == j || IDX == i) continue;
+                ll res = A[IDX] - tar;
                 if(res < 0) res = -res;
                 if(res < RES) {
                     RES = res;
-                    a1 = i; a2 = j; a3 = idx;
-                }
-            }
-            if(++idx < N) {
-                if(idx != i && idx != j) {
-                    ll res = A[idx] - tar;
-                    if(res < 0) res = -res;
-                    if(res < RES) {
-                        RES = res;
-                        a1 = i; a2 = j; a3 = idx;
-                    }
+                    a1 = i; a2 = j; a3 = IDX;
                 }
             }
         }

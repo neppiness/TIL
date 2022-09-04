@@ -2,12 +2,10 @@
 using namespace std;
 
 const int M = 1000003;
-const int MX = 500005;
 const int a = 1000;
 
-int head[M];
-string key[MX];
-int val[MX];
+string key[M];
+int val[M];
 
 int my_hash(string& k) {
   int h = 0;
@@ -17,27 +15,25 @@ int my_hash(string& k) {
 }
 
 int find(string k) {
-  int h = my_hash(k);
-  int idx = head[h];
+  int idx = my_hash(k);
 
   while(key[idx].length()) {
     if(key[idx] == k) return idx;
-    idx++;
+    idx = (idx + 1)%M;
   }
   return -1;
 }
 
 void insert(string k, int v) {
-  int h = my_hash(k);
   int idx = find(k);
-  if(idx == -1) return;
-
-  return;
+  if(idx == -1) {idx = my_hash(k);}
+  key[idx] = k;
+  val[idx] = v;
 }
 
 void erase(string k) {
-
-  return;
+  int idx = find(k);
+  if(idx != -1) key[idx] = "dummy";
 }
 
 void test(){
@@ -49,10 +45,6 @@ void test(){
   insert("orange", 100); // ("orange", 100), ("melon", 20), ("banana", 52), ("cherry", 27)
   assert(val[find("banana")] == 52);
   assert(val[find("orange")] == 100);
-
-  cout << "good!\n";
-  return;
-
   erase("wrong_fruit"); // ("orange", 100), ("melon", 20), ("banana", 52), ("cherry", 27)
   erase("orange"); // ("melon", 20), ("banana", 52), ("cherry", 27)
   assert(find("orange") == -1);
@@ -71,12 +63,11 @@ void test(){
   assert(val[find("cherry")] == 27);
   assert(val[find("orange")] == 701);
   assert(val[find("lemon")] == 6);
+  cout << "good!\n";
 }
 
 int main(){
   ios::sync_with_stdio(0);
   cin.tie(0);
-
-  fill(head, head + M, -1);
   test();
 }

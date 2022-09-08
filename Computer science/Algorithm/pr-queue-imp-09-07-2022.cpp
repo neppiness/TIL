@@ -6,11 +6,12 @@ int heap[100005];
 int sz = 0; // heap에 들어있는 원소의 수
 
 void push(int x){
-  sz++; heap[sz] = x;
+  heap[++sz] = x;
   int cur = sz;
   while(cur != 1) {
     if(heap[cur/2] > heap[cur])
       swap(heap[cur/2], heap[cur]);
+    else break;
     cur /= 2;
   }
 }
@@ -32,6 +33,10 @@ void pop(){
 
 void test(){
   push(10); push(2); push(5); push(9); // {10, 2, 5, 9}
+
+  for(int i = 1; i <= sz; i++) cout << heap[i] << ' ';
+  cout << '\n';
+
   cout << top() << '\n'; // 2
   pop(); // {10, 5, 9}
   pop(); // {10, 9}

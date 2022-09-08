@@ -16,7 +16,9 @@ void push(int x){
   }
 }
 
-int top(){return heap[1];}
+int top(){
+  return heap[1];
+}
 
 void pop(){
   heap[1] = heap[sz--];

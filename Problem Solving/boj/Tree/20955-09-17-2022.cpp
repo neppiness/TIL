@@ -12,8 +12,8 @@ int ccnt, tcnt;
 void tr(int cur) {
   for(int nxt : adj[cur]) {
     if(p[cur] == nxt) continue;
-    else if(p[nxt]) {
-      ccnt += (p[nxt] > 0);
+    if(p[nxt] != 0) {
+      ccnt++;
       continue;
     }
     p[nxt] = cur;
@@ -38,5 +38,5 @@ int main(void){
     p[i] = -1;
     tr(i);
   }
-  cout << (ccnt + tcnt - 1);
+  cout << (tcnt - 1) + ccnt;
 }

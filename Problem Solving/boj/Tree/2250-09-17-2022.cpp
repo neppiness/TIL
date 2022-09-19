@@ -2,7 +2,6 @@
 using namespace std;
 
 int l[10002], r[10002];
-
 bool isroot[10002];
 
 vector<int> coord[10002];

@@ -29,22 +29,22 @@ int find(int x) {
   return p[x] = find(p[x]); // using recursion to find root node and automatically optimize
 }
 
+// If u and v are in different group,
+// the root nodes are united under the root node with higher rank
+// The rank is impelemnted as minus values
 bool is_diff_group(int u, int v){
   // find roots of u and v, and assign them to u and v
   u = find(u); v = find(v);
-  
-  // if the roots of u and v are the same
   if(u == v) return 0;
 
   // u and v are roots, but not the same one.
-  // This code above makes difference between roots
+  // This code below makes difference between ranks of root node
   if(p[u] == p[v]) p[u]--;
   
-  // assign lower value
+  // assign lower value to the other
   if(p[u] < p[v]) p[v] = u;
   else p[u] = v;
 
-  // return 1 means that u and v have different root values
   return 1;
 }
 
@@ -66,6 +66,13 @@ int main(){
 }
 ```
 - `is_diff_group()` function implies the union find algorithm's union
+
+### Appendix. Union-find
+- A disjoint-set data structure is defined as a data structure that keeps track of a set of elements partitioned into a number of disjoint (non-overlapping) subsets
+- Union-find algorithm is an algorithm that performs two useful operations on a disjoint-set data structure:
+  * Find: Determine which subset a particular element is in. This can be used for determining if two elements are in the same subset.
+  * Union: Join two subsets into a single subset. Here first we have to check if the two subsets belong to same set. If no, then we cannot perform union.
+- Union operation could be much efficient when a disjoint-set data structure is implemented using a tree rather than an array
 
 <br>
 
@@ -122,3 +129,4 @@ ___
 2. [Spanning Tree and Minimum Spanning Tree: programiz](https://www.programiz.com/dsa/spanning-tree-and-minimum-spanning-tree)
 3. [Kruskal’s Minimum Spanning Tree Algorithm | Greedy Algo-2](https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)
 4. [Introduction to Disjoint Set Data Structure or Union-Find Algorithm: geeksforgeeks](https://www.geeksforgeeks.org/union-find/)
+5. [[자료구조]Union-Find: Disjoint Set의 표현: 멍멍멍:티스토리](https://bowbowbow.tistory.com/26#union-find-란)

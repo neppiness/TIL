@@ -2,8 +2,6 @@
 using namespace std;
 
 int n, m;
-int a, b, cost;
-
 int p[1002];
 vector<tuple<int,int,int>> e;
 
@@ -27,8 +25,8 @@ int solve() {
   auto it = e.begin();
 
   while(cnt < n - 1) {
-    auto cur = *it; it++;
     int a, b, cost;
+    auto cur = *it; it++;
     tie(cost, a, b) = cur;
     if(!areindiffgr(a, b)) continue;
     ans += cost;
@@ -45,6 +43,7 @@ int main(void){
   n++; m++;
   
   while(m--) {
+    int a, b, cost;
     cin >> a >> b >> cost;
     e.push_back({cost, a, b});
   }

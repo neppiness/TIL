@@ -40,7 +40,7 @@ int main(void){
   cin.tie(0);
 
   cin >> n >> m;
-  n++; m++;
+  n++;
   
   while(m--) {
     int a, b, cost;

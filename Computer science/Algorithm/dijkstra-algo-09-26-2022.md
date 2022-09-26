@@ -54,6 +54,15 @@ void dijkstra_naive(int st) {
 - Time complexity: O(ElgE)
 - If E is too many so the E is about V^2, using priority queue is not efficient
 
+- Procedure
+  1. Add the start node in priority queue
+  2. Pick the minimum value on priority queue and check if that value is same as the value on the array; if not, pop the next value on the priority queue 
+  3. If the picked minimum value is smaller than 
+
+```cpp
+
+```
+
 ___
 
 ### References

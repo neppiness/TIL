@@ -57,11 +57,12 @@ void dijkstra_naive(int st) {
 - Procedure
   1. Add the start node in priority queue
   2. Pick the minimum value on priority queue and check if that value is same as the value on the array; if not, pop the next value on the priority queue 
-  3. If the picked minimum value is smaller than 
+  3. If the picked minimum value is smaller than the value in the minimum cost array, that array is updated by the picked value and that value is put in priority queue
+  4. Repeat step 2 and 3 until the priority queue contains nothing
 
-```cpp
-
-```
+### Path restoration
+- [Calculate minimum cost](../../Problem%20Solving/boj/Dijkstra%20algorithm/11779-09-27-2022.cpp)
+- Different from floid algorithm, path restoration could be done by storing previous nodes
 
 ___
 

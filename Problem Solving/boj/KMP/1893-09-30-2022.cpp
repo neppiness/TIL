@@ -19,12 +19,12 @@ vector<int> failure(){
 void solve(){
   int as = a.size();
   for(int k = 0; k < as; k++){
-    for(int i = 0; i < as; i++) {
-      ma[a[i]] = (as + oa[a[i]] - k)%as;
-      cout << ma[a[i]] << ' ';
+    for(int i = 0; i < as; i++){
+      ma[a[i]] = oa[a[i]] + k;
+      if(ma[a[i]] > as) ma[a[i]] -= as;
     }
-    cout << endl;
-    int j = 1;
+    
+    int j = 0;
     for(int i = 0; i < s.size(); i++){
       while(j > 0 && oa[s[i]] != ma[w[j]]) j = f_fun[j-1];
       if(oa[s[i]] == ma[w[j]]) j++;
@@ -44,14 +44,14 @@ int main(void){
     fill(cnt, cnt + 64, 0);
 
     cin >> a >> w >> s;
-    for(int i = 0; i < a.size(); i++) oa[a[i]] = i;
+    for(int i = 0; i < a.size(); i++) oa[a[i]] = i + 1;
 
     f_fun = failure();
     solve();
 
-    for(int k = 3; k <= a.size(); k++)
+    for(int k = 0; k < a.size(); k++)
       if(cnt[k] == 1) ans.push_back(k);
-    
+
     if(ans.size() == 0) cout << "no solution\n";
     else if(ans.size() == 1)
       cout << "unique: " << ans[0] << '\n';

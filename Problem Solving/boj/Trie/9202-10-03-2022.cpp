@@ -35,19 +35,19 @@ void insert(string& s){
 }
 
 void find(int cx, int cy, int cur, string s){
-  char& c = board[cx][cy];
+  char c = board[cx][cy];
   s += c;
+
+  int& next = nxt[cur][ctoi(c)];
+  if(next == -1) return;
+  if(chk[next]) cnt[s]++;
 
   for(int dir = 0; dir < 8; dir++){
     int nx = cx + dx[dir];
     int ny = cy + dy[dir];
 
-    int& next = nxt[cur][ctoi(c)];
-    if(chk[next]){cnt[s]++; return;}
-
     if(nx >= 4 || nx < 0 || ny >= 4 || ny < 0) continue;
     if(vis[nx][ny]) continue;
-    if(next == -1) continue;
 
     vis[nx][ny] = 1;
     find(nx, ny, next, s);
@@ -56,12 +56,11 @@ void find(int cx, int cy, int cur, string s){
 }
 
 void solve(){
-  int scnt = 0, maxsc = 0;
+  int scnt = 0, sc = 0;
   string lw = "";
 
   for(int i = 8; i > 0; i--)
-    for(auto k : keys[i])
-      cnt[k] = 0;
+    for(auto k : keys[i]) cnt[k] = 0;
 
   for(int x = 0; x < 4; x++)
     for(int y = 0; y < 4; y++) {
@@ -73,12 +72,12 @@ void solve(){
   for(int i = 8; i > 0; i--)
     for(auto k : keys[i])
       if(cnt[k] >= 1) {
-        maxsc += score[k.size()];
+        sc += score[k.size()];
         if(lw == "") lw = k;
         scnt++;
       }
 
-  cout << maxsc << ' ';
+  cout << sc << ' ';
   cout << lw << ' ';
   cout << scnt << '\n';
 }

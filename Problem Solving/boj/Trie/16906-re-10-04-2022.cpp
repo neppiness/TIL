@@ -10,8 +10,8 @@ bool chk[MX];
 
 int n;
 int len[1002];
-vector<string> w[1002];
-unordered_map<int, queue<int>> seq;
+int oriseq[1002];
+queue<string> w[1000];
 
 int ctoi(char a){
   return a - '0';
@@ -29,7 +29,6 @@ string solve(int i){
       if(chk[next]) continue;
       cur = next;
       s += c;
-      cout << s << '\n';
       break;
     }
     if(c == '2') return "";
@@ -57,13 +56,20 @@ int main(void){
   cin >> n;
   for(int i = 0; i < n; i++){
     cin >> len[i];
-    seq[len[i]].push(i);
+    oriseq[i] = len[i];
   }
   sort(len, len + n);
   string s;
   for(int i = 0; i < n; i++){
     s = solve(i);
     if(s == "") {cout << -1; return 0;}
+    w[len[i]].push(s);
+  }
+  cout << "1\n";
+  for(int i = 0; i < n; i++){
+    int seq = oriseq[i];
+    cout << w[seq].front() << '\n';
+    w[seq].pop();
   }
 }
 /*

@@ -5,7 +5,7 @@ int no, x, t;
 string p, nlist;
 deque<int> dq;
 
-string solve() {
+void solve() {
   bool isreversed = 0;
   x = 0;
   
@@ -24,28 +24,29 @@ string solve() {
   for(char c : p) {
     if(c == 'R') isreversed = !isreversed;
     else if(c == 'D') {
-      if(dq.empty()) return "error\n";
+      if(dq.empty()) {
+        cout << "error\n";
+        return;
+      }
       else if(isreversed) dq.pop_back();
       else dq.pop_front();
     }
   }
-  string ans = "[";
+  cout << "[";
   if(!isreversed) {
     while(!dq.empty()) {
-      ans = ans + to_string(dq.front());
+      cout << dq.front();
       dq.pop_front();
-      if(!dq.empty()) ans += ",";
+      if(!dq.empty()) cout << ",";
     }
   } else {
     while(!dq.empty()) {
-      ans = ans + to_string(dq.back());
+      cout << dq.back();
       dq.pop_back();
-      if(!dq.empty()) ans += ",";
+      if(!dq.empty()) cout << ",";
     }
   }
-  ans += "]\n";
-  if (ans == "[]\n") ans = "error\n";
-  return ans;
+  cout << "]\n";
 }
 
 int main(void) {
@@ -53,5 +54,5 @@ int main(void) {
   cin.tie(0);
 
   cin >> t;
-  while(t--) cout << solve();
+  while(t--) solve();
 }

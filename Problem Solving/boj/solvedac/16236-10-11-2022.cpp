@@ -29,10 +29,11 @@ tuple<int, int, int> bfs(int x, int y) {
       nx = cx + dx[dir]; ny = cy + dy[dir];
       if(nx >= n || nx < 0 || ny >= n || ny < 0) continue;
       if(dist[nx][ny] != -1) continue;
+      if(sz < b[nx][ny]) continue;
       dist[nx][ny] = dist[cx][cy] + 1;
       if(lim < dist[nx][ny]) continue;
       q.push({nx, ny});
-      if(b[nx][ny] && sz >= b[nx][ny]) {
+      if(b[nx][ny] && sz > b[nx][ny]) {
         lim = dist[nx][ny];
         v.push_back({lim, nx, ny});
       }

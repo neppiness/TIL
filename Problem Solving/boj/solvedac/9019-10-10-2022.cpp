@@ -9,14 +9,16 @@ string bfs(int st, int en) {
   q.push(st);
   while(!q.empty()) {
     int cur = q.front(); q.pop();
+    string str = s[cur];
     for(char c : cmd) {
       int nxt;
-      if(c == 'D') nxt = (cur*2) % 10000;
+      if(c == 'D') nxt = (cur << 1) % 10000;
       else if(c == 'S') nxt = (cur + 9999) % 10000;
       else if(c == 'L') nxt = (cur % 1000)*10 + (cur / 1000);
       else nxt = (cur / 10) + (cur % 10)*1000;
+
       if(s[nxt] != "") continue;
-      s[nxt] = s[cur] + c;
+      s[nxt] = str + c;
       if(nxt == en) return s[en];
       q.push(nxt);
     }

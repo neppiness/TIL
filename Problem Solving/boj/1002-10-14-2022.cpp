@@ -14,11 +14,13 @@ void solve() {
   if(d1 == 0) {
     if(r[0] == r[1]) cout << -1;
     else cout << 0;
+  } else {
+    if(d1 < d3) cout << 0;
+    else if(d1 == d3) cout << 1;
+    else if(d1 < d2) cout << 2;
+    else if(d1 == d2) cout << 1;
+    else cout << 0; 
   }
-  else if(d1 == d2) cout << 1;
-  else if(d1 == d3) cout << 1;
-  else if(d1 > d2) cout << 0;
-  else if(d1 < d2) cout << 2;
 }
 
 int main(void) {

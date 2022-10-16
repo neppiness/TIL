@@ -2,7 +2,8 @@
 using namespace std;
 
 const int INF = 0x3f3f3f3f;
-int mx;
+int no[80002];
+int sum;
 
 int main(void) {
   ios::sync_with_stdio(0);
@@ -10,29 +11,35 @@ int main(void) {
 
   int n; cin >> n;
 
-  stack <int> st;
+  stack<int> st1;
+  stack<pair<int, int>> st2;
   int x;
   while(n--) {
     cin >> x;
-    st.push(x);
+    st1.push(x);
   }
-  st.push(INF);
-  
-  
+
+  int cur, nxt;
+  int no;
+  long long ans = 0;
+  st2.push({INF, 0});
+  while(!st1.empty()) {
+    int cnt = 0;
+    tie(cur, no) = st2.top();
+    nxt = st1.top(); st1.pop();
+    if(nxt > cur) {
+      while(nxt > cur) {
+        st2.pop();
+        cnt++;
+        cnt += no;
+        tie(cur, no) = st2.top();
+      }
+      st2.push({nxt, cnt});
+      ans += cnt;
+      cnt = 0;
+    } else {
+      st2.push({nxt, cnt});
+    }
+  }
+  cout << ans;
 }
-/*
-1번 건물에서 2, 3, 4번 옥상을 확인할 수 있는 이유는
-이들이 1번 건물보다 낮기 때문이다.
-1번 건물이 12를 확인하는 순간 지금껏 쌓았던 거 다 뱉음
-
-앞 건물이 더 높으면 st에 들어가면 됨
-
-
-
-2번 건물의 경우, 10, 3을 쌓고 있다가
-7이 오면, st의 최상위 값을 확인하고 반환.
-이때 값은 
-
-[7]번 건물 높이는 INF라고 하자
-
-*/

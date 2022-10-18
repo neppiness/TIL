@@ -19,7 +19,8 @@ int main(void) {
       if(a[st.top()] >= a[i]) {
         idx[i] = st.top();
         break;
-      } else st.pop();
+      }
+      else st.pop();
     }
     st.push(i);
   }

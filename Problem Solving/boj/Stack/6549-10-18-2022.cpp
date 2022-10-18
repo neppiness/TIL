@@ -3,35 +3,26 @@ using namespace std;
 typedef long long ll;
 
 int n;
-int a[100'002];
-ll ans[100'002];
-stack<int> st;
+ll mx;
+stack<pair<int, int>> stk;
 
 ll solve() {
-  for(int i = 0; i < n; i++)
-    cin >> a[i];
-  fill(ans, ans + n + 1, 0);  
-
+  int x, cur, st;
+  mx = 0;
   for(int i = 0; i < n; i++) {
-    if(!st.empty() && st.top() > a[i]) {
-      while(!st.empty()) {
-        ans[i - st.size()] = st.size() * a[i - st.size()];
-        st.pop();
-      }
+    cin >> x;
+    while(!stk.empty() && stk.top().first > x) {
+      tie(cur, st) = stk.top();
+      mx = max(mx, (ll)cur*(i - st));
+      stk.pop();
     }
-    st.push(a[i]);
+    stk.push({x, i});
   }
-
-  int i = n;
-  while(!st.empty()) {
-    ans[i - st.size()] = (ll)st.size() * (ll)a[i - st.size()];
-    st.pop();
+  while(!stk.empty()) {
+    tie(cur, st) = stk.top();
+    mx = max(mx, (ll)cur*(n - st));
   }
-
-  for(int i = 0; i < n; i++) cout << ans[i] << ' ';
-  ll mx1 = ans[max_element(ans, ans + n) - ans];
-  ll mx2 = a[max_element(a, a + n) - a];
-  return max(mx1, mx2);
+  return mx;
 }
 
 int main(void) {

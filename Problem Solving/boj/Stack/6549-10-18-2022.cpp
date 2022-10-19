@@ -7,20 +7,20 @@ ll mx;
 stack<pair<int, int>> stk;
 
 ll solve() {
-  int x, cur, st;
+  int cur, prv, st;
   mx = 0;
   for(int i = 0; i < n; i++) {
-    cin >> x;
-    while(!stk.empty() && stk.top().first > x) {
-      tie(cur, st) = stk.top();
-      mx = max(mx, (ll)cur*(i - st));
-      stk.pop();
+    cin >> cur;
+    st = i;
+    while(!stk.empty() && stk.top().first > cur) {
+      tie(prv, st) = stk.top(); stk.pop();
+      mx = max(mx, (ll)prv*(i - st));
     }
-    stk.push({x, i});
+    stk.push({cur, st});
   }
   while(!stk.empty()) {
-    tie(cur, st) = stk.top();
-    mx = max(mx, (ll)cur*(n - st));
+    tie(prv, st) = stk.top(); stk.pop();
+    mx = max(mx, (ll)prv*(n - st));
   }
   return mx;
 }

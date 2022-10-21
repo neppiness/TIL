@@ -7,34 +7,28 @@ bool isvalid = 1;
 string s;
 stack <char> st;
 
-int brak(int lev) {
-  int res = 1;
-  if(s[idx] == '(' || s[idx] == '[') {
-    st.push(s[idx]);
-    int ft = ((s[idx] == '(') ? 2 : 3);
-    res += ft*brak(lev + 1);
-  } else if(s[idx] == ')') {
-    if(!st.empty() && st.top() == '(') {
-      st.pop();
-      return res;
-    } else isvalid = 0;
-  } else {
-    if(!st.empty() && st.top() == '[') {
-      st.pop();
-      return res;
-    } else isvalid = 0;
-  }
-  idx++;
-  if(idx == s.length()) return res;
-}
-
-int solve() {
+int brk() {
   int res = 0;
-  while(idx < s.length()) {
+  while(isvalid && idx < s.length()) {
     if(s[idx] == '(' || s[idx] == '[') {
       st.push(s[idx]);
       int ft = ((s[idx] == '(') ? 2 : 3);
-      res += ft*brak(0);
+      idx++;
+      res += ft*brk();
+    } else if(s[idx] == ')') {
+      idx++;
+      if(!st.empty() && st.top() == '(') {
+        st.pop();
+        if(!res) res = 1;
+      } else isvalid = 0;
+      return res;
+    } else {
+      idx++;
+      if(!st.empty() && st.top() == '[') {
+        st.pop();
+        if(!res) res = 1;
+      } else isvalid = 0;
+      return res;
     }
   }
   return res;
@@ -45,8 +39,7 @@ int main(void) {
   cin.tie(0);
 
   cin >> s;
-  int ans = solve();
-
-  if(!isvalid) ans = 0;
+  int ans = brk();
+  if(!isvalid || !st.empty()) ans = 0;
   cout << ans;
 }

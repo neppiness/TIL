@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int INF = 0x7f7f7f7f;
 int r, c; 
 char b[1002][1002];
 int jh[1002][1002], f[1002][1002];
@@ -9,18 +8,21 @@ int jh[1002][1002], f[1002][1002];
 int dx[] = {1, 0, -1, 0};
 int dy[] = {0, 1, 0, -1};
 
-int ans = INF;
+int ans = 0;
+
+bool onedge(int x, int y) {
+  return (x == r - 1 || x == 0 || y == c - 1 || y == 0);
+}
 
 void solve(int (&dist)[1002][1002], vector<pair<int,int>> &init, bool mod) {
   queue<pair<int,int>> q;
   
   int cx, cy;
   for(auto in : init) {
-    int cx = in.first;
-    int cy = in.second;
+    tie(cx, cy) = in;
     dist[cx][cy] = 1;
     q.push({cx, cy});
-    if(mod) if(cx == r - 1 || cx == 0 || cy == c - 1 || cy == 0) {
+    if(mod && onedge(cx, cy)) {
       ans = dist[cx][cy];
       return;
     }
@@ -29,15 +31,14 @@ void solve(int (&dist)[1002][1002], vector<pair<int,int>> &init, bool mod) {
   while(!q.empty()) {
     tie(cx, cy) = q.front(); q.pop();
     for(int dir = 0; dir < 4; dir++) {
-      nx = cx + dx[dir];
-      ny = cy + dy[dir];
+      nx = cx + dx[dir]; ny = cy + dy[dir];
       if(nx >= r || nx < 0) continue;
       if(ny >= c || ny < 0) continue;
       if(b[nx][ny] == '#') continue;
       if(dist[nx][ny]) continue;
-      if(mod) if(dist[cx][cy] + 1 >= f[nx][ny]) continue;
+      if(mod && f[nx][ny]) if(dist[cx][cy] + 1 >= f[nx][ny]) continue;
       dist[nx][ny] = dist[cx][cy] + 1;
-      if(mod) if(nx == r - 1 || nx == 0 || ny == c - 1 || ny == 0) {
+      if(mod && onedge(nx, ny)) {
         ans = dist[nx][ny];
         return;
       }
@@ -63,6 +64,6 @@ int main(void) {
   solve(f, fcoord, 0);
   solve(jh, jhcoord, 1);
   
-  if(ans == INF) cout << "IMPOSSIBLE";
+  if(ans == 0) cout << "IMPOSSIBLE";
   else cout << ans;
 }

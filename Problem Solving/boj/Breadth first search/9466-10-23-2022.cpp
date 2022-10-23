@@ -13,13 +13,14 @@ int solve() {
   int cur, nxt;
   queue<int> q;
   for(int i = 1; i <= n; i++) {
-    if(cycle[i] || vis[i]) continue;
+    if(vis[i]) continue;
     q.push(i);
     vis[i] = i;
     while(!q.empty()) {
       cur = q.front(); q.pop();
       nxt = li[cur];
-      if(cycle[nxt] || vis[nxt] != i) continue;
+      if(cycle[nxt]) continue;
+      if(vis[nxt] != i && vis[nxt] != 0) continue;
       if(vis[nxt] == i) cycle[nxt] = 1;
       q.push(nxt);
       vis[nxt] = i;

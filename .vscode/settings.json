@@ -90,7 +90,8 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "1987-11-07-202": "cpp"
     },
     "[cpp]": {
         "editor.tabSize": 2
@@ -98,4 +99,5 @@
     "[markdown]": {
         "editor.tabSize": 2
     },
+    "C_Cpp.errorSquiggles": "Disabled",
 }

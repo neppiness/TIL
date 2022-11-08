@@ -4,13 +4,27 @@ using namespace std;
 
 const int MX = 100'002;
 
-int no, mx;
-bool vis[MX];
+int no; ll mx;
+
+ll dist[MX];
 vector<pair<int, int>> adj[MX];
+vector<ll> mxLen;
 
-void solve() {
-  
+int nxt, cost;
+void solve(int cur) {
 
+  for(auto a : adj[cur]) {
+    tie(nxt, cost) = a;
+    if(dist[nxt] != -1) continue;
+    dist[nxt] = 0;
+    solve(nxt);
+    if(!dist[nxt]) {
+      dist[nxt] = dist[cur] + cost;
+    } else {
+      mx = max(mx, dist[nxt] + dist[cur] + cost);
+      dist[nxt] = dist[cur] + cost;
+    }
+  }
 }
 
 int main(void) {
@@ -19,7 +33,7 @@ int main(void) {
 
   cin >> no;
 
-  int u, v, cost;
+  int u, v;
   for(int i = 0; i < no; i++) {
     cin >> u >> v;
     while(v != -1) {
@@ -28,6 +42,8 @@ int main(void) {
       cin >> v;
     }
   }
-  solve();
+
+  fill(dist, dist + MX, -1);
+  solve(1);
   cout << mx;
 }

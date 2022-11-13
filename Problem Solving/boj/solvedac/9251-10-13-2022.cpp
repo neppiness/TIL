@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> idx[26];
-int cnt[26];
+int len[1002];
 
 int main(void) {
   ios::sync_with_stdio(0);
@@ -11,34 +10,20 @@ int main(void) {
   string a, b;
   cin >> a >> b;
 
-  int x;
+  int tmp;
   for(int i = 0; i < a.length(); i++) {
-    x = a[i] - 'A';
-    idx[x].push_back(i);
-  }
-  stack<int> st;
-  int mx = 0;
-  for(int j = 0; j < b.length(); j++) {
-    for(int i = j; i < b.length(); i++) {
-      x = b[i] - 'A';
-      if(idx[x].empty()) continue;
-      if(st.empty()) {
-        st.push(idx[x][0]);
-        cnt[x]++;
-      } else {
-        if(cnt[x] == idx[x].size()) continue;
-        if(st.top() < idx[x][cnt[x]]) {
-          st.push(idx[x][cnt[x]]);
-          mx = max(mx, (int)st.size());
-          cnt[x]++;
-        } else {
-          while(!st.empty() && st.top() > idx[x][cnt[x]]) st.pop();
-          st.push(idx[x][cnt[x]]);
-          cnt[x]--;
+    for(int j = 0; j < b.length(); j++) {
+      if(b[j] == a[i]) {
+        len[j] = max(1, len[j]);
+        tmp = j;
+        tmp--;
+        while(tmp >= 0 && b[tmp] != a[i]) {
+          len[j] = max(len[tmp] + 1, len[j]);
+          tmp--;
         }
       }
     }
-    while(!st.empty()) st.pop();
   }
-  cout << mx;
+  int midx = max_element(len, len + 1002) - len;
+  cout << len[midx];
 }

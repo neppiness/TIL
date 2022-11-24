@@ -1,5 +1,5 @@
 [TIL on November 21st, 2022](../../TIL/2022/11/11-21-2022.md)
-# **Vol. 1: Issue #1 to #4**
+# **Vol. 1 How to come up with solutions?**
 This article is written in English, so I'm going to translate and write down in Korean
 
 ## Issue #1: How to read problem statements
@@ -85,7 +85,9 @@ This article is written in English, so I'm going to translate and write down in 
 
 ### The forcing fallacy: 잘못된 생각을 밀어부치는 경우
 - DP나 그리디가 아닌데, 떠오른 풀이를 그냥 강제하는 경우가 있다. 이 경우 오답으로 가기 쉽다.
-
+- 문제를 이해하고 푸는 과정에서 DP나 그리디를 적용해 푸는 거지, DP로 접근해볼까? 그리디로 접근해볼까?하고 억지로 그 풀이에 끼워맞춰 보는 게 아님
+- 관찰(observation)한다는 것은 단순하게 패턴을 찾는 데 그치는 게 아니라 작은 이론을 세우고 
+- 결론적으로: 문제를 그 상황에 맞게 이해하고, 계산 기법으로 DP나 그리디 등 알고리즘을 활용하는 것
 
 ___
 
@@ -93,3 +95,4 @@ ___
 1. [How to read problem statements](https://codeforces.com/blog/entry/62730)
 2. [How to come up with the solutions: techniques](https://codeforces.com/blog/entry/20548)
 3. [Characteristics of the optimal solution, a technique for finding observations in a problem](https://codeforces.com/blog/entry/99291)
+4. [On "is this greedy or DP", forcing and rubber bands](https://codeforces.com/blog/entry/106346)

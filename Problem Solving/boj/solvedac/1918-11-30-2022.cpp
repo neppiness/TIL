@@ -1,28 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+stack<int> pridx;
+bool vis[102];
 string s;
 
-bool isNotPlusMinus(char a) { return (a == '*' || a == '/'); }
+void makepf(int st, int en) {
+  char tmp = s[st];
+  for(int i = st; i < en; i++)
+    s[i] = s[i + 1];
+  s[en] = tmp;
+}
 
-bool isPlusMinus(char a) { return (a == '-' || a == '+'); }
+void pfop(bool ispm) {
 
-bool isLetter(char a) { return (a >= 'A' && a <= 'Z'); }
+}
 
-void solve(int i) {
-  queue<char> ch;
-  stack<char> op;
-  for(int i = 0; i < s.length(); i++) {
-    if(isOperator(s[i])) op.push(s[i]);
-    else if(isLetter(s[i])) ch.push(s[i]);
+void solve(int st, int en) {
+  stack<char> pridx;
+  for(int i = st; i <= en; i++) {
+    if(vis[i]) continue;
+    if(s[i] == '(') pr.push(i);
+    else if(s[i] == ')') {
+      int idx = pridx.top(); 
+      pridx.pop();
+      vis[idx] = vis[i] = 1;
+      solve(idx + 1, i - 1);
+    }
   }
-  while(!ch.empty()) {
-    cout << ch.front();
-    ch.pop();
-  }
-  while(!op.empty()) {
-    cout << op.top();
-    op.pop();
+  for(int i = st; i <= en; i++) {
+    if(s[i] == '*' || s[i] == '/') pfop(0);
+    else if(s[i] == '+' || s[i] == '-') pfop(1);
   }
 }
 
@@ -31,5 +39,10 @@ int main(void) {
   cin.tie(0);
 
   cin >> s;
-  solve(0);
+  solve(0, s.length() - 1);
+  
+  for(int i = 0; i < s.length(); i++) {
+    if(s[i] == '(' || s[i] == ')') continue;
+    cout << s[i];
+  }
 }

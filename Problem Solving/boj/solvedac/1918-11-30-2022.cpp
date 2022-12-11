@@ -12,26 +12,38 @@ void makepf(int st, int en) {
   s[en] = tmp;
 }
 
-void pfop(bool ispm) {
+void pfop(int st) {
+  int en = st + 1;
+  if(!vis[en]) makepf(st, en);
+  else {
+    while(vis[en]) en++;
+    en--;
+    makepf(st, en);
+  }
 
+  st--;
+  for(int i = st; i <= en; i++)
+    vis[i] = 1;
 }
 
 void solve(int st, int en) {
   stack<char> pridx;
   for(int i = st; i <= en; i++) {
     if(vis[i]) continue;
-    if(s[i] == '(') pr.push(i);
-    else if(s[i] == ')') {
+    if(s[i] == '(') pridx.push(i);
+    if(s[i] == ')') {
       int idx = pridx.top(); 
       pridx.pop();
       vis[idx] = vis[i] = 1;
       solve(idx + 1, i - 1);
     }
   }
-  for(int i = st; i <= en; i++) {
-    if(s[i] == '*' || s[i] == '/') pfop(0);
-    else if(s[i] == '+' || s[i] == '-') pfop(1);
-  }
+  for(int i = st; i <= en; i++)
+    if(s[i] == '*' || s[i] == '/') 
+      if(!vis[i]) pfop(i);
+  for(int i = st; i <= en; i++)
+    if(s[i] == '+' || s[i] == '-')
+      if(!vis[i]) pfop(i);
 }
 
 int main(void) {
@@ -41,8 +53,8 @@ int main(void) {
   cin >> s;
   solve(0, s.length() - 1);
   
-  for(int i = 0; i < s.length(); i++) {
-    if(s[i] == '(' || s[i] == ')') continue;
-    cout << s[i];
+  for(char c : s) {
+    if(c == '(' || c == ')') continue;
+    cout << c;
   }
 }

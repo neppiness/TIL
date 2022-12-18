@@ -43,31 +43,23 @@ void catchShark(int ccol) {
 }
 
 pair<int, int> getnxdir(int cx, int dir, int sp) {
-  int nx;
-  if(dir == 1) nx = cx + sp * dx[dir] - 1;
-  else nx = r - cx + sp * dx[dir];
+  int id = cx + sp * dx[dir];
+  if(0 <= id && id < r) return {id, dir};
+  id = abs(id) - 1;
+  id %= 2*(r - 1);
 
-  int rlim = (r - 1) * 2;
-  nx = ((nx % rlim) + rlim) % rlim;
-
-  dir = (r - 1 > nx);
-  if(nx >= r - 1) nx = rlim - nx - 1;
-  else nx++;
-  return {nx, dir};
+  if(id < r - 1) return {id + 1, 1};
+  else return {2*(r - 1) - 1 - id, 0};
 }
 
 pair<int, int> getnydir(int cy, int dir, int sp) {
-  int ny;
-  if(dir == 2) ny = cy + sp * dy[dir] - 1;
-  else ny = 2 * (c - 1) - 1 - cy + sp * dy[dir];
+  int id = cy + sp * dy[dir];
+  if(0 <= id && id < c) return {id, dir};
+  id = abs(id) - 1;
+  id %= 2*(c - 1);
 
-  int clim = (c - 1) * 2;
-  ny = ((ny % clim) + clim) % clim;
-
-  dir = 2 + (ny >= c - 1);
-  if(ny >= c - 1) ny = clim - 1 - ny;
-  else ny++;
-  return {ny, dir};
+  if(id < c - 1) return {id + 1, 2};
+  else return {2*(c - 1) - 1 - id, 3};
 }
 
 void move(int &id) {
@@ -106,13 +98,6 @@ void printboard() {
       cout << sh[board[i][j]].sz << " \n"[j + 1 == c];
 }
 
-void test() {
-  for(int i = 0; i <= 12; i++) {
-    auto [ny, dir] = getnydir(0, 3, i);
-    cout << ny << ' ' << dir << '\n';
-  }
-}
-
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
@@ -120,21 +105,9 @@ int main() {
   cin >> r >> c >> m;
   init();
 
-  test();
-  return 0;
-
-  cout << "초기 상태\n";
-  printboard();
-
   for(int i = 0; i < c; i++) {
-    cout << '\n' << i + 1 << "초후\n";
     catchShark(i);
-    cout << "\n상어 잡혀감\n";
-    printboard();
-    cout << "\n상어 움직임\n";
     moveShark();
-    printboard();
   }
   cout << sum;
 }
-// Need to debug

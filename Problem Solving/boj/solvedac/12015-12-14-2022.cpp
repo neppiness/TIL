@@ -2,31 +2,23 @@
 using namespace std;
 
 const int MX = 1'000'002;
+const int INF = 0x7f7f7f7f;
 
-vector<int> a;
-int mx;
-
-void pick(int idx, int len) {
-  mx = max(mx, len);
-  for(int i = idx + 1; i < a.size(); i++)
-    if(a[idx] < a[i]) pick(i, len + 1);
-}
-
-void solve() {
-  for(int i = 0; i < a.size(); i++)
-    pick(i, 1); // idx가 i인 항을 첫 항으로 두고 고름
-}
+int ltln[MX]; // use length as an index to get last number of seq.
 
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
+  fill(ltln, ltln + MX, INF);
+
   int n; cin >> n;
   while(n--) {
     int x; cin >> x;
-    a.push_back(x);
+    int len = lower_bound(ltln + 1, ltln + MX, x) - ltln;
+    if(ltln[len] < x) ltln[len + 1] = x;
+    else ltln[len] = x;
   }
-  solve();
-
-  cout << mx;
+  int ans = lower_bound(ltln + 1, ltln + MX, MX) - ltln - 1;
+  cout << ans;
 }

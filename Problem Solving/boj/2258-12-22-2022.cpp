@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
+
+const ll INF = 0x7f7f7f7f7f;
 
 int n, m;
-vector<pair<int, int>> v; // {cost, value}
-vector<tuple<int, int, int>> ps; // {cost, value sum for less or equal, value sum for greater}
+vector<pair<int, int>> meat; // {price, weight}
 
 bool cmp(pair<int, int> a, pair<int, int> b) {
   if(a.first != b.first) return a.first < b.first;
@@ -11,23 +13,18 @@ bool cmp(pair<int, int> a, pair<int, int> b) {
 }
 
 int solve() {
-  ps.push_back({0, 0, 0});
-  for(int i = 0; i < v.size(); i++) {
-    auto [cost, value] = v[i];
-    int cur = ps.size() - 1;
-    auto [d, leqval, gval] = ps[cur];
-    if(d != cost) {
-      leqval = gval + value;
-      ps.push_back({cost, leqval, leqval});
-    } else {
-      gval += value;
-      ps[cur] = {d, leqval, gval};
-    }
-
-    if(leqval >= m) return cost;
-    else if(gval >= m) return cost + 1;
+  ll ans = INF;
+  int mxprice = 0, totpr = 0, totwei = 0;
+  for(auto [price, weight] : meat) {
+    if(mxprice < price) {
+      mxprice = price;
+      totpr = mxprice;
+    } else totpr += price;
+    totwei += weight;
+    if(totwei >= m) ans = min(ans, (ll)totpr);
   }
-  return -1;
+  if(ans == INF) return -1;
+  return ans;
 }
 
 int main() {
@@ -37,11 +34,11 @@ int main() {
   cin >> n >> m;
 
   while(n--) {
-    int value, cost;
-    cin >> value >> cost;
-    v.push_back({cost, value});
+    int weight, price;
+    cin >> weight >> price;
+    meat.push_back({price, weight});
   }
-  sort(v.begin(), v.end(), cmp);
+  sort(meat.begin(), meat.end(), cmp);
 
   cout << solve() << '\n';
 }

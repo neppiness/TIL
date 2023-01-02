@@ -1,26 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
 
-priority_queue<int, vector<int>, greater<int>> pq;
+const int NMX = 502;
 
-ll solve() {
-  int n; cin >> n;
-  while(n--) {
-    int x; cin >> x;
-    pq.push(x);
+int n, ans;
+int ps[NMX];
+bool op[NMX];
+
+void solve() {
+  return;
+}
+
+void init() {
+  cin >> n;
+  for(int i = 1; i <= n; i++) {
+    cin >> ps[i];
+    ps[i] += ps[i - 1];
   }
+  ans = 0;
+}
 
-  ll ans = 0;
-  while(pq.size() != 1) {
-    int x = pq.top(); pq.pop();
-    int y = pq.top(); pq.pop();
-    ans += x + y;
-    pq.push(x + y);
-    cout << x + y << ' ';
-  }
-  pq.pop();
-  return ans;
+void print() {
+  for(int i = 0; i <= n; i++)
+    cout << ps[i]<< ' ';
+  cout << '\n';
 }
 
 int main() {
@@ -28,5 +31,10 @@ int main() {
   cin.tie(0);
 
   int t; cin >> t;
-  while(t--) cout << solve() << '\n';
+  while(t--) {
+    init();
+    solve();
+    print();
+    cout << ans << '\n';
+  }
 }

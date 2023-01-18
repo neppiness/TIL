@@ -5,7 +5,7 @@ int n, ans;
 int dur[10'002]; // work duration
 int ind[10'002]; // indegree
 vector<int> rel[10'002]; // related node
-vector<int> tt[1'000'002]; // time table, work to start
+vector<int> tt[1'000'002]; // time table, work to be done
 
 int main() {
   ios::sync_with_stdio(0);

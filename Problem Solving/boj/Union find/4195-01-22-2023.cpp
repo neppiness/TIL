@@ -2,12 +2,10 @@
 using namespace std;
 
 const int MX = 200'000; // 친구관계 100,000에 주어지는 아이디가 2개이므로
+const int ALPHABETS = 52;
 
 int unused, p[MX + 2];
 int trie[52][22]; // 알파벳 대소문자 26개 + 26개. 문자열 길이 20이하
-
-
-
 
 int find(int cur) {
   if(p[cur] < 0) return cur;
@@ -43,6 +41,10 @@ void solve() {
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
+
+  TrieNode tn = TrieNode();
+  cout << tn.a << ' ' << tn.b;
+  return 0;
 
   int t; cin >> t;
   while(t--) solve();

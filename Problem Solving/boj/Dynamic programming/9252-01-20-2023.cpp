@@ -2,34 +2,54 @@
 using namespace std;
 
 const int MX = 1'000;
+const int di[] = {-1, 0, -1};
+const int dj[] = {0, -1, -1};
 
 string key, lck;
 stack<char> st;
 int cache[MX + 2][MX + 2];
 
-int solve(int keyidx, int lckidx) {
-  if(keyidx < 0 || lckidx < 0) return 0;
-  int &ret = cache[keyidx][lckidx];
-  if(ret != -1) return ret;
-
-  ret = max(solve(keyidx - 1, lckidx), solve(keyidx, lckidx - 1));
-  bool ismatched = (key[keyidx] == lck[lckidx]);
-  return ret = max(ret, solve(keyidx - 1, lckidx - 1) + ismatched);
+void solve(int keyidx) {
+  for(int lckidx = 0; lckidx < lck.length(); lckidx++) {
+    int &ret = cache[keyidx + 1][lckidx + 1];
+    bool ismatched = (key[keyidx] == lck[lckidx]);
+    ret = max(cache[keyidx][lckidx + 1], cache[keyidx + 1][lckidx]);
+    ret = max(ret, cache[keyidx][lckidx] + ismatched);
+  }
 }
 
-void print(int keyidx, int lckidx, int curlen) {
-  bool ismatched = (key[keyidx] == lck[lckidx]);
-  
+void res(int ci, int cj) {
+  if(ci == 0 || cj == 0) return;
+
+  int pi = -1, pj = -1;
+  for(int dir = 0; dir < 2; dir++) {
+    int tmpi = ci + di[dir];
+    int tmpj = cj + dj[dir];
+    if(cache[tmpi][tmpj] != cache[ci][cj]) continue;
+    pi = tmpi; pj = tmpj;
+  }
+  if(pi != -1 && pj != -1) {
+    res(pi, pj);
+    return;
+  }
+  st.push(key[ci - 1]);
+  res(ci - 1, cj - 1);
 }
 
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
-  memset(cache, -1, sizeof(cache));
+  memset(cache, 0, sizeof(cache));
   cin >> key >> lck;
 
-  int ans = solve(key.length() - 1, lck.length() - 1);
-  cout << ans << '\n';
-  cout << print(key.length() - 1, lck.length() - 1, ans) << '\n';
+  for(int keyidx = 0; keyidx < key.length(); keyidx++) 
+    solve(keyidx);
+
+  cout << cache[key.length()][lck.length()] << '\n';
+  res(key.length(), lck.length());
+  while(!st.empty()) {
+    cout << st.top();
+    st.pop();
+  }
 }

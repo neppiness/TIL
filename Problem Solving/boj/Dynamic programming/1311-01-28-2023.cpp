@@ -21,16 +21,18 @@ int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
-  memset(cache, 0x7f, sizeof(cache));
-  cache[0] = 0;
+  cout << __builtin_popcount(MX);
 
-  cin >> n;
-  mx = (1 << n) - 1;
+  // memset(cache, 0x7f, sizeof(cache));
+  // cache[0] = 0;
 
-  for(int i = 0; i < n; i++)
-    for(int j = 0; j < n; j++)
-      cin >> cost[i][j];
+  // cin >> n;
+  // mx = (1 << n) - 1;
 
-  solve(0, 0);
-  cout << cache[mx];
+  // for(int i = 0; i < n; i++)
+  //   for(int j = 0; j < n; j++)
+  //     cin >> cost[i][j];
+
+  // solve(0, 0);
+  // cout << cache[mx];
 }

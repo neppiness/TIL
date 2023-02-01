@@ -39,9 +39,9 @@ int main() {
     setup(i);
 
   for(auto x : sa[0]) {
-    auto lb = lower_bound(sa[1].begin(), sa[1].end(), -x);
-    auto ub = upper_bound(sa[1].begin(), sa[1].end(), -x);
-    ans += ub - lb;
+    int tar = s - x;
+    auto er = equal_range(sa[1].begin(), sa[1].end(), tar);
+    ans += er.second - er.first;
   }
   if(s == 0) ans--;
   cout << ans;

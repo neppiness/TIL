@@ -1,6 +1,5 @@
 [TIL on February 2nd, 2023](../../TIL/2023/02/02-02-2023.md)
 # **[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)**
-
 ### [Conditionals](https://google.github.io/styleguide/cppguide.html#Conditionals)
 * In an `if` statement, including its optional `else if` and `else` clauses, put one space between the `if` and the opening parenthesis, and between the closing parenthesis and the curly brace (if any), but no spaces between the parentheses and the condition or initializer. If the optional initializer is present, put a space or newline after the semicolon, but not before.
   - `if`문과 그 조건을 담을 괄호 사이엔 띄어쓰기가 있어야 한다.

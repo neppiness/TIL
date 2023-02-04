@@ -17,7 +17,8 @@ int solve(int cur, int st) { // cur: current city, vis: visited cities
   for(int nxt = 0; nxt < n; nxt++) {
     int b = (1 << nxt);
     if(st & b) continue;
-    ret = min(ret, cost[cur][nxt] + solve(nxt, st | b));
+    int tmp = cost[cur][nxt] + solve(nxt, st | b);
+    ret = min(ret, tmp);
   }
   return ret;
 }
@@ -40,7 +41,7 @@ int main() {
   mx = (1 << n) - 1;
   int ans = INF;
   for(; init < n; init++)
-    ans = min(solve(init, 1 << init), ans);
+    ans = min(solve(init, (1 << init)), ans);
 
   cout << ans;
 }

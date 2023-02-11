@@ -13,7 +13,6 @@ int main() {
   while(s[0] != '.') {
     int j = 0;
     for(int i = 1; i < s.size(); i++) {
-      j = f[i - 1];
       while(j > 0 && s[i] != s[j]) j = f[j - 1];
       if(s[i] == s[j]) f[i] = ++j;
     }

@@ -12,7 +12,10 @@ int solve(int x) {
 
   bool win = 0;
   for(int i = 0; i < sz; i++) {
-    
+    int j = i;
+    int y = 1;
+    while(j--) { y *= 10; }
+    if(solve())
   }
 }
 

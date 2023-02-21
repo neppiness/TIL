@@ -1,10 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MX = 1'000'000;
-
 string s;
-int f[MX + 2];
+
+vector<int> failure(string &s) {
+  vector<int> f(s.size());
+  int j = 0;
+  for(int i = 1; i < s.size(); i++) {
+    while(j > 0 && s[i] != s[j]) j = f[j - 1];
+    if(s[i] == s[j]) f[i] = ++j;
+  }
+  return f;
+}
 
 int try_match(int len) {
   int j = 0, cnt = 0;
@@ -16,8 +23,9 @@ int try_match(int len) {
   return cnt;
 }
 
-int solve(int len) {
-  int ans = 1;
+void solve() {
+  vector<int> f = failure(s);
+  int ans = 1, len = s.size();
   while(1) {
     len = f[len - 1];
     if(len == 0) break;
@@ -25,7 +33,7 @@ int solve(int len) {
     int no_of_match = try_match(len);
     ans = max(ans, no_of_match);
   }
-  return ans;
+  cout << ans << '\n';
 }
 
 int main() {
@@ -34,13 +42,7 @@ int main() {
 
   cin >> s;
   while(s[0] != '.') {
-    int j = 0;
-    for(int i = 1; i < s.size(); i++) {
-      while(j > 0 && s[i] != s[j]) j = f[j - 1];
-      if(s[i] == s[j]) f[i] = ++j;
-    }
-    int n = solve(s.size());
-    cout << n << '\n';
+    solve();
     cin >> s;
   }
 }

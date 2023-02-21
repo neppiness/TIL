@@ -4,10 +4,22 @@ using namespace std;
 const int M = 360'000;
 const int MX = 200'000 + 2;
 
-int a[MX], b[MX], fa[MX];
+int a[MX], b[MX];
 int n;
 
+vector<int> failure() {
+  vector<int> f(n);
+  int j = 0;
+  for(int i = 1; i < n; i++) {
+    while(j > 0 && a[i] != a[j]) j = f[j - 1];
+    if(a[i] == a[j]) f[i] = ++j;
+  }
+  return f;
+}
+
 bool is_matched() {
+  vector<int> fa = failure();
+
   int j = 0;
   for(int i = 0; i < 2*n - 1; i++) {
     int ci = i;
@@ -33,11 +45,6 @@ void setup() {
   for(int i = 0; i < n; i++) {
     a[i] = a[i + 1] - a[i];
     b[i] = b[i + 1] - b[i];
-  }
-  int j = 0;
-  for(int i = 1; i < n; i++) {
-    while(j > 0 && a[i] != a[j]) j = fa[j - 1];
-    if(a[i] == a[j]) fa[i] = ++j;
   }
 }
 

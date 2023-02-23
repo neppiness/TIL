@@ -23,6 +23,7 @@ bool insert(int l, int cur) {
     if(chk[nx]) continue;
     st.push(a);
     if(insert(l - 1, nx)) return 1;
+    st.pop();
   }
   return 0;
 }

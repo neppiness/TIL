@@ -14,11 +14,13 @@ int dy[] = {0, 1, 0, -1};
 bool oob(int x, int y) { return (x >= n || x < 0 || y >= n || y < 0); }
 
 int solve() {
-  queue<tuple<int, int, int>> q; // cx, cy, cost
+  priority_queue< tuple<int, int, int>,
+      vector<tuple<int, int, int>>,
+      greater<tuple<int, int, int>> > pq; // cx, cy, cost
   dist[0][0] = b[0][0];
-  q.push({0, 0, b[0][0]});
-  while(!q.empty()) {
-    auto [cx, cy, co] = q.front(); q.pop();
+  pq.push({0, 0, b[0][0]});
+  while(!pq.empty()) {
+    auto [cx, cy, co] = pq.top(); pq.pop();
     if(dist[cx][cy] != co) continue;
     for(int dir = 0; dir < 4; dir++) {
       int nx = cx + dx[dir];
@@ -27,7 +29,7 @@ int solve() {
       if(oob(nx, ny)) continue;
       if(dco >= dist[nx][ny]) continue;
       dist[nx][ny] = dco;
-      q.push({nx, ny, dco});
+      pq.push({nx, ny, dco});
     }
   }
   return dist[n - 1][n - 1];

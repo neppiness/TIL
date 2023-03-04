@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const double PI = acos(0.0) * 2;
+double a, d, e;
 
 struct circ {
   double x, y, r;
@@ -11,11 +11,12 @@ struct circ {
 
   double dist(circ &rs) { return hypot(x - rs.x, y - rs.y); }
   bool conc(circ &rs) { return (x == rs.x) && (y == rs.y); }
-  double area() { return (r*r*PI); }
+  double area() { return (r * r * M_PI); }
 } c[2];
 
 double ar(circ &ci) {
-  
+  double alpha = acos((2 * ci.r * ci.r - e*e) / (2 * ci.r * ci.r));
+  return ci.r * ci.r * alpha / 2.0;
 }
 
 int main() {
@@ -28,12 +29,13 @@ int main() {
   for(int i = 0; i < 2; i++) {
     double x, y, r;
     cin >> x >> y >> r;
-    tie(c[i].x, c[i].y, c[i].r) = {x, y, r};
+    circ ci(x, y, r);
+    c[i] = ci;
   }
   // 반지름이 작은 원이 c[0], 큰 원이 c[1]이 됨.
   if(c[1] < c[0]) swap(c[1], c[0]);
 
-  double d = c[0].dist(c[1]);
+  d = c[0].dist(c[1]);
   // Case i. 동심원의 경우 작은 원의 넓이 출력
   if(c[0].conc(c[1]) || (d + c[0].r <= c[1].r)) {
     cout << c[0].area();
@@ -46,5 +48,11 @@ int main() {
     return 0;
   }
   // Case iii. 두 교점이 만들어지는 경우
-  cout << ar(c[0]) + ar(c[1]);
+  double s = (c[0].r + c[1].r + d) / 2.0;
+  a = sqrt(s * (s - c[0].r) * (s - c[1].r) * (s - d));
+  a *= 2.0;
+  e = 2*a / d;
+
+  double int_sec = ar(c[0]) + ar(c[1]) - a;
+  cout << int_sec;
 }

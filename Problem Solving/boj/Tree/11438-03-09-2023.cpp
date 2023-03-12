@@ -50,7 +50,6 @@ int find(int u, int v) {
   int d = max(du, dv) - min(du, dv);
   u = move(u, d);
 
-  d = min(du, dv);
   if(u == v) return u;
   for(int lg = LMX - 1; lg >= 0; lg--) {
     int pu = pst[u][lg], pv = pst[v][lg];

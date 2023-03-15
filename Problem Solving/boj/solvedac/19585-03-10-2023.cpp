@@ -2,6 +2,7 @@
 using namespace std;
 
 const int MX = 2 * 4000 * 1000;
+const int LIM = 1000;
 const int ROOT = 1;
 
 int unused = 2;
@@ -27,7 +28,8 @@ void insert(int code) {
 vector<int> find_color_idx(string &s) {
   vector<int> v;
   int cur = ROOT;
-  for(int i = 0; i < s.size(); i++) {
+  int sz = min((int)s.size(), LIM);
+  for(int i = 0; i < sz; i++) {
     int &nxt = trie[cur][ctoi(s[i])];
     if(nxt == -1) return v;
     if(chk[nxt] == 0 || chk[nxt] == 2) v.push_back(i + 1);
@@ -41,6 +43,7 @@ bool solve() {
   vector<int> found_idx = find_color_idx(s);
 
   for(int idx : found_idx) {
+    if(s.size() - idx > 1000) continue;
     bool is_found = 1;
     int cur = ROOT;
     for(; idx < s.size(); idx++) {

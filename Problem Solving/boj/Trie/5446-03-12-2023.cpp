@@ -4,9 +4,10 @@ using namespace std;
 const int MX = 20 * 1000 * 2;
 const int ROOT = 1;
 
-int n, unused, cnt;
+int n, unused;
 vector<pair<char, int>> trie[MX + 2]; // trie[cur] = {char, nxt}
-bool chk[MX + 2];
+bool is_wc_app[MX + 2]; // is wild card applicable?
+bool term[MX + 2]; // should be removed?
 
 int find(char c, int cur) {
   for(auto [d, nxt] : trie[cur])
@@ -22,40 +23,48 @@ void insert(string &s, bool code) {
       nxt = unused;
       trie[cur].push_back({c, unused++});
     }
-    chk[nxt] = code;
+    is_wc_app[nxt] = code;
+    cur = nxt;
   }
+  term[cur] = code;
 }
 
-void search(int cur) {
-  bool is_checked = 0;
+int search(int cur) {
+  bool is_wc_app_at_nxt = 1;
   for(auto [c, nxt] : trie[cur])
-    if(chk[nxt]) { is_checked = 1; break; }
+    if(is_wc_app[nxt]) { is_wc_app_at_nxt = 0; break; }
+  if(is_wc_app_at_nxt && !term[cur]) return 1;
 
-  if(!is_checked && !chk[cur]) { cnt++; return; }
-  for(auto [c, nxt] : trie[cur])
-    search(nxt);
+  int res = 0;
+  for(auto [c, nxt] : trie[cur]) {
+    res += term[nxt];
+    res += search(nxt);
+  }
+  return res;
 }
 
 void solve() {
-  memset(chk, 0, sizeof(chk));
+  memset(is_wc_app, 0, sizeof(is_wc_app));
+  memset(term, 0, sizeof(term));
   unused = 2;
-  cnt = 0;
+
   for(int i = ROOT; i < MX; i++)
     trie[i].clear();
   
   cin >> n;
-  for(int i = 0; i < n; i++) {
-    string s; cin >> s;
-    insert(s, 0);
-  }
-  cin >> n;
+  is_wc_app[ROOT] = 1;
   for(int i = 0; i < n; i++) {
     string s; cin >> s;
     insert(s, 1);
   }
-
-  search(ROOT);
-  cout << cnt << '\n';
+  cin >> n;
+  if(n) is_wc_app[ROOT] = 0;
+  for(int i = 0; i < n; i++) {
+    string s; cin >> s;
+    insert(s, 0);
+  }
+  int ans = search(ROOT);
+  cout << ans << '\n';
 }
 
 int main() {

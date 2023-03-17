@@ -1,13 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int MX = 20 * 1000 * 2;
+const int MX = 20 * 1000 * 2 + 2;
 const int ROOT = 1;
 
 int n, unused;
-vector<pair<char, int>> trie[MX + 2]; // trie[cur] = {char, nxt}
-bool is_wc_app[MX + 2]; // is wild card applicable
-bool term[MX + 2]; // should be removed
+vector<pair<char, int>> trie[MX]; // trie[cur] = {char, nxt}
+bool is_wc_app[MX]; // is wild card applicable
+bool chk[MX]; // should be removed
 
 int find(char c, int cur) {
   for(auto [d, nxt] : trie[cur])
@@ -20,32 +20,28 @@ void insert(string &s, bool code) {
   is_wc_app[ROOT] = code;
   for(char c : s) {
     int nxt = find(c, cur);
-    if(nxt == -1) { // -1: not_found
+    if(nxt == -1) {
       nxt = unused;
       trie[cur].push_back({c, unused++});
     }
     is_wc_app[nxt] = code;
     cur = nxt;
   }
-  if(code) term[cur] = code;
+  if(code) chk[cur] = code;
 }
 
 int search(int cur) {
-  bool is_wc_app_at_cur = 1;
-  for(auto [c, nxt] : trie[cur])
-    if(!is_wc_app[nxt]) { is_wc_app_at_cur = 0; break; }
-  if(is_wc_app_at_cur) return 1;
+  if(is_wc_app[cur]) return 1;
 
-  int res = 0;
+  int res = chk[cur];
   for(auto [c, nxt] : trie[cur])
     res += search(nxt);
-  if(res == 0) return term[cur];
   return res;
 }
 
 void solve() {
-  memset(is_wc_app, 0, sizeof(is_wc_app));
-  memset(term, 0, sizeof(term));
+  fill(is_wc_app, is_wc_app + MX, 0);
+  fill(chk, chk + MX, 0);
   unused = 2;
 
   for(int i = ROOT; i < MX; i++)

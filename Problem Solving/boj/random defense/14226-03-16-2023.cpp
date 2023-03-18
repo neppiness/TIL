@@ -2,7 +2,7 @@
 using namespace std;
 
 const int MX = 2'000;
-
+const int INF = 0x7f7f7f7f;
 int s;
 queue<pair<int, int>> q; // q = {emocnt, clipboard}
 int t[MX + 2][MX + 2]; // t: time, t[emocnt][clipboard]
@@ -12,28 +12,32 @@ int solve() {
   q.push({1, 0});
 
   while(!q.empty()) {
-    auto [cnt, clip] = q.front(); q.pop();
-    int cur_t = t[cnt][clip];
-    // 1. 화면에 있는 이모티콘을 모두 복사해서 클립보드에 저장
-    if(cnt <= MX && t[cnt][cnt] == -1) {
-      t[cnt][cnt] = cur_t + 1;
-      q.push({cnt, cnt});
-    }
-    // 2. 클립보드에 있는 모든 이모티콘을 화면에 붙여넣기
-    int ncnt = cnt + clip;
-    if(ncnt <= MX) {
-      if(ncnt == s) return cur_t + 1;
-      if(t[ncnt][clip] != -1) {
-        t[ncnt][clip] = cur_t + 1;
-        q.push({ncnt, clip});
+    auto [cur_emo, cur_cl] = q.front(); q.pop();
+    int cur_t = t[cur_emo][cur_cl];
+    if(cur_emo == s) return cur_t;
+
+    int nxt_emo = cur_emo + cur_cl;
+    int nxt_cl = cur_emo;
+
+    // case i.delete an emoticon
+    if(cur_emo >= 1) {
+      if(t[cur_emo - 1][cur_cl] == -1) {
+        t[cur_emo - 1][cur_cl] = cur_t + 1;
+        q.push({cur_emo - 1, cur_cl});
       }
     }
-    // 3. 화면에 있는 이모티콘 하나 삭제
-    if(cnt >= 1) {
-      if(cnt - 1 == s) return cur_t + 1;
-      if(t[cnt - 1][clip] != -1) {
-        t[cnt - 1][clip] = cur_t + 1;
-        q.push({cnt - 1, clip});
+    // case ii.copy from clipboard
+    if(nxt_emo < MX) {
+      if(t[nxt_emo][cur_cl] == -1) {
+        t[nxt_emo][cur_cl] = cur_t + 1;
+        q.push({nxt_emo, cur_cl});
+      }
+    }
+    // case iii. update clipboard
+    if(nxt_cl < MX) {
+      if(t[cur_emo][nxt_cl] == -1) {
+        t[cur_emo][nxt_cl] = cur_t + 1;
+        q.push({cur_emo, nxt_cl});
       }
     }
   }

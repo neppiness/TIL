@@ -15,7 +15,7 @@
 
 ### 단축키 목록
 * Alt + Shift + Enter: select methods to implement
-* Alt + Enter: 경고 메시지 확인하기
+* Alt + Enter: 처리할 수 있는 방법 목록 창 띄우기. 인터페이스를 implement할 때에도 쓸 수 있음.
 * Ctrl + Alt + V: Introduce variable
   - `memberRepository.findByName(member.getName());`에다 적용하는 경우, `Optional<Member> byName = memberRepository.findByName(member.getName());`로 바꿔줌
   - 즉, 관용적으로 사용하는 적당한 이름으로 바꾸면서 이를 받아주는 변수를 도입하는 것
@@ -49,3 +49,4 @@
   - 이를 통해 constructor를 바로 생성하는 것도 가능함.
 * Ctrl + Shift + T: 테스트 케이스 틀 생성하기
   - 대략적으로 의도하는 위치에 현재까지 생성된 메서드 기반으로 테스트 할 수 있는 틀을 만들어줌.
+* Ctrl + Shift + Enter: 현재 위치와 상관 없이 다음 줄로 줄바꿈 삽입

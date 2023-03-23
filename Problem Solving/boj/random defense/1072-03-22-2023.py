@@ -10,7 +10,7 @@ def find_next(x, y, z):
 
 
 X, Y = map(int, input().split())
-Z = 100 * Y // X
+Z = int(Y / X * 100)
 
 if Z > 98:
     print(-1)

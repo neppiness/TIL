@@ -17,6 +17,7 @@
 * Alt + Shift + Enter: select methods to implement
 * Alt + Enter: 처리할 수 있는 방법 목록 창 띄우기. 인터페이스를 implement할 때에도 쓸 수 있음.
 * Ctrl + Alt + V: Introduce variable
+* Ctrl + Alt + I: 똑똑한 들여쓰기.
   - `memberRepository.findByName(member.getName());`에다 적용하는 경우, `Optional<Member> byName = memberRepository.findByName(member.getName());`로 바꿔줌
   - 즉, 관용적으로 사용하는 적당한 이름으로 바꾸면서 이를 받아주는 변수를 도입하는 것
 * Ctrl + Alt + Shift + T (⌃ + ⌥ + ⇧ + T): refactor

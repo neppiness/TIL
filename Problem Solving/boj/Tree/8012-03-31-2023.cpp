@@ -46,7 +46,6 @@ void calc() {
   }
   int w = u;
   if(u != v) w = p[u][0];
-
   ans += d[st] + d[en] - 2*d[w];
 }
 
@@ -66,8 +65,15 @@ int main() {
   treeSetup(ROOT);
   stSetup();
 
-  cin >> m >> st;
-  while(--m) {
+
+  st = 3; en = 5;
+  calc();
+  cout << ans;
+  return 0;
+
+  cin >> m;
+  st = ROOT;
+  while(m--) {
     cin >> en;
     calc();
     swap(st, en);

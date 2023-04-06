@@ -31,8 +31,9 @@
 - TIL list link: written as a format of "TIL on MM-DD-YYYY" at the top
 - References: at the bottom, separated by a line above it
 
-### Commit name
-- "*activity*: TIL on *Month Day (to Day), Year*"
+### Commit message
+- "*activity*: *object* on *Month Day (to Day), Year*"
 - ex) update: TIL on April 4th to 6th, 2023
+- ex) update: convention.md on April 6th, 2023
 
 ### To README file: [link](./README.md)

@@ -43,11 +43,25 @@
 * Ctrl + N: go to class
 * Ctrl + P: 전달해야 하는 인자를 확인하는 단축키, `check parameter` 
 * Ctrl + E: 최근 확인한 파일 목록
+
 * Shift + F6: 이름 다시 짓기
 * Shift + F10: 이전에 돌렸던 프로그램 재실행
+
+* Alt + F12: 터미널 창 띄우기
 * Alt + Shift + Arrow: 줄 이동
 * Alt + Insert: Generate
   - 이를 통해 constructor를 바로 생성하는 것도 가능함.
+  - getter and setter도 바로 만들 수 있음.
+  - toString를 활용해서 toString 메소드에 오버라이딩하는 구문도 자동으로 만들 수 있음.
+
+* Ctrl + Shift + F10
+  - 메소드 위에서 작동시키는 경우, 해당 메소드에 대한 테스트 수행
+  - 메소드 외부에서 작동시키는 경우, 해당 클래스 내 메소드들에 대한 테스트 수행
 * Ctrl + Shift + T: 테스트 케이스 틀 생성하기
   - 대략적으로 의도하는 위치에 현재까지 생성된 메서드 기반으로 테스트 할 수 있는 틀을 만들어줌.
 * Ctrl + Shift + Enter: 현재 위치와 상관 없이 다음 줄로 줄바꿈 삽입. 또한, 자동으로 찾아진 클래스나 메소드를 불러왔을 때, 단순 엔터키만으로는 세미콜론 전까지만 나와서, 이 단축키를 통해 세미콜론까지 완결지을 수 있음.
+
+* 타이핑 - psvm: `public static void main(String[] args) {}`를 자동으로 작성해줌.
+* 타이핑 - sout: `System.out.println();`를 자동으로 작성해줌. soutv: `System.out.println("order = " + order);`를 자동으로 작성해줌.
+
+* F2: 하이라이트된 항목으로 자동 이동.

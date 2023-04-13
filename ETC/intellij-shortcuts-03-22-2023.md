@@ -15,7 +15,10 @@
 
 ### 단축키 목록
 * Alt + Shift + Enter: select methods to implement
-* Alt + Enter: 처리할 수 있는 방법 목록 창 띄우기. 인터페이스를 implement할 때에도 쓸 수 있음.
+* Alt + Enter:
+  1. 처리할 수 있는 방법 목록 창 띄우기
+  2. 인터페이스를 implement할 때에도 쓸 수 있음
+  3. `Assertions.assertThat(memberService).isInstanceOf(MemberServiceImpl.class);`와 같은 구문이 있으면, static method를 도입해서 간단하게 만들어줄 수도 있음: `assertThat(memberService).isInstanceOf(MemberServiceImpl.class);`
 * Ctrl + Alt + V: Introduce variable
 * Ctrl + Alt + I: 똑똑한 들여쓰기.
   - `memberRepository.findByName(member.getName());`에다 적용하는 경우, `Optional<Member> byName = memberRepository.findByName(member.getName());`로 바꿔줌
@@ -62,6 +65,9 @@
 * Ctrl + Shift + Enter: 현재 위치와 상관 없이 다음 줄로 줄바꿈 삽입. 또한, 자동으로 찾아진 클래스나 메소드를 불러왔을 때, 단순 엔터키만으로는 세미콜론 전까지만 나와서, 이 단축키를 통해 세미콜론까지 완결지을 수 있음.
 
 * 타이핑 - psvm: `public static void main(String[] args) {}`를 자동으로 작성해줌.
-* 타이핑 - sout: `System.out.println();`를 자동으로 작성해줌. soutv: `System.out.println("order = " + order);`를 자동으로 작성해줌.
+* 타이핑 - sout: `System.out.println();`를 자동으로 작성해줌. soutv: `System.out.println("order = " + order);
+`를 자동으로 작성해줌.
+* 타이핑 - iter: 배열이나 리스트와 같은 목록이 있을 때, 이를 돌아보는 for 문의 틀을 자동으로 작성해줌.
 
 * F2: 하이라이트된 항목으로 자동 이동.
+

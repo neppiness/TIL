@@ -46,6 +46,7 @@
 * Ctrl + N: go to class
 * Ctrl + P: 전달해야 하는 인자를 확인하는 단축키, `check parameter` 
 * Ctrl + E: 최근 확인한 파일 목록
+* Ctrl + F12: File Structure, 파일 내 메소드 목록을 싹 확인할 수 있음.
 
 * Shift + F6: 이름 다시 짓기
 * Shift + F10: 이전에 돌렸던 프로그램 재실행

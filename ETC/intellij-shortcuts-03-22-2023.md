@@ -20,6 +20,7 @@
   2. 인터페이스를 implement할 때에도 쓸 수 있음
   3. `Assertions.assertThat(memberService).isInstanceOf(MemberServiceImpl.class);`와 같은 구문이 있으면, static method를 도입해서 간단하게 만들어줄 수도 있음: `assertThat(memberService).isInstanceOf(MemberServiceImpl.class);`
 * Ctrl + Alt + V: Introduce variable
+* Ctrl + Alt + B: 선택한 인터페이스의 구현체를 바로 탐색할 수 있음.
 * Ctrl + Alt + I: 똑똑한 들여쓰기.
   - `memberRepository.findByName(member.getName());`에다 적용하는 경우, `Optional<Member> byName = memberRepository.findByName(member.getName());`로 바꿔줌
   - 즉, 관용적으로 사용하는 적당한 이름으로 바꾸면서 이를 받아주는 변수를 도입하는 것

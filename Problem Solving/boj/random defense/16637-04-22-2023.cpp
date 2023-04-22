@@ -9,22 +9,21 @@ string s;
 vector<bool> comb;
 
 ll calc(int st, int en) {
+  
 
 }
 
 void solve(int no_of_par) {
-  if(no_of_par != 0) {
-    for(int i = 0; i < no_of_par*2; i++)
-      comb[i] = 1;
-  }
+  for(int i = 0; i < no_of_par*2; i++)
+    comb[i] = 1;
   
   do {
-    
+    ans = max(ans, );
+
   } while(
       prev_permutation(comb.begin(), comb.end())
   );
 }
-
 
 int main() {
   ios::sync_with_stdio(0);

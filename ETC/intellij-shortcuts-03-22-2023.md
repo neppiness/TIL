@@ -47,7 +47,10 @@
 * Ctrl + N: go to class
 * Ctrl + P: 전달해야 하는 인자를 확인하는 단축키, `check parameter` 
 * Ctrl + E: 최근 확인한 파일 목록
+* Ctrl + F2: 프로그램 셧다운
 * Ctrl + F12: File Structure, 파일 내 메소드 목록을 싹 확인할 수 있음.
+* Ctrl + F5: Re-run
+* Ctrl + O: 오버라이드 또는 구현할 메소드 선택.
 
 * Shift + F6: 이름 다시 짓기
 * Shift + F10: 이전에 돌렸던 프로그램 재실행
@@ -68,6 +71,7 @@
 
 * 타이핑 - psvm: `public static void main(String[] args) {}`를 자동으로 작성해줌.
 * 타이핑 - sout: `System.out.println();`를 자동으로 작성해줌. soutv: `System.out.println("order = " + order);
+* 타이핑 - soutm: `System.out.println("클래스명.메소드명");` 형식으로 자동 작성됨
 `를 자동으로 작성해줌.
 * 타이핑 - iter: 배열이나 리스트와 같은 목록이 있을 때, 이를 돌아보는 for 문의 틀을 자동으로 작성해줌.
 

@@ -288,53 +288,234 @@ HttpServletRequest request, HttpServletResponse response
 * Front Controller를 둬서 공통 로직을 처리하게 하고, controller를 호출하도록 계획함.
 
 
-## 화요일 진도
 ### 섹션 4. MVC 프레임워크 만들기
-* 8강 ∙ 2시간 33분
+* 점진적으로 개선하면서 스프링의 구조를 이해할 수 있게 된다.
 
-#### 프론트 컨트롤러 패턴 소개 06 : 41
-#### 프론트 컨트롤러 도입 - v1 24 : 24
-#### View 분리 - v2 16 : 41
-#### Model 추가 - v3 28 : 51
-#### 단순하고 실용적인 컨트롤러 - v4 16 : 04
-#### 유연한 컨트롤러1 - v5 34 : 06
-#### 유연한 컨트롤러2 - v5 15 : 41
-#### 정리 10 : 35
+#### 프론트 컨트롤러 패턴 소개
+* 프론트 컨트롤러 역할을 하는 서블릿을 하나 도입하는 것으로 공통 로직을 처리.
+* 프론트 컨트롤러를 제외한 나머지 서블릿은 직접 호출할 필요가 없게 됨.
+
+
+#### 프론트 컨트롤러 도입 - v1
+* url을 전달받으면 매핑 정보를 확인하고 해당하는 서블릿을 호출해주는 방식으로 구현됨.
+* 컨트롤러를 인터페이스로 만듦
+  - process라고 '처리'하는 메소드를 만듦. 전체를 포괄할 수 있는 동작의 이름으로 메소드 이름을 지음.
+
+> 꿀팁: 구조를 개선할 때는 세부 로직을 건들지 않고 틀만 바꾸는 데 집중해야 한다. 한꺼번에 개선하려고 하면 어려움을 겪는다.
+
+#### View 분리 - v2
+* View는 후처리 로직. MyView 클래스를 만들어서 render 과정을 수행하도록 수정.
+
+#### Model 추가 - v3
+* 컨트롤러는 서블릿 기술을 몰라도 동작한다. 그러니 관련 인자들을 제거해도 된다.
+* request 객체의 역할을 Model 객체를 사용해 대체할 것.
+* 프론트 컨트롤러가 하나기 때문에, 총무를 맡기는 것. 관련 로직을 다듬는 등의 역할을 수행하게 설정.
+
+#### 단순하고 실용적인 컨트롤러 - v4
+* 개발자가 단순하고 편리하게 사용할 수 있어야 한다. 실용성이 좋아야 한다.
+* 만드는 사람이 힘들면 사용하는 사람이 편하다.
+
+#### 유연한 컨트롤러1, 2
+* 어댑터의 도입.
 
 
 ## 수요일 진도
 ### 섹션 5. 스프링 MVC - 구조 이해
-* 7강 ∙ 1시간 22분
 
-#### 스프링 MVC 전체 구조 16 : 14
-#### 핸들러 매핑과 핸들러 어댑터 14 : 32
-#### 뷰 리졸버 09 : 36
-#### 스프링 MVC - 시작하기 16 : 54
-#### 스프링 MVC - 컨트롤러 통합 06 : 48
-#### 스프링 MVC - 실용적인 방식 12 : 38
-#### 정리 05 : 45
+#### 스프링 MVC 전체 구조
+* 디스패처 서블릿이 스프링 MVC의 핵심이다.
+* 스프링 부트는 `DispatcherServlet`을 서블릿으로 자동 등록하면서 모든 경로`(urlPattern="/")`에 대해 매핑한다.
+
+> `DispatcherServlet`의 `doDispatch` 메소드가 최종 호출된다는 게 포인트
+
+#### 핸들러 매핑과 핸들러 어댑터
+* 어노테이션 기반으로 넘어가기 전에 활용됐던 컨트롤러.
+* 스프링 빈의 이름을 url 패턴으로 맞춤
+
+#### 뷰 리졸버
+* 다음과 같이 뷰 리졸버의 설정을 해줘야 물리 주소로 변환할 수 있음.
+```
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+```
+
+
+#### 스프링 MVC - 시작하기
+* 스프링 MVC의 약한 기능이 어노테이션 컨트롤러 등장과 함께 완벽하게 보완되었다.
+  - 어노테이션 기반 컨트롤러는 매우 유연하고 편리하다.
+
+* `@RequestMapping`
+  - `RequestMappingHandlerMapping`
+  - `RequestMappingHandlerAdapter`
+
+* `@Controller`: 컴포넌트 스캔 대상이 되고, 스프링 빈에 자동으로 등록된다.
+  - 스프링 MVC에서 어노테이션 기반 컨트롤러로 인식한다.
+
+* `@RequestMapping`: 요청 정보를 매핑한다. 해당 URL이 호출되면 이 메소드가 호출된다.
+
+
+#### 스프링 MVC - 컨트롤러 통합
+* 리퀘스트 매핑을 클래스에 적용할 수 있고, 그 클래스 내 메소드들을 각각 매핑을 할 수 있기 때문에 컨트롤러를 하나로 합칠 수 있다.
+
+#### 스프링 MVC - 실용적인 방식
+* 놀랍게도 ModelAndView를 넘겨줘도 되고, String을 넘겨줘도 된다. String을 넘겨준 경우, 이를 뷰 이름으로 인식하고 프로세스를 진행한다.
+* `@RequestMapping("/save")` 같은 식으로 작성하면 메소드 구분이 아직은 안 된 상태이다. 어떤 메소드가 오든 동일 처리를 하는 것이다.
+* `@RequestMapping(value = "/save", method = RequestMethod.GET)`: 매핑 경로(값)은 `/save`이며, 이에 대해 허용되는 메소드는 GET으로 지정됨.
+* 이제 리퀘스트 매핑에 메소드 쓰는 게 번거로우니 GetMapping, PostMapping 등과 같은 어노테이션을 도입함.
+
+<br>
 
 ### 섹션 6. 스프링 MVC - 기본 기능
-#### 15강 ∙ 3시간 36분
-#### 프로젝트 생성 07 : 43
-#### 로깅 간단히 알아보기 23 : 17
-#### 요청 매핑 21 : 13
-#### 요청 매핑 - API 예시 09 : 04
+#### 로깅 간단히 알아보기
+* 로깅 라이브러리: SLF4J, Logback
+  - SLF4J은 인터페이스, 이 구현체가 Logback
+
+* application.properties에서 아래와 같이 로깅 레벨을 설정할 수 있다. 출력 여부를 설정으로 조절할 수 있다.
+```
+#hello.springmvc 패키지와 그 하위 로그 레벨 설정
+logging.level.hello.springmvc=trace
+
+```
+  - 로깅 중요도는 `trace < debug < info < warn < error`순이다.
+  - 설정한 레벨보다 중요도가 낮거나 같은 로그들만 띄워준다. 디폴트 값은 info다.
+  - `logging.level.root=debug` 최상위 패키지의 로그 레벨을 debug 레벨로 설정한 것이고, 이에 따라 엄청나게 많은 동작이 로깅된다.
+  - `private final Logger log = LoggerFactory.getLogger(getClass());`는 롬복의 `@Slf4j`로 대체될 수 있다.
+
+* 반면, println을 사용한다면, 고객 요청에 따라 모든 로그를 출력하게 되고, 이로 인해 과부하가 걸리게 된다.
+
+* `@RestController`는 반환 값으로 뷰를 찾는 것이 아니라, HTTP 메시지 바디에 바로 입력한다.
+
+* `log.debug("data="+data)`: 문자열을 연산한 뒤에 결과를 갖고 있으면서 호출을 기다리게 된다. 쓸데없는 연산이 추가로 일어난다.
 
 
-## 목요일 진도
-### 섹션 6. 스프링 MVC - 기본 기능
-#### HTTP 요청 - 기본, 헤더 조회 12 : 41
-#### HTTP 요청 파라미터 - 쿼리 파라미터, HTML Form 07 : 22
-#### HTTP 요청 파라미터 - @RequestParam 17 : 09
-#### HTTP 요청 파라미터 - @ModelAttribute 10 : 10
-#### HTTP 요청 메시지 - 단순 텍스트 15 : 04
-#### HTTP 요청 메시지 - JSON 14 : 36
-#### 응답 - 정적 리소스, 뷰 템플릿 14 : 46
-#### HTTP 응답 - HTTP API, 메시지 바디에 직접 입력 10 : 10
-#### HTTP 메시지 컨버터 17 : 17
-#### 요청 매핑 헨들러 어뎁터 구조 22 : 27
-#### 정리 13 : 28
+#### 요청 매핑
+* 요청에 따라 어떤 컨트롤러가 호출되어야 하는지 설정하는 것.
+* 원래는 "/hello-basic"과 "/hello-basic/"은 다른 url이지만, 스프링 2.0에서는 둘을 같게 처리해준다.
+  - 스프링 3.0에서는 둘을 구분한다.
+* `RequestMapping`에는 쿼리 파라미터(params)을 설정할 수도 있고, 헤더(headers)를 설정할 수도 있고, 필요로 하는 데이터 형태인 컨숨(consumes)을 설정할 수도 있다. 컨숨의 반대로 특정 형태의 컨텐츠를 만들어주는 경우에는 프로듀스(produces)를 설정할 수 있다.
+* 프로듀스는 Accept 헤더에 명기된 형식의 파일만 처리할 수 있음. 뭐든지 받을 수 있는 상태라면 `Accept=*/*`로 설정함.
+
+
+#### 요청 매핑 - API 예시
+* 요즘 사용하는 URI 설계를 따라 매핑처리.
+
+
+#### HTTP 요청 - 기본, 헤더 조회
+* `MultiValueMap<String, String> headerMap`으로 받는 이유: 같은 key 값에 여러 값을 받을 수 있음.
+  - cpp의 `unordered_multimap<string, string>`
+* 인자와 반환값 모두 굉장히 폭넓게 선택할 수 있다. [공식 레퍼런스 링크](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-arguments)
+
+
+#### HTTP 요청 파라미터 - 쿼리 파라미터, HTML Form
+* *클라이언트에서 서버로 요청 데이터를 전달할 때는 주로 다음 3가지 방법을 사용한다.*
+1. GET - 쿼리 파라미터: `/url?username=hello&age=20`
+2. POST - HTML Form: `content-type: application/x-www-form-urlencoded`
+3. POST, PUT, PATCH - HTTP message body에 데이터를 직접 담아서 요청: `HTTP API에서 주로 사용, JSON, XML, TEXT`
+
+
+#### HTTP 요청 파라미터 - @RequestParam
+* 변수가 단순타입이면 간단하게 변수명만 가지고 뺴낼 수 있다.
+
+```java
+@ResponseBody
+@RequestMapping("/request-param-v3")
+public String requestParamV3(
+        @RequestParam String username,
+        @RequestParam int age) {
+
+    log.info("username={}, age={}", username, age);
+    return "ok";
+}
+```
+
+* RequestParam을 생략하면 혼동을 줄 수도 있긴 하니 명기하는 편이 낫지 않나 싶음.
+  - 이게 코드 내부적으로 가져오는 인자인지 뭔지 분간이 안 되니까.
+
+* `@RequestParam(required = false) int age`와 같이 작성하면 age에 값이 안 들어가도 서버에는 문제 없이 전달된다. 그러나, int는 null일 수 없기 때문에 서버 내부 오류가 발생한다.
+
+* *`@RequestParam(defaultValue = "guest") String username`를 설정하면 값이 없으면 `username = "guest"`가 된다. username에 빈 문자열을 넘겨줘도 guest로 설정된다.*
+
+
+#### HTTP 요청 파라미터 - @ModelAttribute
+* 롬복 @Data: @Getter , @Setter , @ToString , @EqualsAndHashCode , @RequiredArgsConstructor를
+자동 적용.
+
+* 스프링 MVC가 `@ModelAttribute`에 대해 setter를 호출한다.
+  - 롬복을 통해 설정해뒀기 때문에 간단하게 연결이 된다.
+  - 잘못된 변수가 전달되면 바인딩에 실패하고, 예외가 발생한다.
+
+> 실무팁: 예외 처리 및 검증에 70%정도의 에너지를 써야한다.
+
+* @ModelAttribute도, @RequestParam도 생략할 수 있어 혼동될 수 있다.
+  - String, int, Integer 같은 단순 타입 = @RequestParam
+  - argument resolver 로 지정해둔 타입 외에는 @ModelAttribute로 처리된다.
+
+
+#### HTTP 요청 메시지 - 단순 텍스트
+* 요청 파라미터가 아니면 정보를 RequestParam이나 ModelAttribute로 전달받을 수 없다.
+
+* InputStream과 Writer를 인자로 바로 받을 수 있다. 이를 활용하면 간단하게 코드를 작성할 수 있다.
+  - 그러나 스트림으로 받고 Writer로 받는 것 역시 굉장히 구체적인 로직이기 때문에 깔끔하지 못하다.
+
+* HttpMessageConvertor를 활용해서 바디를 뽑을 수 있다.
+  - HttpEntity로 헤더와 바디를 조회할 수 있다. 또한 이를 반환값으로 설정해서 응답에도 활용할 수 있다.
+  - 그러나 요청 파라미터 조회 기능은 없다.
+  - RequestEntity와 ResponseEntity가 HttpEntity를 상속받아 동작하며, 추가 메소드를 제공한다.
+
+
+#### HTTP 요청 메시지 - JSON
+* `@RequestBody HelloData helloData`: `@RequestBody`를 생략하면 `@ModelAttribute`로 동작하고, 파라미터가 전달되지 않기 때문에 값이 전달되지 않는다.
+* Content-type이 정확하게 지정되어야 이를 인식하고 정확하게 바꿔준다.
+
+* Accept 헤더에 따라서 객체를 @ResponseBody를 통해 변환되는 컨텐츠 형식이 결정된다 생각하면 될 듯.
+
+
+#### 응답 - 정적 리소스, 뷰 템플릿
+* `/static`, `/public`, `/resources`, `/META-INF/resources`
+  - 이런 곳이 루트 경로. 이후에 생성되는 디렉토리들은 하위 디렉토리들로써 슬래쉬를 추가하며 접근됨.
+* 뷰 템플릿: `/resources/templates`이 기본경로로 지정됨.
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="${data}">empty</p>
+</body>
+</html>
+```
+* text 부분을 바꿔치기 한다는 말이고, 그때, 변수 이름은 data가 된다. 그래서, controller 코드에 addAttribute 등을 할 때, attribute(속성) 이름을 data로 설정한다.
+
+```java
+@RequestMapping("/response/hello")
+public void responseViewV3(Model model) {
+    model.addAttribute("data", "hello!");
+}
+```
+
+* 위와 같이 호출하는 경우도 있는데, 이건 그냥 템플릿을 직접 호출하는 거고, 그때, 템플릿에서 명시된 변수들에 값을 넣어준 뒤, 그 HTML을 반환하는 것이라고 이해됨.
+  - `@ResponseBody`와 `@Controller`를 합친 것이 `@RestController`이다.
+
+#### HTTP 응답 - HTTP API, 메시지 바디에 직접 입력
+* HTTP API를 제공하는 경우 HTML이 아니라 데이터를 직접 전달해야 한다.
+  - `@RestController` 활용하면 다이렉트로 반환이 가능하긴 할 듯.
+
+
+#### HTTP 메시지 컨버터
+* `@ResponseBody`를 사용하면 viewResolver 대신 HttpMessageConverter가 동작한다.
+* 스프링에선 우선 ByteArray인지, String인지, json인지 순차적으로 확인하게 된다.
+* 지정된 content-type은 우선순위가 밀린다. 동작하는 컨버터는 Controller의 인자 유형에 따라서 일차적으로 결정된다(강의자료 47페이지).
+  - 다만, json을 처리하려면 반드시 json을 지원한다고 표기가 되어야 한다. 안 그러면 해당 컨버팅을 시도도 안 한다.
+
+
+#### 요청 매핑 헨들러 어뎁터 구조
+* `RequestMappingHandlerAdapter`가 컨트롤러를 보고 준비해야 하는 인자를 확인한 뒤, 이를 넣어준다.
+* `ArgumentResolver`가 인자를 준비하기 위해 날 것의 응답(HTTP 메시지)을 해석한 뒤 넘겨줘야 한다고 생각하면 될 듯.
+* 핸들러 어댑터의 역할이 어디까지인지 공부할 필요가 있을 듯함.
+* HTTP 메시지 컨버터: Argument Resolver가 @RequestBody 또는 HttpEntity를 전달해줘야 할 때, 또는 Return Value Handler가 @ResponseBody 또는 HttpEntity를 전달해줘야 할 때 HTTP 컨버터를 거쳐서 처리할 수 있는 형태로 만든 후에 넘겨준다.
 
 
 ## 금요일 진도

@@ -517,26 +517,98 @@ public void responseViewV3(Model model) {
 * 핸들러 어댑터의 역할이 어디까지인지 공부할 필요가 있을 듯함.
 * HTTP 메시지 컨버터: Argument Resolver가 @RequestBody 또는 HttpEntity를 전달해줘야 할 때, 또는 Return Value Handler가 @ResponseBody 또는 HttpEntity를 전달해줘야 할 때 HTTP 컨버터를 거쳐서 처리할 수 있는 형태로 만든 후에 넘겨준다.
 
+<br>
 
-## 금요일 진도
 ### 섹션 7. 스프링 MVC - 웹 페이지 만들기
-* 12강 ∙ 2시간 11분
+#### 상품 도메인 개발
+* @Data는 많은 것들이 오픈되기 때문에 사용 시 주의할 것.
+* DTO: Data Transfer Object로, 필요한 데이터만 전달하기 위한 임의의 오브젝트를 생성해서 대응해주는 방식.
+* 간단하게 아이템을 저장하고 업데이트 하는 등의 로직을 만듦: 핵심 도메인 로직
 
-#### 프로젝트 생성 03 : 45
-#### 요구사항 분석 07 : 37
-#### 상품 도메인 개발 16 : 17
-#### 상품 서비스 HTML 08 : 43
-#### 상품 목록 - 타임리프 31 : 00
-#### 상품 상세 07 : 50
-#### 상품 등록 폼 07 : 04
-#### 상품 등록 처리 - @ModelAttribute 12 : 52
-#### 상품 수정 11 : 48
-#### PRG Post/Redirect/Get 10 : 13
-#### RedirectAttributes 07 : 20
-#### 정리 07 : 19
+#### 상품 서비스 HTML
+* 부트스트랩을 활용해서 깔끔한 폼으로 구현 가능함
+* 정적 리소스는 단순하게 운영체제 안에서도 열어볼 수 있다.
+* 서비스를 운영한다면 HTML을 공개해버리면 안 된다.
 
-## 금요일 또는 주말 중 마무리
-### 섹션 8. 다음으로
-* 1강 ∙ 40분
 
-#### 다음으로 40 : 59
+#### 상품 목록 - 타임리프
+* `@RequiredArgsConstructor`를 사용하면 final이 붙은 필드를 생성자로 주입할 수 있도록 스프링이 자동 설정해준다.
+  - `private final ItemRepository itemRepository;`가 있을 때, 아래와 같은 생성자를 자동으로 만들어주는 것.
+
+```java
+    public BasicItemController(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
+```
+
+* `<html>`이라 되어 있던 태그를 `<html xmlns:th="http://www.thymeleaf.org">`로 변경함.
+  - 무조건 `xmlns:th`라고 해야 정상작동 되는 듯. th를 다른 변수로 고칠 수 있을 줄 알았는데 그렇진 않은 듯.
+
+* `th:onclick="|location.href='@{/basic/items/add}'|"`
+  - 타임리프 문법에 따라, ||를 활용해 raw string을 보내는 듯함.
+
+* `th:href="@{/basic/items/{itemId}(itemId=${item.id})}"`로 선언해서 동적으로 경로를 제어할 수 있음.
+```html
+<td><a href="item.html" th:href="@{/basic/items/{itemId}(itemId=${item.id})}"
+      th:text="${item.id}">상품id</a></td>
+```
+
+* 화면을 html 형태로 유지해주기 때문에 '내츄럴 템플릿'이라고 한다.
+
+* 타임리프 핵심
+  - 핵심은 th:xxx 가 붙은 부분은 서버사이드에서 렌더링 되고, 기존 것을 대체한다. th:xxx 이 없으면 기존 html의 xxx 속성이 그대로 사용된다.
+  - HTML을 파일로 직접 열었을 때, th:xxx 가 있어도 웹 브라우저는 th: 속성을 알지 못하므로 무시한다
+  - 따라서 HTML을 파일 보기를 유지하면서 템플릿 기능도 할 수 있다.
+
+
+#### 상품 상세
+* `th:onclick="|location.href='@{/basic/items}'|"`: 절대 경로로 이동
+* `th:onclick="|location.href='@{basic/items}'|"`: 현 경로에서 basic/items를 더 들어감.
+
+
+### 상품 등록 처리 - @ModelAttribute
+* @ModelAttribute - 요청 파라미터 처리
+  - @ModelAttribute 는 Item 객체를 생성하고, 요청 파라미터의 값을 프로퍼티 접근법(setXxx)으로 입력해준다.
+
+* @ModelAttribute - Model 추가
+  - @ModelAttribute 는 중요한 한가지 기능이 더 있는데, 바로 모델(Model)에 @ModelAttribute로 지정한 객체를 자동으로 넣어준다. 지금 코드를 보면 model.addAttribute("item", item) 가 주석처리 되어 있어도 잘 동작하는 것을 확인할 수 있다.
+
+  - 모델에 데이터를 담을 때는 이름이 필요하다. 이름은 @ModelAttribute 에 지정한 name(value) 속성을 사용한다. 만약 다음과 같이 @ModelAttribute 의 이름을 다르게 지정하면 다른 이름으로 모델에 포함된다.
+
+* 아래 둘은 같은 동작을 하는 듯한데
+  - `@ModelAttribute("hello") Item item`: 
+  - `model.addAttribute("hello", item);` `item` 객체를 모델에 `hello`라는 이름으로 저장함
+
+* `@ModelAttribute Item item`: 모델에 item이라는 이름으로 담김. 이는 첫 글자를 소문자로 변경한 이름을 자동으로 활용하는 규칙에 따름.
+
+* 아래와 같이 완전히 생략해도 된다.
+  - 이 경우, 기본형 변수가 아니면 `@ModelAttribute`가 `"item"`라는 이름으로 자동 지정된다.
+```java
+    @PostMapping("/add")
+    public String addItemSimplest(Item item) {
+        itemRepository.save(item);
+        return "basic/item";
+    }
+```
+
+#### 상품 수정
+* 리다이렉트 하는 법: `return "redirect:/basic/items/{itemId}";`
+
+#### PRG패턴: Post/Redirect/Get
+* 상품을 등록하고 난 후, 상품 상세를 받게 됨. 이를 새로고침하면 POST가 다시 제출되고, 이에 따라 상품을 계속 등록하게 됨: 새로고침은 마지막에 요청했던 데이터를 다시 서버에 전송하는 것.
+* redirect는 사용자가 새롭게 요청한 것처럼 바꿔주는 역할을 하는 듯.
+  - 서버에서 클라이언트에 다시 연결을 시도할 요청 데이터를 넘겨줘서 서버에서 의도한 대로 클라이언트가 재요청할 수 있게 만드는 것.
+
+
+#### RedirectAttributes
+```java
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("updated", true);
+        return "redirect:/basic/items/{itemId}";
+    }
+```
+* RedirectAttributes를 활용해서 redirect 되었을 때 전달하고 싶은 인자들을 추가할 수 있다.
+  - thymeleaf를 사용해서 넘겨받은 인자를 확인할 수 있고, 전달받은 값들에 따라서 원하는 동작을 설정할 수 있다.

@@ -5,17 +5,19 @@ public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
     static int n, m;
     static int[] cnt = new int[102];
-    static TreeMap<Integer, FrameInfo> frame = new TreeMap<>();
+    static TreeSet<FrameInfo> frame = new TreeSet<>();
 
     static class FrameInfo implements Comparable<FrameInfo> {
-        public int noOfRec, registeredTurn;
+        public int noOfRec, registeredTurn, studentNo;
 
-        FrameInfo(int noOfRec_, int registeredTurn) {
+        FrameInfo(int noOfRec_, int registeredTurn_, int studentNo_) {
             this.noOfRec = noOfRec_;
-            this.registeredTurn = registeredTurn;
+            this.registeredTurn = registeredTurn_;
+            this.studentNo = studentNo_;
         }
 
         @Override
@@ -26,25 +28,35 @@ public class Main {
         }
     }
 
+    static FrameInfo findByStudentNo(int no) {
+        for (FrameInfo frinfo : frame)
+            if (frinfo.studentNo == no) return frinfo;
+        return null;
+    }
+
     public static void main(String[] args) throws IOException {
 
-        n = Integer.parseInt(br.readLine()); // 사진틀 개수 제한
+        n = Integer.parseInt(br.readLine());
         m = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
 
         for (int turn = 1; turn <= m; turn++) {
-            int x = Integer.parseInt(br.readLine());
-            if (frame.size() <= n) {
-                FrameInfo frinfo = frame.get(x);
-                if (frinfo == null) frame.put(x, new FrameInfo(1, turn));
-                else frinfo.noOfRec++;
+            int x = Integer.parseInt(st.nextToken());
+            FrameInfo frinfo = findByStudentNo(x);
+            if (frinfo == null) {
+                if (frame.size() == n)
+                    frame.pollFirst();
+                frame.add(new FrameInfo(1, turn, x));
+            } else {
+                frinfo.noOfRec++;
             }
-            
-            // 현재까지 추천 받은 횟수가 가장 적은 학생이 두 명 이상일 경우에는
-            // 그러한 학생들 중 게시된 지 가장 오래된 사진을 삭제한다.
         }
 
-        for (Map.Entry<Integer, FrameInfo> entry : frame.entrySet()) {
-            sb.append(entry.getValue());
-        }
+        ArrayList<Integer> studentNos = new ArrayList<>();
+        for (FrameInfo frinfo : frame)
+            studentNos.add(frinfo.studentNo);
+        Collections.sort(studentNos);
+        for (int sn : studentNos) sb.append(sn).append(' ');
+        System.out.print(sb);
     }
 }

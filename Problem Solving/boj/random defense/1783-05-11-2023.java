@@ -17,7 +17,7 @@ public class Main {
         int ans;
         if (n == 1) ans = 1;
         else if (n == 2) {
-            ans = Math.min((m + 1) / 2, 3);
+            ans = Math.min((m + 1) / 2, 4);
         } else {
             if (m <= 6) ans = Math.min(4, m);
             else ans = m - 2;

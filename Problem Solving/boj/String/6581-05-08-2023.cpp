@@ -25,7 +25,7 @@ int main() {
 
   while (getline(cin, s)) input += ' ' + s;
   for (char& c : input)
-    if (c == '\t') c = ' ';
+    if (c == '\t' || c == '\n') c = ' ';
 
   splitted_input = split(input, " ");
   int cnt = 0;

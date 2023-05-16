@@ -29,8 +29,8 @@ public class Main {
     }
 
     static FrameInfo findByStudentNo(int no) {
-        for (FrameInfo frinfo : frame)
-            if (frinfo.studentNo == no) return frinfo;
+        for (FrameInfo frInfo : frame)
+            if (frInfo.studentNo == no) return frInfo;
         return null;
     }
 
@@ -42,19 +42,22 @@ public class Main {
 
         for (int turn = 1; turn <= m; turn++) {
             int x = Integer.parseInt(st.nextToken());
-            FrameInfo frinfo = findByStudentNo(x);
-            if (frinfo == null) {
+            FrameInfo foundFi = findByStudentNo(x);
+
+            if (foundFi == null) {
                 if (frame.size() == n)
                     frame.pollFirst();
                 frame.add(new FrameInfo(1, turn, x));
             } else {
-                frinfo.noOfRec++;
+                frame.remove(foundFi);
+                foundFi.noOfRec++;
+                frame.add(foundFi);
             }
         }
 
         ArrayList<Integer> studentNos = new ArrayList<>();
-        for (FrameInfo frinfo : frame)
-            studentNos.add(frinfo.studentNo);
+        for (FrameInfo frInfo : frame)
+            studentNos.add(frInfo.studentNo);
         Collections.sort(studentNos);
         for (int sn : studentNos) sb.append(sn).append(' ');
         System.out.print(sb);

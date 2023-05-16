@@ -4,7 +4,7 @@ using namespace std;
 const int LIM = 80;
 
 string s, input; 
-vector<string> splitted_input;
+vector<string> split_input;
 
 vector<string> split(string& s, string sep) {
   vector<string> ret;
@@ -23,20 +23,20 @@ int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
-  while (getline(cin, s)) input += ' ' + s;
+  while (getline(cin, s)) input += " " + s;
   for (char& c : input)
-    if (c == '\t' || c == '\n') c = ' ';
+    if (c == '\t') c = ' ';
 
-  splitted_input = split(input, " ");
+  split_input = split(input, " ");
+
   int cnt = 0;
-  for (auto& str : splitted_input) {
-    string tagchk = str.substr(0, 4);
-    if (tagchk != "<br>" && tagchk != "<hr>") {
+  for (auto& str : split_input) {
+    if (str != "<br>" && str != "<hr>") {
       if (cnt + str.size() > LIM) { cout << '\n'; cnt = 0; }
       cout << str; cnt += str.size();
       if (cnt < LIM) { cout << ' '; cnt++; }
     } else {
-      if (tagchk == "<hr>") {
+      if (str == "<hr>") {
         if (cnt) cout << '\n';
         int no = LIM;
         while (no--) cout << '-';
@@ -44,5 +44,4 @@ int main() {
       cout << '\n'; cnt = 0;
     }
   }
-  cout << '\n';
 }

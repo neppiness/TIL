@@ -7,14 +7,13 @@ public class Main {
     static StringTokenizer st;
 
     static char[][] b = new char[7][7];
-    static Coord[] vct = new Coord[36];
-    static Coord[] t = new Coord[5];
+    static List<Coord> vacant = new ArrayList<>();
+    static List<Coord> teacher = new ArrayList<>();
 
     static int[] dx = new int[]{1, 0, -1, 0};
     static int[] dy = new int[]{0, 1, 0, -1};
 
     static boolean isPossible;
-    static int vctcnt, tcnt;
     static int n;
 
     static class Coord {
@@ -31,8 +30,8 @@ public class Main {
     }
 
     static boolean check() {
-        for (int i = 0; i < tcnt; i++) {
-            Coord cur = t[i];
+        for (int i = 0; i < teacher.size(); i++) {
+            Coord cur = teacher.get(i);
             int cx = cur.x; int cy = cur.y;
             for (int dir = 0; dir < 4; dir++) {
                 int nx = cx + dx[dir];
@@ -51,10 +50,10 @@ public class Main {
             isPossible = (isPossible || check());
             return;
         }
-        for (int i = st; i < vctcnt; i++) {
-            vct[i].setChar('O');
+        for (int i = st; i < vacant.size(); i++) {
+            vacant.get(i).setChar('O');
             solve(i + 1, lv - 1);
-            vct[i].setChar('X');
+            vacant.get(i).setChar('X');
         }
     }
 
@@ -65,13 +64,13 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
                 char c = (st.nextToken()).charAt(0);
-                if (c == 'X') vct[vctcnt++] = new Coord(i, j);
-                if (c == 'T') t[tcnt++] = new Coord(i, j);
+                if (c == 'X') vacant.add(new Coord(i, j));
+                if (c == 'T') teacher.add(new Coord(i, j));
                 b[i][j] = c;
             }
         }
 
-        for (int i = 0; i < vctcnt; i++)
+        for (int i = 0; i < vacant.size(); i++)
             solve(i, 3);
 
         if (isPossible) System.out.print("YES");

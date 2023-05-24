@@ -20,23 +20,43 @@ public class Main {
         Coord(int x_, int y_) { this.x = x_; this.y = y_; }
         void visit() { vis[this.x][this.y] = true; }
         boolean isVisited() { return vis[this.x][this.y]; }
-        boolean oob() { 
+        boolean isNoIce() { return ice[this.x][this.y] <= 0; }
+        boolean oob() {
             return (this.x >= n || this.x < 0 || this.y >= n || this.y < 0);
         }
     }
 
+    static void rotate(int x, int y, int unitSize) {
+        int[][] copy = new int[unitSize][unitSize];
+        int iStart = x * unitSize;
+        int jStart = y * unitSize;
+
+        for (int i = 0; i < unitSize; i++)
+            for (int j = 0; j < unitSize; j++)
+                copy[j][unitSize - 1 - i] = ice[i + iStart][j + jStart];
+
+        for (int i = 0; i < unitSize; i++)
+            for (int j = 0; j < unitSize; j++)
+                ice[i + iStart][j + jStart] = copy[i][j];
+    }
+
     static void rotate(int f) {
         int unitSize = (1 << f);
-        
+        int no = n / unitSize;
+        for (int i = 0; i < no; i++)
+            for (int j = 0; j < no; j++)
+                rotate(i, j, unitSize);
     }
 
     static void adjCheckAndReduce() {
         int[][] adjCount = new int[n][n];
         for (int cx = 0; cx < n; cx++) {
             for (int cy = 0; cy < n; cy++) {
+                Coord cur = new Coord(cx, cy);
+                if (cur.isNoIce()) continue;
                 for (int dir = 0; dir < 4; dir++) {
                     Coord nxt = new Coord(cx + dx[dir], cy + dy[dir]);
-                    if (nxt.oob()) continue;
+                    if (nxt.oob() || nxt.isNoIce()) continue;
                     adjCount[cx][cy]++;
                 }
             }
@@ -52,7 +72,7 @@ public class Main {
     }
 
     static int countBiggestMass(Coord start) {
-        int count = 0;
+        int count = 1;
         Queue<Coord> q = new ArrayDeque<>();
         q.add(start); start.visit();
         while (!q.isEmpty()) {
@@ -61,6 +81,7 @@ public class Main {
             for (int dir = 0; dir < 4; dir++) {
                 Coord nxt = new Coord(cx + dx[dir], cy + dy[dir]);
                 if (nxt.oob() || nxt.isVisited()) continue;
+                if (nxt.isNoIce()) continue;
                 count++; q.add(nxt); nxt.visit();
             }
         }
@@ -72,7 +93,7 @@ public class Main {
         int size = 0;
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++) {
-                if (vis[i][j]) continue;
+                if (vis[i][j] || ice[i][j] <= 0) continue;
                 size = Math.max(size, countBiggestMass(new Coord(i, j)));
             }
         return size;
@@ -82,7 +103,7 @@ public class Main {
         int sum = 0;
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
-                sum += ice[i][j];
+                if (ice[i][j] > 0) sum += ice[i][j];
         System.out.println(sum);
         System.out.println(findBiggestMass());
     }
@@ -95,15 +116,15 @@ public class Main {
         n = (1 << lg);
 
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine()); 
+            st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++)
                 ice[i][j] = Integer.parseInt(st.nextToken());
         }
-        
+
         st = new StringTokenizer(br.readLine());
         while (st.hasMoreTokens())
             fs.add(Integer.parseInt(st.nextToken()));
-        
+
         for (int f : fs) fireStorm(f);
         printResult();
     }

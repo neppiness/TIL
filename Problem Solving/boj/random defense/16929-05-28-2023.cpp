@@ -12,27 +12,20 @@ bool OOB(int x, int y) {
   return (x >= n || x < 0 || y >= m || y < 0);
 }
 
-bool Solve(int x, int y) {
-  int col = b[x][y] - 'A';
+bool Solve(int cx, int cy, int prv) {
+  int col = b[cx][cy] - 'A';
+  dist[cx][cy][col] = prv + 1;
 
-  stack<pair<int, int>> st;
-  st.push({x, y});
-  dist[x][y][col] = 1;
-
-  while (!st.empty()) {
-    auto [cx, cy] = st.top(); st.pop();
-    for (int dir = 0; dir < 4; dir++) {
-      int nx = cx + dx[dir];
-      int ny = cy + dy[dir];
-      if (OOB(nx, ny)) continue;
-      if (b[nx][ny] != b[x][y]) continue;
-      if (dist[nx][ny][col] != -1) {
-        if (abs(dist[cx][cy][col] - dist[nx][ny][col]) >= 3) return 1;
-        continue;
-      }
-      dist[nx][ny][col] = dist[cx][cy][col] + 1;
-      st .push({nx, ny});
+  for (int dir = 0; dir < 4; dir++) {
+    int nx = cx + dx[dir];
+    int ny = cy + dy[dir];
+    if (OOB(nx, ny)) continue;
+    if (b[nx][ny] != b[cx][cy]) continue;
+    if (dist[nx][ny][col] != -1) {
+      if (abs(dist[cx][cy][col] - dist[nx][ny][col]) >= 3) return 1;
+      continue;
     }
+    if (Solve(nx, ny, prv + 1)) return 1;
   }
   return 0;
 }
@@ -42,7 +35,7 @@ bool IsFound() {
     for (int j = 0; j < m; j++) {
       int col = b[i][j] - 'A';
       if (dist[i][j][col] != -1) continue;
-      if (Solve(i, j)) return 1;
+      if (Solve(i, j, 0)) return 1;
     }
   return 0;
 }
@@ -59,9 +52,4 @@ int main() {
 
   if (IsFound()) cout << "Yes";
   else cout << "No";
-
-  cout << '\n';
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < m; j++)
-      cout << dist[i][j][0] << " \n"[j + 1 == m];
 }

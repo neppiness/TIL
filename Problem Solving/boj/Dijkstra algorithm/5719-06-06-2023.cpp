@@ -3,48 +3,61 @@ using namespace std;
 
 const int kInf = 0x7f7f7f7f;
 
-vector<tuple<int, int, int>> adj[502]; //adj[cur] = {cost, nxt, id};
-bool is_used[10002];
+int n, m, st, en;
+bool is_opt_path[10002];
 int dist[502];
 
-int n, m, st, en;
-priority_queue< tuple<int, int, int>,
-    vector<tuple<int, int, int>>,
-    greater<tuple<int, int, int>> > pq;
+ //adj[cur], rev_adj[cur] = {cost, nxt, id};
+vector<tuple<int, int, int>> adj[502];
+vector<tuple<int, int, int>> rev_adj[502];
+
+priority_queue< pair<int, int>,
+    vector<pair<int, int>>,
+    greater<pair<int, int>> > pq;
 
 void setup() {
-  for (int i = 0; i < n; i++) adj[i].clear();
-  memset(dist, 0x7f, sizeof(dist));
-  memset(is_used, 0, sizeof(is_used));
+  for (int i = 0; i < n; i++) {
+    adj[i].clear(); rev_adj[i].clear();
+  }
+  fill(is_opt_path, is_opt_path + m, 0);
 
-  st, en; cin >> st >> en;
+  cin >> st >> en;
   for (int id = 0; id < m; id++) {
     int u, v, cost;
     cin >> u >> v >> cost;
     adj[u].push_back({cost, v, id});
-    adj[v].push_back({cost, u, id});
+    rev_adj[v].push_back({cost, u, id});
   }
 }
 
 void solve() {
+  fill(dist, dist + n, kInf);
   dist[st] = 0;
-  pq.push({0, 0, m}); // m번 간선은 가상의 간선으로 활용되지 않는다.
+  pq.push({0, st});
   while (!pq.empty()) {
-    auto [co, cur, cid] = pq.top(); pq.pop();
+    auto [co, cur] = pq.top(); pq.pop();
     if (dist[cur] != co) continue;
-    for (auto [dco, nxt, nid] : adj[cur]) {
-
+    for (auto [dco, nxt, id] : adj[cur]) {
+      if (is_opt_path[id]) continue;
+      dco += co;
+      if (dist[nxt] <= dco) continue;
+      dist[nxt] = dco;
+      pq.push({dco, nxt});
     }
   }
-
 }
 
 void trace() {
-
-}
-
-void solve2() {
-
+  pq.push({dist[en], en});
+  while (!pq.empty()) {
+    auto [co, cur] = pq.top(); pq.pop();
+    for (auto [dco, nxt, id] : rev_adj[cur]) {
+      int d = co - dco;
+      if (dist[nxt] != d) continue;
+      pq.push({dist[nxt], nxt});
+      is_opt_path[id] = 1;
+    }
+  }
 }
 
 int main() {
@@ -56,7 +69,10 @@ int main() {
     setup();
     solve();
     trace();
-    solve2();
+    solve();
+
+    if (dist[en] == kInf) dist[en] = -1;
+    cout << dist[en] << '\n';
     cin >> n >> m;
   }
 }

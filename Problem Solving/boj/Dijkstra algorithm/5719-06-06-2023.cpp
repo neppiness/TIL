@@ -15,6 +15,8 @@ priority_queue< pair<int, int>,
     vector<pair<int, int>>,
     greater<pair<int, int>> > pq;
 
+queue<int> q;
+
 void setup() {
   for (int i = 0; i < n; i++) {
     adj[i].clear(); rev_adj[i].clear();
@@ -48,13 +50,14 @@ void solve() {
 }
 
 void trace() {
-  pq.push({dist[en], en});
-  while (!pq.empty()) {
-    auto [co, cur] = pq.top(); pq.pop();
+  q.push(en);
+  while (!q.empty()) {
+    int cur = q.front(); q.pop();
     for (auto [dco, nxt, id] : rev_adj[cur]) {
-      int d = co - dco;
+      if (is_opt_path[id]) continue;
+      int d = dist[cur] - dco;
       if (dist[nxt] != d) continue;
-      pq.push({dist[nxt], nxt});
+      q.push(nxt);
       is_opt_path[id] = 1;
     }
   }

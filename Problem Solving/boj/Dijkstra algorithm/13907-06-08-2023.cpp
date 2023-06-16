@@ -1,16 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
 
-const ll kInf = 0x7f7f7f7f7f7f;
+const int INF = 0x7f7f7f7f;
 
 int n, m, k, st, en;
-ll dist[1002][1002];
+int dist[1002][1002];
 int inc[30002];
 
-priority_queue< tuple<ll, int, int>,
-    vector<tuple<ll, int, int>>,
-    greater<tuple<ll, int, int>> > pq;
+priority_queue< tuple<int, int, int>,
+    vector<tuple<int, int, int>>,
+    greater<tuple<int, int, int>> > pq;
 
 vector<pair<int, int>> adj[1002];
 
@@ -19,7 +18,7 @@ int main() {
   cin.tie(0);
 
   for (int i = 0; i <= 1000; i++)
-    fill(dist[i], dist[i] + 1001, kInf);
+    fill(dist[i], dist[i] + 1001, INF);
 
   cin >> n >> m >> k;
   cin >> st >> en;
@@ -50,7 +49,7 @@ int main() {
   }
 
   for (int i = 0; i <= k; i++) {
-    ll ans = kInf;
+    int ans = INF;
     for (int nop = 0; nop <= n; nop++) {
       dist[nop][en] += inc[i]*nop;
       ans = min(ans, dist[nop][en]);

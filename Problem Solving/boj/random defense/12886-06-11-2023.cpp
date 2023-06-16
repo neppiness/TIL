@@ -1,28 +1,29 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int a[3], tmp[3];
-int cache[502][502][502];
+int a[3], tot;
+int cache[1502][1502];
 
-bool solve(int x, int y, int z);
-
-bool setandret(int x, int y, int z) {
-  tmp[0] = x; tmp[1] = y; tmp[2] = z;
-  sort(tmp, tmp + 3);
-  return solve(tmp[0], tmp[1], tmp[2]);
-}
-
-bool solve(int x, int y, int z) {
-  int &ret = cache[x][y][z];
+bool solve(int x, int y) {
+  int &ret = cache[x][y];
   if (ret != -1) return ret;
+
+  int z = tot - x - y;
   if (x == y && y == z) return ret = 1;
 
-  ret = setandret(x + x, y, z - x);
-  if (x != y)
-    ret |= setandret(x + x, y - x, z);
-  if (y != z)
-    ret |= setandret(x, y + y, z - y);
-  return ret;
+  int tmp[3] = {x, y, z};
+  sort(tmp, tmp + 3);
+
+  ret = 0;
+  
+  for (int i = 0; i < 3; i++) {
+    for (int j = i + 1; j < 3; j++) {
+      if (tmp[i] == tmp[j]) continue;
+      if (solve(tmp[i] + tmp[i], tmp[j] - tmp[i]))
+        return ret = 1;
+    }
+  }
+  return ret = 0;
 }
 
 int main() {
@@ -31,9 +32,13 @@ int main() {
 
   memset(cache, -1, sizeof(cache));
 
-  for (int i = 0; i < 3; i++)
-    cin >> a[i];
-  sort(a, a + 3);
+  for (int i = 0; i < 3; i++) {
+    cin >> a[i]; tot += a[i];
+  }
 
-  cout << solve(a[0], a[1], a[2]);
+  sort(a, a + 3);
+  bool ans = solve(a[0], a[1]);
+  ans |= solve(a[0], a[2]);
+  ans |= solve(a[1], a[2]);
+  cout << ans;
 }

@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+using ld = long double;
 
 int n, k;
 ll p[502], s[502];
-double ans;
+ld ans;
 
 int main() {
   ios::sync_with_stdio(0);
@@ -18,18 +19,20 @@ int main() {
     s[i] += s[i - 1];
   }
 
-  ll sumsq = (p[k] - p[0]) * (p[k] - p[0]);
-  ll sqsum = (s[k] - s[0]);
+  ll sumsq = p[k] * p[k];
+  ll sqsum = s[k];
   ll eq = k * sqsum - sumsq;
   ans = sqrt(eq); ans /= k;
 
-  double tmp;
-  for (int i = k; i <= n; i++) {
-    sumsq = (p[i] - p[i - k]) * (p[i] - p[i - k]);
-    sqsum = (s[i] - s[i - k]);
-    eq = k * sqsum - sumsq;
-    tmp = sqrt(eq);
-    ans = min(ans, tmp / k);
+  ld tmp;
+  for (int j = k; j <= n; j++) {
+    for (int i = j; i <= n; i++) {
+      sumsq = (p[i] - p[i - j]) * (p[i] - p[i - j]);
+      sqsum = (s[i] - s[i - j]);
+      eq = j * sqsum - sumsq;
+      tmp = sqrt(eq);
+      ans = min(ans, tmp / j);
+    }
   }
   cout.precision(11);
   cout << fixed << ans;

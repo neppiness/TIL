@@ -1,107 +1,95 @@
 #include <bits/stdc++.h>
+#define X first
+#define Y second
 using namespace std;
 
-const int kRoot = 1;
+const int ROOT = 1;
 
 int n, k;
-int mn[400'002], mx[400'002];
+int x[100'002], mn[400'002], mx[400'002];
 
-int init(int st, int en, int cur, bool is_max) {
-  if (st == en) {
-    if (is_max) return mx[cur] = st;
-    return mn[cur] = st;
-  }
-
-  int mid = (st + en) / 2;
-  if (is_max) return mx[cur] = max(
-      init(st, mid, cur*2, 1),
-      init(mid + 1, en, cur*2 + 1, 1)
-  );
+int mininit(int nlb, int nrb, int cur) {
+  if (nlb == nrb) return mn[cur] = x[nlb];
+  int nmid = (nlb + nrb) / 2;
   return mn[cur] = min(
-      init(st, mid, cur*2, 0),
-      init(mid + 1, en, cur*2 + 1, 0)
+      mininit(nlb, nmid, cur*2),
+      mininit(nmid + 1, nrb, cur*2 + 1)
   );
 }
 
-int get(int st, int en, int cur, int x) {
-  if (st == en) return mn[cur];
-  int mid = (st + en) / 2;
-  if (x <= mid) return get(st, mid, cur*2, x);
-  return get(mid + 1, en, cur*2 + 1, x);
+int maxinit(int nlb, int nrb, int cur) {
+  if (nlb == nrb) return mx[cur] = x[nlb];
+  int nmid = (nlb + nrb) / 2;
+  return mx[cur] = max(
+      maxinit(nlb, nmid, cur*2),
+      maxinit(nmid + 1, nrb, cur*2 + 1)
+  );
 }
 
-int get(int st, int en, int cur, int a, int b, bool is_max) {
-  if (a <= st && en <= b) {
+int update(bool is_max, int tar, int nlb, int nrb, int cur) {
+  if (tar < nlb || nrb < tar) {
     if (is_max) return mx[cur];
     return mn[cur];
   }
-
-  if (b < st || en < a) { // out of range process
-    if (is_max) return -21e8;
-    return 21e8;
+  if (nlb == nrb) {
+    if (is_max) return mx[cur] = x[tar];
+    return mn[cur] = x[tar];
   }
 
-  int mid = (st + en) / 2;
-  if (is_max) return max(
-      get(st, mid, cur*2, a, b, 1),
-      get(mid + 1, en, cur*2 + 1, a, b, 1)
-  );
-  return min(
-      get(st, mid, cur*2, a, b, 0),
-      get(mid + 1, en, cur*2 + 1, a, b, 0)
-  );
-}
-
-int update(int st, int en, int cur, int taridx, int val, bool is_max) {
-  if (st == en) {
-    if (is_max) return mx[cur] = val;
-    return mn[cur] = val;
+  int nmid = (nlb + nrb) / 2;
+  if (is_max) {
+    return mx[cur] = max(
+        update(1, tar, nlb, nmid, cur*2),
+        update(1, tar, nmid + 1, nrb, cur*2 + 1)
+    );
   }
-
-  if (taridx < st || en < taridx) { // out of range process
-    if (is_max) return -21e8;
-    return 21e8;
-  }
-
-  int mid = (st + en) / 2;
-  if (is_max) return mx[cur] = max(
-    update(st, mid, cur*2, taridx, val, 1),
-    update(mid + 1, en, cur*2 + 1, taridx, val, 1)
-  );
   return mn[cur] = min(
-      update(st, mid, cur*2, taridx, val, 0),
-      update(mid + 1, en, cur*2 + 1, taridx, val, 0)
+      update(0, tar, nlb, nmid, cur*2),
+      update(0, tar, nmid + 1, nrb, cur*2 + 1)
   );
 }
 
-void swap(int a, int b) {
-  int val_a = get(0, n - 1, kRoot, a);
-  int val_b = get(0, n - 1, kRoot, b);
-  update(0, n - 1, kRoot, a, val_b, 0);
-  update(0, n - 1, kRoot, a, val_b, 1);
-  update(0, n - 1, kRoot, b, val_a, 0);
-  update(0, n - 1, kRoot, b, val_a, 1);
+pair<int, int> getminmax(int qlb, int qrb, int nlb, int nrb, int cur) {
+  if (qlb <= nlb && nrb <= qrb) return {mn[cur], mx[cur]};
+  // 유효한 값이 0부터 n - 1까지기 때문에 inf, -inf와 다름 없다.
+  if (nrb < qlb || qrb < nlb) return {n, -1};
+
+  int nmid = (nlb + nrb) / 2;
+  pair<int, int> ltpair = getminmax(qlb, qrb, nlb, nmid, cur*2);
+  pair<int, int> rtpair = getminmax(qlb, qrb, nmid + 1, nrb, cur*2 + 1);
+  return {min(ltpair.X, rtpair.X), max(ltpair.Y, rtpair.Y)};
 }
 
-void chk(int a, int b) {
-  int range_max = get(0, n - 1, kRoot, a, b, 1);
-  int range_min = get(0, n - 1, kRoot, a, b, 0);
-  if (range_min == a && range_max == b) cout << "YES\n";
+void maxupdate(int idx) { update(1, idx, 0, n - 1, ROOT); }
+void minupdate(int idx) { update(0, idx, 0, n - 1, ROOT); }
+
+void swapval(int aidx, int bidx) {
+  int aval = x[aidx], bval = x[bidx];
+  x[aidx] = bval;
+  maxupdate(aidx); minupdate(aidx);
+  x[bidx] = aval;
+  maxupdate(bidx); minupdate(bidx);
+}
+
+void init() {
+  for (int i = 0; i < n; i++) x[i] = i;
+  maxinit(0, n - 1, ROOT);
+  mininit(0, n - 1, ROOT);
+}
+
+void check(int qlb, int qrb) {
+  pair<int, int> ret = getminmax(qlb, qrb, 0, n - 1, ROOT);
+  if (ret.X == qlb && ret.Y == qrb) cout << "YES\n";
   else cout << "NO\n";
 }
 
 void solve() {
   while (k--) {
-    int code, a, b;
+    bool code; int a, b;
     cin >> code >> a >> b;
-    if (!code) swap(a, b);
-    else chk(a, b);
+    if (code == 0) swapval(a, b);
+    else check(a, b);
   }
-}
-
-void init() {
-  init(0, n - 1, kRoot, 0);
-  init(0, n - 1, kRoot, 1);
 }
 
 int main() {

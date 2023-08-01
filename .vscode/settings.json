@@ -100,4 +100,7 @@
         "editor.tabSize": 2
     },
     "C_Cpp.errorSquiggles": "Disabled",
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.formatOnSave": false,
+    "C_Cpp.clang_format_fallbackStyle": "Google",
 }

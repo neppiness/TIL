@@ -12,6 +12,8 @@
 - 'Date' is written in MM-DD-YYYY format
 - ex1) markdown-basics-05-15-2022.md (TIL content)
 - ex2) 05-15-2022.md (TIL list)
+- Folder: snake-case is used for folder naming
+- ex) problem_solving, TIL (because it's a abbr.)
 
 ### Style for headings
 - Heading 1: only for a title of a file

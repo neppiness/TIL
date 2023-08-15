@@ -82,5 +82,3 @@ data[1] = "cpp";
 data[2] = "java";
 data[3] = "javascript";
 ```
-
-* 

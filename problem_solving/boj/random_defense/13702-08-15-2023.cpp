@@ -29,4 +29,3 @@ int main() {
   }
   cout << st;
 }
-// Solved at 3rd try. Memory: 2060 kB, Time 4 ms, Code length: 497 B

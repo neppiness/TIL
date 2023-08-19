@@ -18,20 +18,27 @@ bool isSqrtNo(int x) {
   return (rn + 1) * (rn + 1) == x;
 }
 
+void checkForUpdate(int no) {
+  if (!isSqrtNo(no)) return;
+  ans = max(ans, no);
+}
+
 void solve(int x, int y) {
   for (int dir = 0; dir < 4; dir++)
     for (int a = 0; a < 9; a++)
       for (int b = 0; b < 9; b++) {
         if (a == 0 && b == 0) continue;
-        int no = 0;
-        int cx = x, cy = y;
-        do {
+        int no = board[x][y];
+        checkForUpdate(no);
+        int nx = x + a * dx[dir];
+        int ny = y + b * dy[dir];
+        while (!oob(nx, ny)) {
           no *= 10;
-          no += board[cx][cy];
-          cx = cx + a * dx[dir];
-          cy = cy + b * dy[dir];
-        } while (!oob(cx, cy));
-        if (isSqrtNo(no)) ans = max(ans, no);
+          no += board[nx][ny];
+          checkForUpdate(no);
+          nx += a * dx[dir];
+          ny += b * dy[dir];
+        }
       }
 }
 

@@ -44,6 +44,11 @@
 ## 10.2 Demand Paging (file p. 504)
 > 그 전에 paging에 대해서 먼저 공부할 수밖에 없을 듯함.
 
+<br>
+
+### NOTE: Paging
+* Main Memory: file p. 349 
+
 
 ## 최종 목표 
 > 그래서 가상 메몸리를 왜 쓰냐라는 질문에 답하기 위한 것들을 알면 될 듯함.

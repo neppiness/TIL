@@ -1,38 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int dist[302][302]; // dist[cur][no of visited city];
-vector<pair<int, int>> adj[302]; // adj[cur] = {po, nxt};
+const int INF = 0x7f7f7f7f;
+
+int n, k, m;
+int tot[302][302];
+vector<pair<int, int>> adj[302]; // adj[cur] = {po, prv};
+
+int solve(int cur, int no) {
+  if (no > k) return - INF;
+  if (cur == 1) return 0;
+
+  int &ret = tot[cur][no];
+  if (ret != -1) return ret;
+  
+  ret = - INF;
+  for (auto [po, prv] : adj[cur]) 
+    ret = max(ret, po + solve(prv, no + 1));
+  return ret;
+}
 
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
   
-  int n, k, m;
-  cin >> n >> k >> m;
+  memset(tot, -1, sizeof(tot));
 
+  cin >> n >> k >> m;
   while (m--) {
     int u, v, po;
     cin >> u >> v >> po;
     if (u > v) continue;
-    adj[u].push_back({po, v});
+    adj[v].push_back({po, u});
   }
 
-  priority_queue<tuple<int, int, int>> pq; // pq = {tot, v, no of visited};
-  pq.push({0, 1, 1});
-  while (!pq.empty()) {
-    auto [tot, u, no] = pq.top(); pq.pop();
-    if (dist[u][no] != tot) continue;
-    for (auto [po, v] : adj[u]) {
-      po += tot;
-      if (dist[v][no + 1] >= po) continue;
-      dist[v][no + 1] = po;
-      pq.push({po, v, no + 1});
-    }
-  }
-
-  int ans = 0;
-  for (int i = 2; i <= k; i++)
-    ans = max(dist[n][i], ans);
-  cout << ans;
+  cout << solve(n, 1);
 }
+

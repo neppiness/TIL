@@ -13,4 +13,4 @@ I've written TIL since May 14th, 2022
 * Extendability and accessibility: obtained from 'Github' platform
 
 ### Markdown convention
-* My own convention for markdown is given [here](/conventions.md)
+* My own convention for markdown is given [here](/convention.md)

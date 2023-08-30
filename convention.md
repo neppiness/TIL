@@ -5,6 +5,8 @@
 * TIL list: a list of a TIL content
 * TIL content: a note about a specific subject
 
+<br>
+
 ### Naming
 * TIL content file: 'Title'-'Date'
 * TIL list file: 'Date'

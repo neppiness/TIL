@@ -267,10 +267,121 @@ if (request.user.id != document.owner_id) {
 <br>
 
 ### 9 변수와 가독성
+* 변수를 잘못 사용하는 경우 발생하는 단점
+  1. 변수의 수가 많을수록 기억하고 다루기 어려워진다.
+  2. 변수의 범위가 넓어질수록 기억하고 다루는 시간이 더 길어진다.
+  3. 변수값이 자주 바뀔수록 현재값을 기억하고 다루기가 더 어려워진다.
+* 변수 제거하기
+  - 불필요한 임시 변수를 쓰지 않는다. 바로 할당할 변수같은 건 큰 의미 없다.
+  - 흐름 제어 변수를 제거한다. 현재 상태를 불리언으로 두고 이를 통해 while 문 지속 여부를 결정하는 식
+    + 이 경우, 조건이 만족되면 빠져나오도록 제어문을 고치면 된다.
+* 변수 사용 범위를 좁혀라
+  - 전역 변수 사용을 지양하라
+  - 커다란 클래스의 필드 역시 전역변수나 다름 없다.
+    + 이는 지역 변수로 만드는 게 더 좋다.
+    > 사실 이런 경우 함수 인수를 줄이라는 조언과 상충되긴 함.
+  - 정적 메소드를 활용하라: 지역변수와 무관하다는 것을 알리기 좋다.
+  - C++에서 if문의 범위: 앞의 코드는 뒤의 코드로 대체될 수 있다.
+    ```cpp
+    PaymentInfo* info = database.ReadPaymentInfo();
+    if (info) {
+        cout << "User paid: " << info->amount() << endl;
+    }
+    ```
+    ```cpp
+    if (PaymentInfo* info = database.ReadPaymentInfo()) {
+        cout << "User paid: " << info->amount() << endl;
+    }
+    ```
+    > 이건 반드시 써먹어보자.
+    + 공식 문서에 따르면 if 문의 괄호 안에는 선택적으로 초기화 구문이 들어갈 수 있다.
+    + 초기화 구문과 조건문은 세미콜론으로 구분된다.
+  - 변수를 상단에 두텁게 선언할 필요는 없다. 그러니, 필요한 위치에서 선언하자.
+    + 습관적으로 모든 변수를 전역 변수로 때려넣는 PS를 해왔는데, 이에 대해서 좀 더 고민해볼 필요가 있을 듯함.
+    + 물론, PS는 개발이 아니니 그렇게까지 심각하게 생각해볼 필요는 없을지 모름.
+* 값을 한 번만 할당하는 변수를 선호하라
+  - const/final의 사용을 권장.
+* 정리: 쓸모없는 변수 제거. 변수 범위를 최대한 축소. 상수 사용 권장
+
+<br>
 
 ## Part 3 코드 재작성하기
+* 프로그램의 주된 목적과 부합하지 않는 '상관없는 하위문제'를 추출
+* 코드를 재배열하여 한 번에 한 가지 일만 수행하게 하라
+* 코드를 우선 단어로 묘사한 뒤 이를 활용해 깔끔히 풀어봐라.
+
 ### 10 상관없는 하위문제 추출하기
+* 엔지니어링은 커다란 문제를 작은 문제들로 나누고, 각각에 대해 해결한 뒤 조합하는 방식으로 진행된다.
+  - 이와 같은 원리를 코드에 적용하면 좋다.
+* 일반적 목적의 코드를 프로젝트의 특정 코드에서 분리하라.
+* 지나치게 메소드를 분리하면 오히려 가독성을 해친다.
+  - 아래 두 코드를 보자
+```py
+user_info = { "username": "...", "password": "..." }
+url = "http://example.com/?user_info=" + url_safe_encrypt(user_info)
+
+def url_safe_encrypt(obj):
+    obj_stsr = json.dumps(ob);
+    cipher = Cipher("aes_128_cbc", key=PRIVATE_KEY, init_vector=INIT_VECTOR, op=ENCODE)
+    encrypted_bytes = cipher.update(obj_str)
+    encrypted_bytes += cipher.final()
+    return base64.urlsafe_b64encode(encrypted_bytes)
+```
+
+```py
+user_info = { "username": "...", "password": "..." }
+url = "http://example.com/?user_info=" + url_safe_encrypt_obj(user_info)
+
+def url_safe_encrypt_obj(obj):
+    obj_str = json.dumps(obj)
+    return url_safe_encrypt(obj_str)
+
+def url_safe_encrypt_str(data):
+    encrypted_bytes = encrypt(data)
+    return base64.urlsafe_b64encode(encrypted_bytes)
+
+def encrypt(data):
+    cipher = make_cipher()
+    encrypted_bytes = cipher.update(data)
+    encrypted_bytes += cipher.final()
+    return encrypted_bytes
+
+def make_cipher():
+    return Cipher("aes_128_cbc", key=PRIVATE_KEY, init_vector=INIT_VECTOR, op=ENCODE)
+```
+  
+  > 클린코드적인 관점에선 분명 아래 코드를 권장할 것 같다.
+  - 이 책에선 두 코드를 비교하며 아래와 같이 말한다.
+  - 이렇게 자잘한 함수를 사용하면 오히려 가독성을 해친다. 사용자가 신경써야 하는 내용이 늘어나고, 실행경로를 추적하기 위해 정의를 찾아다녀야 한다.
+  - 코드에 새로운 함수를 추가하는 건 가독성을 대가로 지불해야 한다. 이를 상회하는 이득이 없다면 추출할 필요가 없다.
+    + 이득 중 하나는 추출된 함수를 다른 데서도 활용하는 경우다.
+
 ### 11 한 번에 하나씩
+* 코드는 한 번에 하나의 작업만 수행하도록 구성되어야 한다.
+  - 함수 안에서도 처리하는 작업들이 있을 텐데 이들을 구분해서 진행할 필요가 있다.
+* 작업 단위는 작을 수 있다.
+
+```js
+var vote_value = function (vote) {
+    if (vote === 'Up') return 1;
+    if (vote === 'Down') return -1;
+    return 0;
+}
+
+var vote_changed = function (old_vote, new_vote) {
+    var score = get_score();
+
+    score -= vote_value(old_vote);
+    score += vote_value(new_vote);
+    set_score(score);
+}
+```
+
+* 이정도 단위로 쪼개놔도 충분히 이해하기 좋은 코드가 나올 수 있음.
+  - vote_value를 그대로 vote_change 코드 안에 둔 경우엔 굉장히 지저분한 분기처리가 이루어져야 했음.
+* 객체에서 값 추출하기: to be continued
+
+
 ### 12 생각을 코드로 만들기
 ### 13 코드 분량 줄이기
 

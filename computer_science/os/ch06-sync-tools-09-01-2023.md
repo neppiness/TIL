@@ -13,4 +13,4 @@
 * 임계영역 문제의 해결법에 대해 평가한다.
 
 ## 6.1 Background
-* 
+* PDF file page 257

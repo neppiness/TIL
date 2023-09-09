@@ -20,7 +20,6 @@
   - 뮤텍스 락: 6.5절 270페이지. 이에 대해 공부해볼 것.
   - 세마포어: 6.6절 272페이지. 이에 대해서 공부해볼 것.
 
-
 ### Cache란?
 * 캐시는 기본적으로 바로 가져다가 쓸 수 있도록 임시로 저장해두는 메모장과 같은 것.
 * CPU 측면에서는 계산에 필요한 데이터들을 임시 공간에 저장해서 바로 꺼내다가 쓸 수 있도록 하는 것이며, 연산 성능에 직결된다.
@@ -35,7 +34,6 @@
 
 ### Database Index 추가의 장단점은?
 * 그냥 새롭게 공부가 필요한 부분.
-
 
 ### NoSQL의 장단점은?
 * 스키마 없이 사용할 수 있어서 자유도가 높다.(이게 특징이지 장점이나 단점이라고 할 수 있는진 모르겠음)
@@ -99,8 +97,90 @@
 * 프로세스들이 
 
 ### C++ 에서 다형성이란?
+* [씹어먹는 C++ - <6 - 2. 가상(virtual) 함수와 다형성>](https://modoocode.com/210)
 * 다형성이 뭔가?
+  - 같은 이름의 메소드가 여러가지 다른 작업들을 하는 것
+  - '나비'가 애벌레, 번데기, 성충에 이르기까지 모든 과정을 '나비'라는 이름으로 묶듯, 하나의 인터페이스로 여러 타입을 나타내는 것을 뜻함.
+
 * C++에서 이를 어떻게 활용하나?
+  - 가상 함수와 상속을 활용해서 구현함
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+class Base {
+
+ public:
+  Base () {
+    cout << "Base Class instance constructed\n";
+  }
+
+  virtual void what() {
+    cout << "what() method of Base Class\n";
+  }
+};
+
+class Derived : public Base {
+
+ public:
+  Derived() : Base() {
+    cout << "Derived Class instance constructed\n";
+  }
+
+  void what() {
+    cout << "what() method of Derived Class\n";
+  }
+};
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  
+  Base parent;
+  Derived child;
+
+  Base* pt_par = &parent;
+  Base* pt_ch = &child;
+
+  pt_par->what();
+  pt_ch ->what();
+}
+```
+
+* 위와 같이 하면 아래 결과가 출력됨
+
+```
+Base Class instance constructed
+Base Class instance constructed
+Derived Class instance constructed
+what() method of Base Class
+what() method of Derived Class
+```
+
+* Base의 포인터로 Derived 객체를 가리킬 수가 있고, 여기서 호출된 메소드는 런타임에 Derived의 what을 가져오게 됨.
+  - 먼저 Base의 포인터니 Base의 what()을 실행하고자 함
+  - 여기서 what() 메소드가 virtual 메소드인 것을 확인
+  - 이후 실제로 Base 타입인지 확인함. 이후 Derived 클래스 객체임을 확인
+  - Derived의 what() 메소드가 실행됨.
+* 클래스 레벨에서 override 키워드를 사용하면 해당 메소드가 가상 함수를 오버라이드했음을 명시적으로 표현 가능함.
+
+```cpp
+class Base {
+ public:
+  Base() { cout << "Base Constructor\n"; }
+
+  virtual void what() { cout << "WHAT? of Base\n"; }
+};
+
+class Derived : public Base {
+ public:
+  Derived() : Base() { cout << "Derived Constructor\n"; }
+
+  void what() override { cout << "WHAT? of Derived\n"; }
+};
+```
+
 
 ### 그래픽카드를 이용한 하드웨어 가속이란?
 * 그래픽카드의 빠른 연산을 활용해 기능을 돕는다- 정도 밖에 모르겠음. 검색해야 할 듯.

@@ -50,6 +50,18 @@
   - 해당 메모리가 해제되거나 더이상 참조당하지 않는 상태가 되면 이를 정리해서 가용한 공간으로 만드는 과정이 필요. 이를 가비지 컬렉션이라 한다.
   - 가비지 컬렉션은 가비지 컬렉터에 의해서 수행된다.
   - C++과 같은 경우엔 직접 할당을 해제해야 함. C++ 11부터 GC에 대한 말이 나오지만 실제로 이를 구현한 컴파일러는 없다고 함.
+* 이를 통해 자동으로 메모리 관리를 수행할 수 있음. 이 경우, 몇 가지 문제를 해결해줌.
+  - 매달린 포인터(dangling pointers): 포인터를 없애기 전에 해당 데이터의 할당을 해제하는 경우, 가리키는 게 없는 상태로 포인터는 잔류하게 된다. 그 공간에 변수가 할당되면 버그가 발생할 수 있다.
+  - 이중 할당 해제 버그(double free bugs): 이미 할당 해제된 변수를 또 할당하는 버그를 막는다.
+  - 몇몇 종류의 메모리 누수: 자동으로 참조되지 않는 데이터를 자동으로 해제해주기 때문에 이런 문제도 막을 수 있다.
+* 작동 방식에 따른 분류
+  1. 추적 기반 가비지 컬렉션(Tracing Garbage Collection)
+    + 점진적 쓰레기 수집(Incremental Garbage Collection)
+    + 세대별 쓰레기 수집()
+  2. 참조 횟수 기반 가비지 컬렉션(Referencing Counting Based Garbage Collection)
+
+* [Java Garbage Collection Basics](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html)
+
 
 ### Database Index 추가의 장단점은?
 * 그냥 새롭게 공부가 필요한 부분.

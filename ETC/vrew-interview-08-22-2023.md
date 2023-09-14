@@ -57,7 +57,7 @@
 * 작동 방식에 따른 분류
   1. 추적 기반 가비지 컬렉션(Tracing Garbage Collection)
     + 점진적 쓰레기 수집(Incremental Garbage Collection)
-    + 세대별 쓰레기 수집()
+    + 세대별 쓰레기 수집(Generational Garbagae Collection)
   2. 참조 횟수 기반 가비지 컬렉션(Referencing Counting Based Garbage Collection)
 
 * [Java Garbage Collection Basics](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html)

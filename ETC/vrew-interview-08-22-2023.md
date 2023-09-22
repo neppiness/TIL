@@ -60,11 +60,43 @@
     + 세대별 쓰레기 수집(Generational Garbagae Collection)
   2. 참조 횟수 기반 가비지 컬렉션(Referencing Counting Based Garbage Collection)
 
-* [Java Garbage Collection Basics](https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html)
+* 먼저 자동 가비지 컬렉션이 뭔지 알아보자.
+  - 힙에 있는 사용되지 않는 객체나 참조되지 않는 객체의 메모리를 해제하는 역할 수행
+  - C와 같은 언어에서는 이를 프로그래머가 수행해야 함.
+  - 자바와 같이 가비지 컬렉터가 있는 경우엔 이를 자동으로 처리해줌
+* 다음 과정을 통해서 가비지 컬렉션이 이루어진다.
+  1. 마킹: 참조되지 않는 객체나 미사용 중인 객체를 표시한다.
+  2. 삭제: 마킹된 데이터를 삭제한다. 이후 과정을 통해 일반 삭제와 삭제 및 압축이 나뉜다.
+    + 일반 삭제: 데이터가 삭제된 공간을 리스트로 관리하며 할당이 필요할 때 활용한다.
+    + 삭제 및 압축: 잔존하는 데이터를 메모리 상 가깝게 위치하도록 압축하고, 그 이후부터 데이터를 관리한다.
+* 힙 구조는 다음과 같이 나뉨
+  - Young Generation
+    + eden: 데이터가 할당된 직후에 위치하는 듯
+    + survivor: S0, S1: 마이너 GC 이후에 살아남은 데이터가 S0, S1 순으로 이동함
+  - Old Generation
+    + Tenured: Young Generation에서 벗어나 이제 마이너 GC의 대상이 아니게 됨
+  - Permanent Generation: 영구적으로 활용될 메소드, 클래스 등이 기록됨
+* GC 과정은 아래와 같음. GC는 어떤 식으로든 Stop-the-world-event임. 따라서 비용이 굉장히 비쌈.
+  - minor GC: Young Generation을 대상으로 수행.
+  - Major GC: 살아있는 전 객체를 대상으로 수행.
+* 마이너 GC는 eden의 공간이 가득차면 시작됨
+  - 처음에는 여전히 참조중인 데이터를 S0에 둠
+  - 그 다음 번에 마이너 GC가 작동되면 참조중인 데이터는 S1로 이동함
+  - S0와 S1을 번갈아가면서 저장되다가 Young Generation에 머물 시간을 넘기는 경우 Old Generation으로 넘어감.
+  - Tenured 공간이 가득차면 메이저 GC가 동작됨.
 
+> JS위주로 하는 곳이니 일단은 Node.js의 GC에 대해서 공부해보자.
+
+* [Memory management](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management)
+* JavaScript의 Garbage Collector는 mark-and-sweep collector이다.
 
 ### Database Index 추가의 장단점은?
 * 그냥 새롭게 공부가 필요한 부분.
+* Databse Index가 뭔가?
+
+* 추가하면 어떤 효과가 발생하나
+  - 장점?
+  - 단점?
 
 ### NoSQL의 장단점은?
 * 스키마 없이 사용할 수 있어서 자유도가 높다.(이게 특징이지 장점이나 단점이라고 할 수 있는진 모르겠음)
@@ -72,7 +104,7 @@
 ### 공유기의 원리는?
 * 사설 네트워크의 게이트웨이 역할을 수행함
 * 어떤 것들을 통해 구성되는지는 공부해야 함.
-:
+
 ### HTTP/2의 특성은?
 * HTTP/2는 TCP/IP 기반이며, 1.1보다 개선되었음.
 > 어떤 점이 개선되었는지 확인해보자.

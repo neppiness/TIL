@@ -82,6 +82,8 @@
 ## Back-of-the-envelope Calculations
 ### Put Back-of-the-envelope Numbers in Perspective
 * 대략적으로 서버가 얼마의 일을 처리할 수 있는지 계산하는 과정 설명
+* 서버를 웹 서버와 어플리케이션 서버, 스토리지 서버로 나눔.
+  - 각각에 필요한 기능에 따라서 메모리 및 CPU 코어 수가 다르게 활용될 수 있음을 설명.
 
 ### Example of Resource Estimation
 * Twitter의 예로 Outgoing bandwidth와 Incoming bandwidth, 그리고 1년에 증설해야 하는 데이터 사이즈를 가늠함.

@@ -87,3 +87,8 @@
 
 ### Example of Resource Estimation
 * Twitter의 예로 Outgoing bandwidth와 Incoming bandwidth, 그리고 1년에 증설해야 하는 데이터 사이즈를 가늠함.
+
+<br>
+
+## Building Blocks
+### Introduction to Building Blocks for Modern System Design

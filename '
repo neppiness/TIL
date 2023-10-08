@@ -316,37 +316,7 @@
 * First solution: UUID
   - Cons: 유일하지 않음(중복 가능성이 거의 없지만), 64비트 숫자가 아님.
 * Second solution: using a database
-  - 중복 가능성이 있고 확장성도 없음. 가용성은 확보. 64비트 숫자임
+  - 중복 가능성이 있고 확장성도 없음.
 * Third solution: using a range handler
-  - Range Handler를 두고, 할당 받은 영역의 ID가 채워졌을 시 다음 영역을 안내 받는 방식으로 동작
-  - 모든 조건을 만족함
-
-### Uniqe IDs with Causality
-* Causality
-  - 이벤트들의 연관성을 추적하는 방법에 대한 챕터
-* Use UNIX time stamps
-  - 로드밸런서를 통해서 time stamp 서버와 의사소통하며 ID를 받아옴
-  - 시간만으로는 인과성을 기록하기 쉽지 않고, 확장성이 약함
-* Twitter Snowflake
-  - 부호 비트: 항상 0으로 둬서 어떤 시스템이든 전체 값을 양수로 인식하게 함
-  - 타임스탬프: 70년을 기록할 수 있는 41-bit 타임스탬프
-  - 워커 ID, 시퀀스 
-* Using logical clocks
-  - Lamport clocks: 카운터를 통해서 어느 워커의 몇 번째 작업이었나 파악
-  - Vector clocks: Lamport clock을 각 워커에 대해서 조합하여 활용.
-* TrueTime API
-  - 이를 활용해서 Snokflake와 유사한 Unique ID를 고안함
-  - 이를 통해 ID 하나로 필요한 정보를 다 담을 수 있다고 함.
-* 사실 이게 중앙 시스템에선 전혀 문제가 안 되는 작업이었는데, 분산 시스템으로 처리하려다 보니 고안할 수밖에 없던 것.
-  - 항상 trade-off가 있다.
-
-<br>
-
-## Distributed Monitoring
-### System Design: Distributed Monitoring
-### Introduction to Distributed Monitoring
-* 분산 모니터링을 수행함으로 실패 지점을 찾기가 수월해지고 비용도 줄어든다.
-* 실제로 실패 사례에 의해 얼마나 많은 돈을 잃었는지 알려줌.
-* 서비스의 장애 상황에서 대해서 아래 두 유형으로 구분할 수 있다.
-  - 클라이언트 사이드 에러
-  - 서버 사이드 에러
+  - Pros
+  - Cons

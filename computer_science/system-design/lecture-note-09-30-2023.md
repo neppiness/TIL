@@ -350,3 +350,296 @@
 * 서비스의 장애 상황에서 대해서 아래 두 유형으로 구분할 수 있다.
   - 클라이언트 사이드 에러
   - 서버 사이드 에러
+
+### Prerequisites of a Monitoring System
+* 어떤 지표에 대해 어떤 단위로 측정할 것인지가 중요하다.
+* Push / Pull monitoring System
+  - 주체는 모니터링 시스템
+    + 모니터링 시스템이 필요한 속성들을 어떻게 구하느냐의 관점으로 보면 됨.
+* Time-series database
+  - 이벤트에 시간이 기록되지 않으면 대부분 쓸모없는 정보가 됨.
+  - 따라서 시간을 기록하고 시간순으로 정보를 기록.
+* 경고: 어떤 지표가 수용할 수 있는 범위를 벗어나면 알림을 발생
+
+<br>
+
+## Monitor Server-side Errors
+### Design of a Monitoring System
+* 시스템의 성능 관련된 지표들을 선정
+  - CPU, 메모리, 디스크, 네트워크 사용량 지표
+  - 전원 관련 이슈
+  - 전력 소모량 지표
+* AWS, Azure, Google에서 제공하는 모니터링 툴들도 있음.
+* Blob storage를 통해 정보를 기록할 것.
+  - High-level 디자인 구성
+    + 모니터링 데이터를 기록할 저장소
+    + 데이터 수집 서비스
+    + 쿼리 서비스
+
+### Detailed Design of a Monitoring System
+* Storage
+  - Time-series DB: 각 시간 마다 이벤트 기록
+  - Rules and action DB: 경고 등에 대한 기준을 저장
+* Data collector
+  - 어플리케이션, 서비스, 서버 등에 데이터를 요청하고 데이터를 수집함.
+* Service discoverer
+  - 어떤 서비스를 확인해야 하는지 알려줌
+* Querying service
+  - 어디서 문제가 생겼는지 파악하는 서비스
+  - 구성 요소는 아래와 같음
+    + Alert manager: 설정한 규칙에 따라 알림이 필요한 경우를 인지하고 해당 메시지를 전송
+    + Dashboard: 필요 정보를 수집하는 대쉬보드 활용
+* 장단점
+  - 장점
+    + 가용성이 높음
+    + 네트워크 트래픽 등으로 인한 오버헤드를 방지
+  - 단점
+    + 확장성(scalability)이 좋지 않음.
+    + 모니터링 서비스가 Single Point Failure을 일으킬 수 있음
+    + 이를 관리하기 위해서 failover 서버를 두게 되면 동기화를 처리해야 함.
+    + 항상 이와 같은 모니터링 시스템을 활용하는 것은 방대한 데이터를 기록해야 함.
+    + 따라서 이를 잘 처리하기 위한 규칙이 필요.
+* 설계 개선하기
+  - 확장성을 확보하기 위해서, 모니터링 서버를 여러 대 두는 방식을 채용
+  - 그리고, '모니터링 서버를 모니터링하는 서버'를 둠
+  - 이를 통해 모니터링 서버들이 '모니터링 서버를 모니터링 하는 서버'에 데이터를 전송
+* 이와 같이 데이터를 모으게 되면, 굉장히 많은 양의 데이터가 저장됨.
+  - 이를 어떻게 사람이 관리할 수 있는 형태로 바꿀 수 있을지 다음 절에서 알아보고자 함.
+
+
+### Visualize Data in a Monitoring System
+* Using heat maps to troubleshoot
+  - heat map을 그려서 각 클러스터의 상태를 표현하도록 만듦.
+  - 1: 동작 중인 서버, 0: 동작하지 않는 서버
+  - 이를 통해 굉장히 효율적이고 시각적으로 서버 상태를 표현할 수 있다.
+
+<br>
+
+## Monitor Client-side Errors
+### Focus on Client-side Errors in a Monitoring System
+* 서버는 클라이언트 사이드 에러에 대해서 거의 정보가 없다.
+  - 서버 부하를 본다고 해도, false positive나 false negative가 많다.
+* 예시: 구글의 BGP Leak. ISP에서 의도하지 않은 곳으로 연결을 시켜 사용자가 서비스 주소에 도달하지 못함.
+
+### Design of a Client-side Monitoring System
+* Prober
+  - 직접 사용자 입장에서 서버에 접근 시도.
+  - 완전히 모든 사용자 입장에서 접근을 시도할 수도 없고, 완벽히 사용자 입장을 표현하기도 힘들다.
+* Agent and Collector
+  - Agent: 사용자의 브라우저에 심어두고 접속 문제 발생 시 Collector에게 정보 전송
+* 발생한 문제에 대해 다른 우회 루트를 찾아서 장애 상황을 컬렉터에 보고하는 식으로 agent를 운용
+* 보고되는 정보에는 traceroute hops나, DNS resolver, RTT 등을 제외한다.
+  - 이는 사용자의 위치정보를 드러낼 수 있다.
+  - 또한, 어떤 사용자 정보도 능동적으로 수집해선 안 된다.
+
+<br>
+
+## Distributed Cache
+### System Design: The Distributed Cache
+* 서로 다른 계층의 캐싱을 통해 비용을 절약하고 유저의 지연시간을 줄임
+* Web, Application, Database 레벨에서 활용됨.
+
+### Background of Distributed Cache
+* 분산 캐시에서 고려할 주요 사항
+  - Writing policies
+  - eviction policies
+  - cache invalidation
+  - storage mechanism
+  - cache client
+* Writing policies
+  - write-through cache
+    + 캐시에 기록하면서 DB에도 기록
+    + 소요시간이 길어짐
+  - write-back cache
+    + 캐시에 먼저 쓰여지고 DB에 비동기적으로 갱신됨
+    + 소요시간 짧음
+  - write-around cache
+    + DB에 먼저 쓰고, 캐시 미스가 나는 경우에 캐시를 작성
+    + 최근에 업데이트된 내용이 캐시에는 반영되지 않았다면, 캐시를 불러왔을 때는 만료된 정보가 기록되어 있을 듯.
+* Eviction policies
+  - Least recently used (LRU)
+  - Most recently used (MRU)
+  - Least frequently used (LFU)
+  - Most frequently used (MFU)
+* Cache invalidation
+  - TTL을 설정하는 것으로 해결
+  - 능동적 만료(active expiration): 직접 TTL이 만료된 것들을 찾음
+  - 수동적 만료(passive expiration): 접근하는 시점에 TTL을 확인
+* Storage mechanism
+  - 두 가지 문제를 해결하고자 함.
+    1. 어떤 데이터를 어느 캐시 서버에 저장할 것인가
+    2. 데이터를 저장할 때 어떤 자료구조를 활용할 것인가
+  - Hash function
+    + Consistent hashing을 통해서 어떤 데이터를 어떤 서버에 저장할지 결정할 수 있음.
+    + 캐시 엔트리를 결정할 수는 있음. 그러나, 어떤 자료구조를 활용할지는 따로 결정해야함.
+  - 연결 리스트
+    + 데이터를 쓰고 지우는 데 상수시간이 걸리므로 활용한다고 함
+    + 그러나, 필요한 데이터를 탐색한다고 하면 O(N)의 시간이 걸릴 텐데 어떡하겠다는 건지...
+  - Sharding in cache clusters
+    + 캐시를 샤딩해서 나눠둠. 그리고 각 서버만의 단독 캐시를 둘 수도 있고, 공유할 수도 있음.
+  - Cache client
+    + 캐시 계산을 해주는 클라이언트
+
+### High-level Design of a Distributed Cache
+* 기능적, 비기능적 요구사항
+  - 기능적
+    + 데이터 삽입 및 호출
+  - 비기능적
+    + 높은 성능, 확장성, 높은 가용성, 항상성, 경제성
+* API: 해시와 동일함
+  - 삽입(put): key와 value를 인자로 활용
+  - 호출(get): key를 인자로 활용
+* 설계 고려사항
+  - Storage hardware: 저장을 위한 하드웨어. 보조기억장치를 활용할 수도 있음.
+  - Data structures: 적절한 자료구조를 활용해서 데이터에 접근할 수 있도록 활용.
+  - Cache client: 클라이언트에 캐시 클라이언트를 두고, 접근하려는 정보를 얻기 위한 캐시 서버를 안내 받음
+  - Writing policy: 캐시와 영속적 데이터는 기본적으로 항상 같아야 하지만, 필요에 따라 여러 방법을 둘 수 있음.
+  - Eviction policy: 만료된 캐시는 어플리케이션 종류에 따라 더 효율적인 방법으로 처리
+* High-level design, 고급 설계란...
+  - Service와 cache client의 병용
+  - Cache server를 둬서 persistence layer에 있는 자료에 접근하도록 계층적 설계.
+
+### Detailed Design of a Distributed Cache
+* Find and remove limitations
+  - Configuration service를 둬서 캐시 서버 상태를 파악하고, 필요에 따라서 캐싱 상태를 갱신하는 방식으로 활용
+* Improve availability
+  - 레플리카 노드를 둔다. 이를 통해서 캐시 서버의 다운이 시스템 실패로 이어지게 하지 않는다.
+  - 또한, hot-key에 대해 더 많은 연결을 수용할 수 있도록 확장할 수도 있다.
+* 캐시 서버 내부
+  - Hash map을 두고, 양방향 연결리스트를 둠. Eviction policy는 LRU로 설정했다고 해보자.
+  - key가 있는데 각 노드를 굳이 연결리스트로 잇는 이유는 정말 모르겠음.
+
+### Evaluation of a Distributed Cache's Design
+* High performance
+  - 다른 건 다 준비됐고, 어플리케이션에 따른 적절한 eviction policy만 잘 선택해주면 성능을 좋게 유지할 수 있다.
+* Scalability
+  - 복제 노드를 활용하여 hot shard에 대한 부하를 덜어줌
+* High availability
+  - leader-follower algorithm을 통해서 한 노드가 망가져도 다른 노드가 대신할 수 있도록 설정
+* Consistency
+  - 필요에 따라서, consistency를 줄이고, 더 높은 availability를 가져갈 수 있음.
+  - consistency를 택하는 경우 어느 정도의 성능 저하는 감수해야 함.
+* Affordability
+  - 이와 같은 분산 캐시 시스템은 경제성도 충분하다.
+
+### Memcached versus Redis
+* Memcached
+  - 동일한 데이터 구조만 다룬다.
+  - 페이스북에서 활용함. RAM이 굉장히 많이 필요.
+* Redis
+  - 다양한 자료구조를 다룰 수 있음.
+  - 자체 데이터베이스가 있음.
+  - 자체 failover 솔루션이 있음.
+  - 적절한 레플리카를 만들어서 제공. 이로 인해 강한 항상성 유지가 안 될 수 있음.
+* Memcached vs. Redis
+  - 단순성: Memcached가 단순함
+  - 영속성: Redis가 제공. Memcached는 외부 프로그램이 필요
+  - 자료형: Memcached는 객체. Redis는 다양한 자료형을 제공
+  - 메모리 사용: 둘 다 설정 가능
+  - Multithreading: Redis는 기본적으로 싱글코어. 
+  - Repliaction: Redis는 클러스터링을 해야하는데 이는 꽤 복잡함.
+
+<br>
+
+## Distributed Messaging Queue
+### System Design: The Distributed Messaging Queue
+* 메시지 큐는 일을 할당해놓고 순차적으로 처리되도록 함.
+  - 우선순위에 따라 일을 처리하도록 설정할 수도 있음.
+  - 실생활에서도 많이 쓰임(이메일 시스템, 추천 시스템, 시스템 업데이트 등)
+
+### Requirements of a Distributed Messaging Queue’s Design
+* 기능적 요구사항
+  - 큐 생성, 메시지 전송, 메시지 수신, 메시지 삭제, 큐 삭제
+* 비기능적 요구사항
+  - 안정성, 확장성, 가용성, 성능
+* 단일 서버 메시징 큐
+  - 큐가 임계영역(critical section)이 됨.
+    + race condition이 발생하지 않도록 lock을 잡아야 하며, 이는 성능 저하로 이어짐
+    + 단일 서버로 활용하면 네트워크나 하드웨어 실패로 인해서 접근하지 못하게 될 때 둘 다 쓰지 못해서 안 됨.
+* 이를 극복하기 위해서 분산 시스템을 설계하고자 함.
+  - 데이터베이스, 캐시, 로드 밸런서를 활용
+
+### Considerations of a Distributed Messaging Queue’s Design
+* Ordering of messages
+  - 주어진 순서대로 받아서 전달하는 경우
+  - 정렬 기준을 따라 큐에서 정렬 후 순서를 맞추는 경우
+    + 필요에 따라서 메시지의 순서가 온전해야 할 수 있음.
+* Effect on performance
+  - sender와 reciever 패턴 자체가 온전한 순서를 보장하지 않으니 큐에서 정렬이 이뤄져야 함.
+* Managing concurrency
+  - locking: 성능이 좋지도 않고 확장도 불가능함
+  - serialize requests using the system's buffer: 시스템의 버퍼를 활용해 입출력 하듯 주고받는 것으로 이해됨
+    + 그러나 정확히 어떻게 버퍼를 활용할 수 있는 건지는 잘 모르겠음.
+  - using multiple queues: 다수의 큐를 활용하면 어플리케이션 로직이 복잡해짐.
+
+### Design of a Distributed Messaging Queue: Part 1
+* 확장성, 가용성, 내구성(durability) 이슈에 대해서 다룰 것.
+* High-level design
+  - 큐를 primary-secondary 또는 quorum-like 시스템으로 클러스터 내부에 둠
+* 프론트엔드 서버
+  - 요청에 대한 유효성을 판단, 권한 확인을 수행, 캐싱, 리퀘스트를 백엔드로 보냄, 중복된 요청 제거, 사용 데이터 모음
+* 메타데이터 서비스
+  - 큐 자체를 관리
+* 클러스터 활용
+  - 메타 데이터를 프론트엔드 서버가 가지고 있는 경우
+  - 메타 데이터를 각 호스트가 가지고 있는 경우
+    + 메타 데이터를 확인한 뒤, 다른 호스트에게 보내야 한다면 조치를 취해줌.
+
+### Design of a Distributed Messaging Queue: Part 2
+* 큐와 메시지가 저장되는 백엔드에 대해서 알아보자.
+* 클러스터 매니저는 아래 두 가지로 나뉨.
+  - Internal cluster manager
+    + 큐와 클러스터 내 호스트 간 정보를 매핑하고 있음.
+    + 클러스터를 관리
+  - External cluster manager
+    + 큐와 클러스터 간 정보를 매핑하고 있음.
+    + 메타데이터 서비스를 관리
+* 이에 따라 특정 큐에 요청이 들어왔을 때 메시지를 전달할 수 있다.
+
+### Evaluation of a Distributed Messaging Queue’s Design
+* 기능적 요구사항
+  - 큐 생성 및 삭제
+  - 메시지 전송 및 반환
+  - 메시지 삭제(잘 이해 안 됨)
+* 비기능적 요구사항
+  - 내구성, 확장성, 가용성, 성능
+  - 분산 시스템의 특성을 활용하여 가용성을 향상하고, 내구성을 가짐. 성능 역시 향상됨.
+
+  <br>
+
+## Pub-sub
+### System Design: The Pub-sub Abstraction
+* Publish-subscribe messaging
+  - 비동기적으로 서비스에서 서비스로 의사소통하는 방법.
+  - 메시지를 만드는 사람이 있고, 이들의 메시지를 구독자들에게 전달
+  - 비동기적으로 처리하기도 쉽고, 확장성이 매우 좋은 방식.
+
+### Introduction to Pub-sub
+* Use cases of pub-sub
+  - Handling ingestion
+  - Real-time monitoring
+  - Replicating data
+* API
+  - 생성된 특정 topic에 대해 메시지를 작성하거나, 읽고, 구독하거나 취소하는 등의 동작을 수행하는 API를 설계
+* Building blocks for pub-sub
+  - DB, Distributed messaging queue, Key-value store
+
+### Design of a Pub-sub System
+* 초기 디자인은 메시지 디렉터와 서브스크라이버를 두고, 각 주제에 대한 consumer의 큐에 메시지를 전달
+  - 이는 토픽이 많아지면 큐가 많아진다는 단점이 있음.
+* 이를 해결하기 위해 다음 디자인을 제안
+  - Broker를 통해 메시지를 전달
+  - Broker들을 관리하는 Cluster manager가 있음.
+  - Consumer들을 관리하는 Consumer manager가 있음.
+    + 이 매니저는 DB를 통해서 Consumer 정보를 관리 및 저장
+* Broker
+  - 많은 큐를 사용하지 않아도 되게 만들어줌
+  - 하나의 토픽에 대해서 서로 다른 브로커가 파티션을 들고 있도록 함.
+    + 이를 통해 한 브로커가 망가져도 전체 토픽에 문제가 되지 않도록 함.
+* Cluster manager
+  - 브로커 및 토픽 관리, 데이터 레플리케이션 관리
+* Consumer manager
+  - Consumer 유효성 판단
+  - 데이터 유지 시간 관리
+  - 메시지 수신 옵션 관리
+  - 여러 번 데이터를 읽어올 수 있도록 허용

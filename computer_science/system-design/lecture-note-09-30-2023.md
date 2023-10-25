@@ -643,3 +643,146 @@
   - 데이터 유지 시간 관리
   - 메시지 수신 옵션 관리
   - 여러 번 데이터를 읽어올 수 있도록 허용
+
+<br>
+
+## Rate Limiter
+* 요청 횟수에 리미터를 둬서 악의적인 공격 등에 대해 대응할 수 있도록 하기 위함
+* 리미터의 위치에 따라 분류
+  - 클라이언트 위치
+  - 미들웨어 위치
+  - 서버 위치
+* 두 가지 모델
+  - 중앙지향적 데이터베이스를 활용한 리미터
+  - 분산형 데이터베이스를 활용한 리미터
+* 토큰-버킷 알고리즘을 활용.
+  - 이를 유저 별로 둘 것인지, 아니면 전체 시스템에 대해 둘 것인지는
+* 필요한 빌딩 블록
+  - 데이터베이스, 캐쉬, 큐
+
+### Design of a Rate Limiter
+1. 요청이 오면 요청에 대한 식별자를 만듦
+2. 이에 대해 요청을 진행할 건지 결정함
+3. 요청 처리자가 이를 받고 적절한 서버에 전달
+4. 만약 이에 대한 요청을 거절하는 경우 전략에 따라 서로 다른 처리를 수행.
+
+### Rate Limiter Algorithms
+* 레이트 리미팅 알고리즘
+  - 알고리즘 마다 장단점이 있으므로, 이에 대해 알아보고 어떤 것을 활용할지 결정하자.
+* 토큰 버킷 알고리즘
+  - 일정량의 토큰을 소지할 수 있는 버킷을 두는 것. 한 요청에 대해 한 토큰이 소모됨.
+  - 일정 주기마다 버킷에 토큰이 다시 채워짐. 그 수에 해당하는 만큼만 요청을 보낼 수 있음.
+* 새는 버킷 알고리즘
+  - 일정 속도로 요청을 내보내는 식
+* 고정된 윈도우 카운터 알고리즘
+  - 고정된 시간 단위로 허용된 요청량을 부여함
+* 슬라이딩 윈도우 로그 알고리즘
+  - 요청이 진행된 시간을 기록하고, 단위 시간 내에 허용량보다 많은 요청이 들어오면 리젝함
+* 슬라이딩 윈도우 카운터 알고리즘
+  - 옮겨가면서 요청을 확인하는데, 곧바로 현재 받은 요청을 처리할 수 있는지 없는지 판단 가능한 알고리즘은 아닌 듯.
+  - 0분부터 1분, 1분부터 2분까지 구간(time window)에 대해 받은 요청 수를 알아야함
+    + 이를 통해 중간에 받은 요청을 처리할 수 있는지 없는지를 판단.
+
+<br>
+
+## Blob Store
+### System Design: A Blob Store
+* WORM: write once, read many times
+  - 한 번 쓰여지면 특별한 이유 없이 변경되지 않음.
+
+### Requirements of a Blob Store's Design
+* Blob 스토리지 접근 순서
+  - 클라이언트가 프론트엔드 서버에 접근.
+  - 필요한 조치를 수행하고자 함.
+  - 이에 따라 프론트엔드 서버가 Blob stroage에 요청하여 필요한 조치를 취하는 식.
+* Blob storage는 컨테이너들로 이루어져 있음.
+  - 계정 정보를 담는 컨테이너
+  - 그 계정 정보를 통해서 접근하여 어떤 영상들과 사진들이 어떤 컨테이너에 들어있나 매핑
+  - 그 컨테이너를 통해 실제 데이터가 저장된 컨테이너로 접근함.
+  - 이는 서로 멀리 떨어져있는 건지, 아니면 동일한 storage에 배치되는 건지 잘 모르겠음.
+
+### Design Considerations of a Blob Store
+* 관리할 수 있게 하고, replication을 두는 등 여러 가지 장치를 둠
+* 데이터를 특정 단위로 저장하고, 이를 기록
+* 가비지 컬렉터를 활용해서 추후에 삭제할 데이터를 삭제하도록 함.
+
+<br>
+
+## Distributed Search
+### System Design: The Distributed Search
+* 검색 엔진 없이는 인터넷은 거대한 정보 덩어리일 뿐이다.
+
+### Requirements of a Distributed Search System's Design 
+* 검색 종류
+  - Fuzzy search
+  - Inverted search
+* Inverted search를 위한 리스트를 만들어두는데, 이를 램에 띄워둬야 함.
+  - 그러나, 전세계 웹사이트가 수천억에 달하고, 이들에 대한 데이터는 100 PB 정도 된다고 함.
+  - 이들을 인버티드 인덱스 리스트로 만들어도 역시 그정도 수준의 데이터가 됨.
+  - 따라서, 이들을 단일 시스템 메인 메모리에 모두 띄워두는 건 아직 불가능함.
+  - 그렇기에, 효율성을 생각해서 분산 시스템을 구축하는 게좋다.
+* 
+
+### Design of a Distributed Search
+* 오프라인 페이즈(offline phase)
+  1. 크롤러(Crawler)가 문서를 가져옴
+  2. 인덱서(Indexer)가 인덱스를 실행
+  3. Distributed data processing system(MapReduce frame work)
+    - 데이터 처리, 인덱싱 결과를 인덱서에게 반환
+  4. Indexer가 분산 스토리지(distributed storage)에 인덱스 결과를 전달, 저장
+* 온라인 페이즈(online phase)
+  1. Searcher로 검색 시도
+  2. Index에 검색 쿼리 전달
+  3. 분산 스토리지에서 매핑한 결과를 서쳐에 전달
+  4. 서쳐가 사용자에게 검색 결과를 반환
+* 병렬적 인덱싱과 서칭(parallel indexing and searching)을 통해서 빠르게 검색을 수행할 수 있음.
+* Replication을 서로 다른 Available Zone에 배치함으로, Single Point of Failure를 방지할 수 있음.
+
+### Scaling Search and Indexing
+* 인덱싱과 서칭을 동시에 수행하면 과부하가 걸릴 수 있음.
+* 인덱스를 재계산하는 과정은 굉장히 많은 리소스를 차지하게 됨.
+  - 또한, 노드를 나눠놨기에 제각기 인덱스를 재계산하게 된다면 중복연산이 발생함.
+* 단순하게 인덱스를 계산하는 데서는 계산 후 파일을 업로드만 함
+  - 그리고 서쳐는 계산된 인덱싱을 다운로드한 뒤, 램에 띄워놔서 빠르게 쿼리가 이루어지게 함.
+* 그래서 MapReduce Framework는 어떻게 동작하는가?
+  - Mapper가 주어진 문서들에 대해서 inverted index를 만듦
+  - Reducer는 이 결과들을 종합해서 분산 스토리지에 저장함
+
+<br>
+
+## Distributed Logging
+### System Design: Distributed Logging
+* 로깅이 왜 필요한가
+  - 심각성을 포함하고, 문제를 트래킹할 수 있게 도우며, 구조를 갖추고 있음.
+  - 복구에 필요한 평균 시간을 줄여줌
+  - 이를 분석하여 많은 유용한 정보를 얻을 수 있음
+    + 사용자의 행동을 분석할 수도 있음.
+    + 문제 발생 시 이를 해결하는 데 활용될 수 있음.
+
+### Introduction to Distributed Logging
+* 핵심이 되는 내용만 로깅함.
+* 출력하려는 로그를 심각성에 대해 결정함.
+* log4j는 취약점이 있어서 잘못하면 악용될 수 있음.
+
+### Design of a Distributed Logging Service
+* pub-sub 시스템과 aggregate하는 파트들을 구분해서 체계적인 로그 수집이 가능하도록 함
+
+<br>
+
+## Distributed Task Scheduler
+### System Design: The Distributed Task Scheduler 
+* 서로 다른 곳에서 많은 작업이 들어왔을 때 이를 분산처리하는 작업 스케쥴러를 설계한다.
+
+### 기능적 / 비기능적 요구사항
+* 기능적 요구사항
+  - 작업 할당 및 수행
+  - 작업의 진행도 확인
+  - 작업 대기 시간 확인 등을 수행할 수 있어야 함.
+* 비기능적 요구사항
+  - 확장성, 가용성 등 통상적인 요구사항들.
+
+### Design of a Distributed Task Scheduler
+* Task submitter가 하나기 때문에 SPOF(single point of failure)가 발생할 수 있다.
+  - 그렇기에 이를 노드들의 클러스터로 구현한다.
+
+* 그외는 그림을 보면서 얘기하면 됨.

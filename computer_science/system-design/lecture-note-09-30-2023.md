@@ -786,3 +786,82 @@
   - 그렇기에 이를 노드들의 클러스터로 구현한다.
 
 * 그외는 그림을 보면서 얘기하면 됨.
+
+
+### Design Considerations of a Distributed Task Scheduler
+* 긴급, 통상, 주기적 작업을 큐 자체로 구분함.
+* 멱등성을 가짐으로 저장된 이전 상태에서 작업을 재개해도 동일한 결과를 얻을 수 있도록
+    - 또한, 재개가 정상적으로 이루어질 수 있도록 설계
+
+<br>
+
+## Sharded Counters
+### System Design: The Sharded Counters
+* '헤비 히터 문제'
+    - 단순히 카운팅만 하더라도 쓰는 게 읽는 것보다 어렵고, 동시성 문제도 발생하기에 처리가 쉽지 않다.
+    - 이에 대한 카운터를 분산 시스템으로 처리하고자 함
+
+### High-level Design of Sharded Counters
+* 서비스를 개발해야하는 사람들 입장에서는 필요한 내용일 듯
+    - 어떤 API에 어떤 인자들이 들어가면 좋다고 안내해주는 편이 더 와닿을 듯함.
+
+### Detailed Design of Sharded Counters
+* 아마 각 카운터에 기록하고, 이를 read 요청에 따라 취합하는 것으로 이해하면 됨
+* 샤드 수는 성능에 밀접하게 관계된다.
+* 트래픽은 유동적이다. 따라서, 이에 따라 카운터도 유동적으로 샤딩될 수 있어야 한다.
+    - 요청들은 로드 밸런서에 의해서 트래픽이 덜 몰리는 곳으로 유도될 수 있다.
+    - 현재 상태를 확인하여 피드백에 대해 유동적으로 동작하게 할 수 있다.
+
+<br>
+
+## Concluding the Building Blocks Discussion
+### The RESHADED Approach for System Design
+* Requirements: 기능적, 비기능적 요구사항 분석
+* Estimation: 어느 정도의 시스템이 필요할지 견적
+* Storage schema: 데이터 저장이 필요할 경우 DB 설계
+* High-level design: 어떤 파트들을 어떻게 활용할 것인지 설계
+* API design: api 설계
+* Detailed design: 설계한 파트들의 구현
+* Evaluation: 각 파트를 이런 식으로 두었을 때 그에 대해 어떤 한계점이 있는지
+* Distinctive component/feature: 독자적인 구성요소나 기능에 대한 언급
+
+## Design YouTube
+### System Design: YouTube
+* Required building blocks
+    - CDN
+    - Blob storage
+    - Distributed Database
+    - Load balancers
+
+### Requirements of YouTube's Design 
+* 영상 스트림, 업로드, 다운로드 등 기능적 요구사항
+* 활용성, 고성능 등의 비기능적 요구사항
+* 수요값 계산
+    - 서버가 몇 개나 필요한지 대략적인 계산
+    - 네트워크 대역폭은 얼마나 되어야 하는지
+
+<br>
+
+## Design Quora
+### Requirements of Quora's Design 
+* 로드밸런서, 데이터베이스, 캐시, Blob 저장소를 활용해 설계하고자 함.
+
+### Initial Design of Quora
+* 적절한 답변을 찾아서 추천하는 과정은 단순히 upvote에만 의존할 수 없다.
+    - 적절한 답변이 아닌데도 추천을 받는 경우가 있기 때문.
+    - 따라서 이를 ML을 활용해 결과를 계산한다.
+* 이런 연산이 필요한 부분들이 있어 여러가지 파트가 들어가야 하는 것으로 이해됨.
+
+### Final Design of Quora
+* 초기 설계대로 가는 경우엔 기능적 요구사항은 모두 만족함.
+    - 그러나, 스케일이 커지면 비기능적 요구사항을 상실하게 됨
+    - 이를 보완하기 위한 최종 설계가 필요함.
+
+<br>
+
+## Design Google Maps
+### System Design: Google Maps
+* Key-value store: 메타 데이타를 저장하기 위해
+* pub-sub: 이벤트 발생 시 이를 전파하기 위해
+* Graph database: 그래프 형태로 연결된 데이터를 저장하기 위해
+* Search engine: 지도 상 다른 장소들에 대한 정보를 검색하기 위해

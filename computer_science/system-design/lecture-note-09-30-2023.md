@@ -865,3 +865,71 @@
 * pub-sub: 이벤트 발생 시 이를 전파하기 위해
 * Graph database: 그래프 형태로 연결된 데이터를 저장하기 위해
 * Search engine: 지도 상 다른 장소들에 대한 정보를 검색하기 위해
+
+### High-level design
+* Location finder: 위도 경도를 사용자가 기억할 수 없으니 위치를 규정해야 함.
+* Route finder and navigator: 루트를 찾아주고, 어떻게 이동해야 하는지 가르쳐줌.
+
+* 그래서 제시되는 컴포넌트가 갖춰졌을 때 순차적으로 어떻게 동작하는지 이후에 서술됨.
+
+### Meeting the challenges
+* 다익스트라와 같은 방식으로 경로를 계산
+    - 세그먼트를 나눠서 각각에 대한 edge 간 최단거리를 구하는 문제로 변경
+    - 세그먼트는 역이 되거나 정류장이 되는 게 맞는 듯.
+
+<br>
+
+## Design a Proximity Service / Yelp
+### Requirements of Yelp’s Design
+* 기능적, 비기능적 요구사항을 만족하기 위해서 갖다 쓸 빌딩 블록에 대한 언급
+* 캐시, 로드 밸런서, 블랍(Blob) 스토리지, 데이터베이스를 활용한다고 함.
+
+### Design of Yelp
+* 로드밸런서를 통해서 Read와 Write 처리를 나눠서 수행함.
+    - 구글 맵과 동일하게 위치를 활용해야 하므로, segment producer도 활용
+
+## Design Uber
+### System Design: Uber
+* 요구사항, 고수준 설계, 상세 설계, 결제 서비스와 사기 감지, 평가 순으로 진행될 예정.
+
+### High-level Design of Uber
+* API 설계
+    - 드라이버 위치 갱신: updateDriverLocation(driverID, oldlat, oldlong, newlat, newlong)
+        + driverID를 가지고 작업을 함.
+        + 사실, 인증 같은 과정을 고민하지 않고 로직을 작성하면 이만큼 직관적인 것도 없음.
+        + DB에 저장하는 식이라면 이전 위도, 경도는 필요하지 않을 것.
+
+* 생각보다 API들은 복잡하지 않음.
+    - 서비스가 커지면서 그에 따라 이전과 같은 성능을 발휘하지 못해서 발생하는 걸 그에 맞게 키우는 식으로 풀이하는 것.
+    - 막말로, 서비스가 커지지 않으면, 기능적 요구사항은 단일 서버로도 만족시킬 수 있을 것.
+
+### Payment Service and Fraud Detection in Uber Design
+* 결제 시 주의해야 하는 것들
+    - 잔액 부족, 중복 결제, 잘못된 결제, 잘못된 환전, 댕글링 인가(dangling authorization)
+* 리스크 엔진을 둬서 불량 탑승자에 대한 위험을 확인함.
+
+### Apache Kafka
+* 카프카는 오픈소스 스트림 처리 소프트웨어 플랫폼이다.
+* 비즈니스 이벤트가 발생되어 처리하는 일들을 카프카가 받고 진행시키는 식이라 이해됨.
+* RADAR를 통해서 사람을 통해 판단하는 AI를 활용하여 사기를 탐지함.
+
+<br>
+
+## Design Twitter
+### System Design: Twitter
+* 클라이언트 사이드에서 로드밸런싱이 일어나는 부분에 초점을 둘 것.
+
+### Requirements of Twitter’s Design
+* Storage system
+    - Google Cloud: Hadoop Distributed File System에 데이터를 옮겨 닮음. 이를 통해 부분적 클라우드(partly cloudy) 전략을 활용함
+    - Manhattan: 카산드라를 활용하다가 2014년 4월에 범용 실시간 분산 키값 스토어를 런칭했음.
+    - Kafka and Cloud dataflow
+    - FlockDB
+
+### Client-side Load Balancer for Twitter
+* 트위터는 원래 단일 서버로 동작했었다. 이로 인해 많은 문제가 발생함.
+    - 동일한 코드베이스에서 많은 개발자가 작업하기 때문에, 각각의 서비스를 업데이트하기 어려웠다.
+    - 하나의 서비스를 업그레이드 하는 과정이 다른 서비스를 중지시키기도 하였다.
+    - 여러 서비스를 한 하드웨어에서 돌리니 그에 따라 비용이 증가되었다.
+    - 문제 발생 시 복구하는 과정은 시간을 많이 잡아먹었으며, 복잡하였다.
+* 이후 서버의 부하를 적절하게 나누는 방법에 대해서 서술함.

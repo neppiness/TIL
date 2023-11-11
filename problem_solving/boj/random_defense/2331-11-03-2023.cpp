@@ -23,15 +23,29 @@ int main() {
   int a, p;
   cin >> a >> p;
 
+  ans.insert(a);
+  int tmp;
   while (1) {
     int b = get_nxt(a, p);
-    cout << b << '\n';
     auto it = ans.find(b);
-    if (it != ans.end()) break;
+    if (it != ans.end()) {
+      tmp = b;
+      break;
+    }
     ans.insert(b);
     swap(a, b);
   }
-  for (int x : ans) cout << x << '\n';
+
+  a = tmp;
+  while (1) {
+    int b = get_nxt(a, p);
+    auto it = ans.find(b);
+    if (it == ans.end()) {
+      break;
+    }
+    ans.erase(b);
+    swap(a, b);
+  }
 
   cout << ans.size();
 }

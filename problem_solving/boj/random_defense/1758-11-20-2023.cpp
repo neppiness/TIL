@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int a[100'002];
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+
+  int n; cin >> n;
+  for (int i = 0; i < n; i++)
+    cin >> a[i];
+  sort(a, a + n, greater<int>());
+  
+  long long tot = 0;
+  for (int i = 0; i < n; i++) {
+    if (a[i] - i <= 0) continue;
+    tot += a[i] - i;
+  }
+  cout << tot;
+}

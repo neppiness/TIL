@@ -18,7 +18,7 @@ int main() {
     mx = max(mx, a[i]);
   }
 
-  double mul;
+  double mul = 1;
   for (int i = 0; i < n; i++) {
     mul *= a[i];
     mx = max(mx, mul);
@@ -26,4 +26,3 @@ int main() {
   }
   cout << round(mx * 1000) / 1000.0;
 }
-

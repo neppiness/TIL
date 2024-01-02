@@ -15,7 +15,6 @@ pair<ll, ll> get_coordinate(ll x) {
     }
     return {cnt, x - st};
   }
-  return {-1, -1};
 }
 
 pair<ll, ll> move(pair<ll, ll> coord, ll diff) {
@@ -42,7 +41,7 @@ int main() {
   while (q--) {
     ll a, b; cin >> a >> b;
     if (a < b) swap(a, b); // a가 항상 큰 값
-                           //
+
     pair<ll, ll> coord_a = get_coordinate(a);
     pair<ll, ll> coord_b = get_coordinate(b);
 

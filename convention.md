@@ -9,11 +9,11 @@
 * TIL content file: 'Title'-'Date'
 * TIL list file: 'Date'
 * 'Title' is written in kebab case or hyphen-separated style
-* 'Date' is written in MM-DD-YYYY format
+* 'Date' is written in mm-dd-YYYY format
 * ex1) markdown-basics-05-15-2022.md (TIL content)
 * ex2) 05-15-2022.md (TIL list)
 * Folder: snake-case is used for folder naming
-* ex) problem_solving, TIL (because it's a abbr.)
+* ex) problem-solving, TIL
 
 ### Style for headings
 * Heading 1: only for a title of a file
@@ -30,12 +30,14 @@
 * New line `<br>` is required between headings
 
 ### TIL content file: TIL list link and references
-* TIL list link: written as a format of "TIL on MM-DD-YYYY" at the top
+* TIL list link: written as a format of "TIL on mm-dd-YYYY" at the top
 * References: at the bottom, separated by a line above it
 
 ### Commit message
 * Format is given as below:
   - {activity}: {object} on {Month} {Day} (to {Day}), {Year}
+  - Activity: Capitalized word is used
+    + Update, Create, Rename, Remove
 * Here are the examples:
-  1. update: TIL on April 4th to 6th, 2023
-  2. update: convention.md on April 6th, 2023
+  1. Update: TIL on April 4th to 6th, 2023
+  2. Update: convention.md on April 6th, 2023

@@ -24,6 +24,9 @@ void transform(ll x, stack<int> &st) {
 
 ll solve() {
   ll a, b; cin >> a >> b;
+  if (k == 1) {
+    return max(a, b) - min(a, b);
+  }
   a--; b--;
   transform(a, sta);
   transform(b, stb);

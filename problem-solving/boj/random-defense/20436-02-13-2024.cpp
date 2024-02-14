@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const string L_RANGE = "qwertasdfgzxcv";
+
 pair<int, int> coord[26];
-int dp[28][28][102];
 string s; 
 
 int to_index(char c) {
@@ -11,30 +12,27 @@ int to_index(char c) {
 
 int solve(int l_index, int r_index, int seq) {
   if (seq == s.size()) return 0;
-  int &ret = dp[l_index][r_index][seq];
-  if (ret != -1) return ret;
 
-  int dest_index = to_index(s[seq]);
+  char c = s[seq];
+  int dest_index = to_index(c);
   pair<int, int> dest_coord = coord[dest_index];
+  int pos = L_RANGE.find(c);
 
-  pair<int, int> l_coord = coord[l_index];
-  int dist_1 = abs(l_coord.first - dest_coord.first)
-      + abs(l_coord.second - dest_coord.second);
-  ret = solve(dest_index, r_index, seq + 1) + dist_1;
-
+  // 왼손이 처리해야 하는 경우
+  if (pos != -1) {
+    pair<int, int> l_coord = coord[l_index];
+    int dist = abs(l_coord.first - dest_coord.first)
+        + abs(l_coord.second - dest_coord.second);
+    return solve(dest_index, r_index, seq + 1) + dist;
+  }
+  // 오른손이 처리해야 하는 경우
   pair<int, int> r_coord = coord[r_index];
-  int dist_2 = abs(r_coord.first - dest_coord.first)
+  int dist = abs(r_coord.first - dest_coord.first)
       + abs(r_coord.second - dest_coord.second);
-  ret = min(ret, solve(l_index, dest_index, seq + 1) + dist_2);
-  return ret;
+  return solve(l_index, dest_index, seq + 1) + dist;
 }
 
-int main() {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-
-  memset(dp, -1, sizeof(dp));
-
+void setup() {
   coord[to_index('q')] = {0, 0};
   coord[to_index('w')] = {0, 1};
   coord[to_index('e')] = {0, 2};
@@ -63,6 +61,13 @@ int main() {
   coord[to_index('b')] = {2, 4};
   coord[to_index('n')] = {2, 5};
   coord[to_index('m')] = {2, 6};
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+
+  setup();
 
   char l, r;
   cin >> l >> r >> s;

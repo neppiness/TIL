@@ -17,9 +17,11 @@ int main() {
   for (int i = 0; i < 8; i++)
     cin >> board[i];
 
+  int cnt = 0;
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       if (board[i][j] != '*') continue;
+      cnt++;
       int cx = i, cy = j;
       for (int dir = 0; dir < 8; dir++) {
         int nx = cx + dx[dir];
@@ -35,5 +37,9 @@ int main() {
       }
     }
   }
-  cout << "valid";
+  if (cnt != 8) {
+    cout << "invalid";
+  } else {
+    cout << "valid";
+  }
 }

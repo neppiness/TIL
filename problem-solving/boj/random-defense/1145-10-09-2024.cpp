@@ -9,7 +9,7 @@ int main() {
   for (int i = 0; i < 5; i++)
     cin >> a[i];
 
-  for (int n = 1; n <= 100'000; n++) {
+  for (int n = 1; n <= 1'000'000; n++) {
     int cnt = 0;
     for (int i = 0; i < 5; i++) {
       if (n % a[i]) continue;

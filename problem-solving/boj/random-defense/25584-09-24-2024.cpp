@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const string ANS[] = {"NO", "YES"};
+const string ANS[] = {"No", "Yes"};
 const int INF = 0x7f7f7f7f;
+const int TIME[] = {4, 6, 4, 10};
 
 unordered_map<string, int> sum;
 
@@ -12,25 +13,17 @@ int main() {
 
   int n; cin >> n;
   for (int i = 0; i < 4 * n; i++) {
+    int t = TIME[i % 4];
     for (int j = 0; j < 7; j++) {
       string s; cin >> s;
       if (s == "-") continue;
-      switch (i % 4) {
-        case 0:
-          sum[s] += 4; break;
-        case 1:
-          sum[s] += 6; break;
-        case 2:
-          sum[s] += 4; break;
-        default:
-          sum[s] += 10;
-      }
+      sum[s] += t;
     }
   }
-  int mn = INF, mx = 0;
-  for (auto &entry : sum) {
-    mx = max(mx, sum[entry.first]);
-    mn = min(mn, sum[entry.first]);
+  int mx = 0, mn = INF;
+  for (auto s : sum) {
+    mx = max(mx, s.second);
+    mn = min(mn, s.second);
   }
-  cout << ANS[mn == INF || mx - mn <= 12];
+  cout << ANS[mx - mn <= 12];
 }

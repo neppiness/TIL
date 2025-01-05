@@ -8,20 +8,20 @@ int main() {
   cin.tie(0);
 
   string s; cin >> s;
-  for (int i = 0; i < s.size(); i++) {
+  for (int i = 0; i < s.size(); i++)
     val[i] = s[i] - '0';
-  }
 
   int ans = 0;
-  for (int len = 1; len <= s.size() / 2; len++) {
-    for (int st = 0; st < s.size() - 2 * len; st++) {
-      int sum1 = 0;
-      for (int i = st; i < st + len; i++)
-        sum1 += val[i];
-      int sum2 = 0;
-      for (int i = st + len; i < st + 2 * len; i++)
-        sum2 += val[i];
-      if (sum1 == sum2) ans = max(ans, 2 * len);
+  for (int l = 2; l <= s.size(); l += 2) {
+    // i는 시작 인덱스
+    for (int i = 0; i <= s.size() - l; i++) {
+      int left_sum = 0;
+      for (int j = i; j < i + l/2; j++)
+        left_sum += val[j];
+      int right_sum = 0;
+      for (int j = i + l/2; j < i + l; j++)
+        right_sum += val[j];
+      if (left_sum == right_sum) ans = max(ans, l);
     }
   }
   cout << ans;
